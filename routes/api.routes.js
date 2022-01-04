@@ -1,9 +1,23 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+
+/**
+ * Module dependancies.
+ */
+var { currentTimeString } = require('../utils/time.utils')
+
+
+/**
+ * ALL ping.
+ */
+router.all('/ping', function(req, res) {
+  let bind = {
+    status: "success",
+    message: `request received at ${currentTimeString()}`
+  };
+  res.status(200).json(bind);
 });
+
 
 module.exports = router;
