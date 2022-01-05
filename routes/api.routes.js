@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-
 /**
  * Module dependancies.
  */
@@ -18,6 +17,13 @@ router.all('/ping', function(req, res) {
   };
   res.status(200).json(bind);
 });
+
+
+/**
+ * Demo endpoints.
+ */
+var demoRouter = require('./demo.routes');
+router.use('/demo', demoRouter);
 
 
 module.exports = router;
