@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-var { subscriberModel, messageModel } = require('../models/demo.models');
+var { subscriberModel, messageModel, earlyAccessModel } = require('../models/demo.models');
+var { early_access_email } = require('../utils/email.utils')
 
 
 router.post('/subscriber-form', async function(req, res) {
@@ -34,5 +35,19 @@ router.post('/message-form', async function(req, res) {
     }
 });
 
+
+router.post('/early-access', async function(req, res) {
+    try {
+        let data = req.body.form;
+        let newEarlyAccess = new earlyAccessModel(data);
+        await newEarlyAccess.save();
+        await early_access_email(data);
+        res.status(200).json({ status: "success", message: "early access data saved and early access email sent" });
+    }
+    catch(e) {
+        console.error(e);
+        res.status(500).json({ status: "error", message: "early acesss form parse failure or email sent failure" });
+    }
+});
 
 module.exports = router;
