@@ -1,0 +1,13 @@
+extends layout.pug
+
+block content
+  p 嗨 #{firstname}
+  p 歡迎您加入Arctics升學平台大家庭！以下是您留給我們的資料：
+  ul(style="list-style-type: none; padding-left: 0; margin: 0; margin-bottom: 12px;")
+    li(style="padding-left: 0; margin-left: 0;") 姓名：#{lastname+firstname}
+    li(style="padding-left: 0; margin-left: 0;") 電話：#{phone}
+    li(style="padding-left: 0; margin-left: 0; text-decoration: none; color: black;") 電郵地址：#{email}
+    li(style="padding-left: 0; margin-left: 0;") 學校科系：#{school+major+year+"年級"}
+  p 如果您想要暸解更多關於我們的資訊，請點#[a(style="color: #80bccd" target="_blank" href="https://www.arctics.academy/") 這裡]進入我們的官網；或點選下方按鈕試用我們的平台。
+  button(style="font-size: 14px; padding: 8px 16px 8px 16px; border-radius: 6px; margin-bottom: 10px; color: #003b6b; border: none; background-color: #f2d60f; text-align: center;") #[a(style="text-decoration: none; color: #003b6b;" target="_blank" href="https://www.arctics.academy/") 試用平台]
+  p Arctics團隊 敬上
