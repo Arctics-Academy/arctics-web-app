@@ -25,7 +25,7 @@ const cors_options = {
         else new Error('not allowed by cors');
     }
 }
-app.options('*', cors());
+app.use(cors());
 
 databaseConfig();
 
