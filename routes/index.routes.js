@@ -8,7 +8,7 @@ router.get('/', function(req, res) {
   }
   catch(e) {
     console.debug(e);
-    res.sendStatus(500);
+    res.sendStatus(404);
   }
 });
 
