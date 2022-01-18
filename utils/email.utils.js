@@ -47,7 +47,7 @@ let early_access_email = async (data) => {
         await mailgun_instance.messages.create(mailgun_domain, mail_object);
     } 
     catch(e) {
-        throw e;
+        console.log(e);
     }
 };
 
