@@ -18,6 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'frontend', 'build')));
 
+// Cors Whitlist Unimplemented
 const cors_whitelist = [ 'https://arctics.academy', 'https://www.arctics.academy' ];
 const cors_options = {
     origin: (origin, callback) => {
@@ -25,7 +26,7 @@ const cors_options = {
         else new Error('not allowed by cors');
     }
 }
-app.use(cors(cors_options));
+app.use(cors());
 
 databaseConfig();
 
