@@ -19,6 +19,7 @@ let early_access_email = async (data) => {
     let mail_content = 
     {
         from: `"Arctics升學顧問" <hello@mailgun.arctics.academy>`,
+        to: `"${data.lastname+data.firstname}" <${data.email}>`,
         subject: `Arctics升學平台 搶先體驗`,
         text: read_file_to_string('statics/emails/texts/early-access.txt'),
         html: compiled_early_access_email(data),
@@ -38,7 +39,7 @@ let early_access_email = async (data) => {
 
     // Build mailgun object
     let mail_object = {
-        to: [ data.email ],
+        to: [ `"${data.lastname+data.firstname}" <${data.email}>` ],
         message: compiled_mime_mail
     }
 
