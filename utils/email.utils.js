@@ -1,7 +1,7 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
-const { read_file_to_base64 } = require('./file.utils')
+const { read_file_to_base64, read_file_to_string } = require('./file.utils')
 
 const pug = require('pug');
 var compiled_early_access_email = pug.compileFile('statics/emails/templates/early-access.pug');
@@ -20,7 +20,7 @@ let early_access_email = async (data) => {
     {
         from: `"Arctics升學顧問" <hello@mailgun.arctics.academy>`,
         subject: `Arctics升學平台 搶先體驗`,
-        text: `Something about early access...`,
+        text: read_file_to_string('statics/emails/texts/early-access.txt'),
         html: compiled_early_access_email(data),
         attachments: 
         [
