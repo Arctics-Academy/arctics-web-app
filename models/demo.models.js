@@ -21,7 +21,7 @@ earlyAccessSchema = new Schema({
     school: { type: String, required: true },
     major: { type: String, required: true },
     year: { type: Number, require: true }
-}, { collection: "EarlyAccessForms"})
+}, { collection: "EarlyAccessForms"});
 const earlyAccessModel = mongoose.model('early-access', earlyAccessSchema);
 
 
