@@ -1,15 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
-/**
- * Module dependancies.
- */
+// Module dependancies.
 var { currentTimeString } = require('../utils/time.utils')
 
-
-/**
- * ALL ping.
- */
+// ALL ping.
 router.all('/ping', function(req, res) {
   let bind = {
     status: "success",
@@ -18,10 +13,7 @@ router.all('/ping', function(req, res) {
   res.status(200).json(bind);
 });
 
-
-/**
- * Demo endpoints.
- */
+// Demo endpoints.
 var demoRouter = require('./demo.routes');
 router.use('/demo', demoRouter);
 
