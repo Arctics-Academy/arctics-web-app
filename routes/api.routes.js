@@ -17,5 +17,8 @@ router.all('/ping', function(req, res) {
 var demoRouter = require('./demo.routes');
 router.use('/demo', demoRouter);
 
+// Consultant endpoints.
+var consultantRouter = require('./consultant.routes');
+router.use('/consultant', consultantRouter);
 
 module.exports = router;
