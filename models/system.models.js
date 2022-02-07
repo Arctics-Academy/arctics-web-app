@@ -7,16 +7,14 @@ const MediaSchema = new mongoose.Schema({
     data: { type: String, required: true }
 }, { _id: false });
 
+const AnnouncementSchema = new mongoose.Schema({
+    id: { type: String, required: true },
+    title: { type: String, required: true },
+    text: { type: String, required: true },
+    html: { type: String, required: true },
+    media: { type: [MediaSchema], required: true, default: [] }
+}, { _id: false, collection: 'Announcements' });
+const AnnouncementModel = new mongoose.model('Announcement', AnnouncementSchema);
 
-module.exports = { MediaSchema };
 
-
-// // Announcement Schema (useful later)
-// const ConsultantAnnouncementSchema = new Schema({
-//     id: { type: String, required: true },
-//     html: { type: String, required: true },
-//     media: { type: [{
-//         type: { type: String },
-//         data: { type: String }
-//     }], required: true, default: [] }
-// });
+module.exports = { MediaSchema, AnnouncementModel };
