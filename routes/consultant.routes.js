@@ -15,6 +15,7 @@ router.get('/meetings', function (req, res) {}); // returns meetings for +- 1 mo
 router.get('/purse', function (req, res) {}); // returns top 20 transaction records
 
 router.get('/profile', function (req, res) {
+router.get('/profile', async function (req, res) {
     try {
         let obj = await consultantController.getConsultantProfile(req.body.id);
         res.status(200).json({ status: "success", data: obj });
