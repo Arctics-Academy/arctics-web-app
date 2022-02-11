@@ -7,11 +7,23 @@ const consultantController = require('../controllers/consultant.controllers')
 // GET/POST method to alter everything.
 router.get('/')
 router.post('/')
+// returns meetings for +- 1 month
+// req.body: { id: "string", date: "date" }
+router.get('/meetings/calendar', async function (req, res) {
+    try {
+        let data = await consultantController.getConsultantMeetingsCalendar(req.body.id, req.body.date)
+        res.status(200).json({ status: "success", data: data })
+    }
+    catch (e) {
+        console.log(e)
+        res.status(500).json({ status: "error", message: `cannot get consultant calendar with id ${req.body.id}`})
+    }
+})
+
 
 // GET processes for information display.
 router.get('/dashboard', function (req, res) {}); // returns whole consultant obj
 router.get('/notification', function (req, res) {}); // returns top 8 notices & top 8 notifs of consultant
-router.get('/meetings', function (req, res) {}); // returns meetings for +- 1 month
 router.get('/purse', function (req, res) {}); // returns top 20 transaction records
 
 router.get('/profile', function (req, res) {
