@@ -20,6 +20,20 @@ router.get('/meetings/calendar', async function (req, res) {
     }
 })
 
+// returns all meetings
+// req.body: { id: "string" }
+router.get('/meetings/list', async function (req, res) {
+    try {
+        let data = await consultantController.getConsultantMeetingsList(req.body.id)
+        res.status(200).json({ status: "success", data: data })
+    }
+    catch (e) {
+        console.log(e)
+        res.status(500).json({ status: "error", message: `cannot get consultant meeting list with id ${req.body.id}`})
+    }
+    
+})
+
 
 // GET processes for information display.
 router.get('/dashboard', function (req, res) {}); // returns whole consultant obj

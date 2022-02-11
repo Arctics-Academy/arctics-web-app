@@ -27,6 +27,9 @@ const getConsultantMeetingsCalendar = async function(id, date) {
     return meeting
 }
 
+const getConsultantMeetingsList = async function(id) {
+    let meeting = await ConsultantModel.findOne({ id: id }).select('meetings')
+    return meeting
 }
 
 module.exports = { getConsultantProfile };{ 
