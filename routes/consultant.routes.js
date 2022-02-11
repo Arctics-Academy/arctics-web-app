@@ -11,7 +11,7 @@ router.get('/dashboard', function (req, res) {})
 
 // returns all announcements & notifications
 // req.body: { id: "string" }
-router.get('/notification', function (req, res) {
+router.get('/notification', async function (req, res) {
     try {
         let data = await consultantController.getConsultantNotifications(req.body.id)
         res.status(200).json({ status: "success", data: data })
