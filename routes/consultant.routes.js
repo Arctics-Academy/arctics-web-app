@@ -6,6 +6,22 @@ var router = express.Router()
 const consultantController = require('../controllers/consultant.controllers')
 
 // Routes
+// returns whole consultant obj
+router.get('/dashboard', function (req, res) {}) 
+
+// returns all announcements & notifications
+// req.body: { id: "string" }
+router.get('/notification', function (req, res) {
+    try {
+        let data = await consultantController.getConsultantNotifications(req.body.id)
+        res.status(200).json({ status: "success", data: data })
+    }
+    catch (e) {
+        console.log(e)
+        res.status(500).json({ status: "error", message: `cannot get consultant notifications with id ${req.body.id}`})
+    }
+}) 
+
 // returns meetings for +- 1 month
 // req.body: { id: "string", date: "date" }
 router.get('/meetings/calendar', async function (req, res) {

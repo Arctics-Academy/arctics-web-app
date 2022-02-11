@@ -38,6 +38,12 @@ const getConsultantMeetingsList = async function(id) {
     return meeting
 }
 
+const getConsultantNotifications = async function(id) {
+    let notifs = await ConsultantModel.findOne({ id: id }).select('announcements notifications')
+    return notifs
+}
+
+
 // Exports
 module.exports = 
 { 
