@@ -50,8 +50,8 @@ const getConsultantNotifications = async function(id) {
 
     // replace announcements
     for (item in notifs.announcements) {
-        let temp = await AnnouncementModel.findOne({ id: item.id });
-        item = Object.assign(item, temp);
+        let temp = await AnnouncementModel.findOne({ id: item.id })
+        item = Object.assign(item, temp)
     }
     return notifs
 }

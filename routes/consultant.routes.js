@@ -71,7 +71,6 @@ router.get('/purse', async function (req, res) {
     }
 }) 
 
-
 // return consultant.id & consultant.profile obj
 // req.body: { id: "string" }
 router.get('/profile', async function (req, res) {
@@ -83,7 +82,7 @@ router.get('/profile', async function (req, res) {
         console.error(e)
         res.status(500).json({ status: "error", message: `cannot get consultant profile with id ${req.body.id}`})
     }
-}) 
+})
 
 
 // Exports
