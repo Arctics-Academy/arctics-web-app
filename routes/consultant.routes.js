@@ -34,11 +34,19 @@ router.get('/meetings/list', async function (req, res) {
     
 })
 
+// returns purse & all transaction records
+// req.body: { id: "string" }
+router.get('/purse', async function (req, res) {
+    try {
+        let data = await consultantController.getConsultantPurse(req.body.id)
+        res.status(200).json({ status: "success", data: data })
+    }
+    catch (e) {
+        console.error(e)
+        res.status(500).json({ status: "error", message: `cannot get consultant purse with id ${req.body.id}`})
+    }
+}) 
 
-// GET processes for information display.
-router.get('/dashboard', function (req, res) {}); // returns whole consultant obj
-router.get('/notification', function (req, res) {}); // returns top 8 notices & top 8 notifs of consultant
-router.get('/purse', function (req, res) {}); // returns top 20 transaction records
 
 // return consultant.id & consultant.profile obj
 // req.body: { id: "string" }
