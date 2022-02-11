@@ -12,7 +12,7 @@ Information Needed:
 
 Operations:
 - [x] Get Dashboard Information
-- [ ] Cancel Appointment
+- [x] Cancel Appointment
 
 ### Notification (XD: Consultant Announcement)
 

@@ -84,6 +84,17 @@ router.get('/profile', async function (req, res) {
     }
 })
 
+// action: cancel meeting
+// req.body: { id: "string", meetingId: "string" }
+router.post('/meetings/cancel', async function(req, res) {
+    let result = await consultantController.consultantCancelMeeting(req.body.id, req.body.meetingId)
+    if (result) {
+        res.status(200).json({ status: "success", message: `meeting with ${req.meetingId} canceled successfully`})
+    }
+    else {
+        res.status(500).json({ status: "error", message: "cannot cancel meeting, try again later"})
+    }
+})
 
 // Exports
 module.exports = router
