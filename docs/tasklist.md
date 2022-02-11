@@ -14,6 +14,16 @@ Operations:
 - [ ] Get Dashboard Appointment
 - [ ] Cancel Appointment
 
+### Notification (XD: Consultant Announcement)
+
+Information Needed:
+- Announcemnt Section
+- Notification Section
+
+Operations:
+- [x] Get Notification Information
+- [ ] Read Announcement / Notification
+
 ### Calendar & List (XD: Schedule & List)
 
 Information Needed:
@@ -23,8 +33,8 @@ Information Needed:
     - All Sorted Meetings In Order
 
 Operations
-- [ ] Get Calendar Information
-- [ ] Get List Information
+- [x] Get Calendar Information
+- [x] Get List Information
 - [ ] Cancel Appointment
 - [ ] View Questions & Conditions
 
@@ -39,7 +49,7 @@ Information Needed:
     - Account List
 
 Operations:
-- [ ] Get Purse Information
+- [x] Get Purse Information
 - [ ] Get Account List Information
 - [ ] Add Account
 
@@ -50,7 +60,7 @@ Information Needed:
 - Profile Section
 
 Operations:
-- [ ] Get Profile Information Object
+- [x] Get Profile Information Object
 - [ ] Edit Profile Information
 - [ ] Upload Student ID
 - [ ] Edit Timetable Information
