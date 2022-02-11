@@ -41,10 +41,10 @@ const ConsultantSchema = new mongoose.Schema({
         school: { type: String, required: true }, // 就讀&畢業
         major: { type: String, required: true }, // 就讀&畢業
         year: { type: String, required: true }, // 就讀&畢業
-        field: { type: String, required: true }, // 學群
-        labels: { type: [String], required: true }, // 諮詢項目
-        experiences: { type: String, required: true }, // 相關經歷&能力證明
-        intro: { type: String, required: true }, // 個人簡介
+        field: { type: String, required: true, default: [] }, // 學群
+        labels: { type: [String], required: true, default: [] }, // 諮詢項目
+        experiences: { type: String }, // 相關經歷&能力證明
+        intro: { type: String }, // 個人簡介
 
         // 帳戶設定 (密碼不傳)
         email: { type: String, required: true }, // 電子信箱
