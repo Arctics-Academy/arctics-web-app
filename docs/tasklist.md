@@ -11,7 +11,7 @@ Information Needed:
 - Purse
 
 Operations:
-- [ ] Get Dashboard Appointment
+- [ ] Get Dashboard Information
 - [ ] Cancel Appointment
 
 ### Notification (XD: Consultant Announcement)
@@ -73,8 +73,7 @@ Information Needed:
 - Notification Count
 
 Operations:
-- [ ] Get Total Notificaiton Count
-
+- [ ] Get Total Notification Count
 
 ## Backlog
 
