@@ -1,6 +1,3 @@
-// System Config File
-const { config } = require('../config')
-
 // Models
 const { ConsultantModel } = require('../models/consultant.models')
 
