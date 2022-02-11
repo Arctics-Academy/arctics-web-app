@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
-const { MediaSchema } = require('./system.models');
+const { MediaSchema } = require('./system.models')
 
 
 // Consultant schema & sub-schemas.
@@ -10,7 +10,7 @@ const ConsultantTransactionSchema = new mongoose.Schema({
     amount: { type: Number, required: true },
     balance: { type: Number, required: true },
     withdrawn: { type: Number, required: true }
-}, { _id: false });
+}, { _id: false })
 
 const ConsultantNotificationSchema = new mongoose.Schema({
     id: { type: String, required: true },
@@ -18,13 +18,13 @@ const ConsultantNotificationSchema = new mongoose.Schema({
     title: { type: String, required: true },
     content: { type: String },
     read: { type: Boolean, required: true, default: false }
-}, {_id: false });
+}, {_id: false })
 
 const ConsultantAnnouncementSchema = new mongoose.Schema({
     id: { type: String, required: true },
     timestamp: { type: Date, required: true },
     read: { type: Boolean, required: true, default: false }
-}, { _id: false });
+}, { _id: false })
 
 const ConsultantSchema = new mongoose.Schema({
     id: { type: String, required: true, index: true, select: true, unique: true },
@@ -80,8 +80,8 @@ const ConsultantSchema = new mongoose.Schema({
         unreadCount: { type: Number, required: true, default: 0 },
         list: { type: [ConsultantNotificationSchema], required: true, default: [] }
     }
-}, { _id: false, collection: "Consultants" });
-const ConsultantModel = mongoose.model('Consultant', ConsultantSchema);
+}, { id: false, collection: "Consultants" })
+const ConsultantModel = mongoose.model('Consultant', ConsultantSchema)
 
 
-module.exports = { ConsultantModel };
+module.exports = { ConsultantModel }
