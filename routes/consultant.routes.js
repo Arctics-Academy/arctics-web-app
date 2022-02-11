@@ -40,15 +40,16 @@ router.get('/dashboard', function (req, res) {}); // returns whole consultant ob
 router.get('/notification', function (req, res) {}); // returns top 8 notices & top 8 notifs of consultant
 router.get('/purse', function (req, res) {}); // returns top 20 transaction records
 
-router.get('/profile', function (req, res) {
+// return consultant.id & consultant.profile obj
+// req.body: { id: "string" }
 router.get('/profile', async function (req, res) {
     try {
         let data = await consultantController.getConsultantProfile(req.body.id)
         res.status(200).json({ status: "success", data: data })
     }
     catch(e) {
-        console.error(e);
-        res.status(500).json({ status: "error", message: `cannot get consultant with id ${req.body.id}`})
+        console.error(e)
+        res.status(500).json({ status: "error", message: `cannot get consultant profile with id ${req.body.id}`})
     }
 }) 
 

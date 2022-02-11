@@ -9,6 +9,12 @@ const getConsultantProfile = async function (id) {
     let profile = await ConsultantModel.findOne({ id: id }).select('profile')
     return profile
 }
+
+const getConsultantPurse = async function(id) {
+    let purse = await ConsultantModel.findOne({ id: id }).select('purse')
+    return purse
+}
+
 const getConsultantMeetingsCalendar = async function(id, date) {
     // load meetings
     let meeting = await ConsultantModel.findOne({ id: id }).select('meetings')
