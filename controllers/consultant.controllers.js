@@ -5,7 +5,7 @@ const { ConsultantModel } = require('../models/consultant.models')
 const timeUtil = require('../utils/time.utils')
 
 
-const getConsultantProfile = async function (id) {
+const getConsultantProfile = async function(id) {
     let profile = await ConsultantModel.findOne({ id: id }).select('profile')
     return profile
 }
@@ -38,7 +38,6 @@ const getConsultantMeetingsList = async function(id) {
     return meeting
 }
 
-module.exports = { getConsultantProfile };{ 
 // Exports
 module.exports = 
 { 
