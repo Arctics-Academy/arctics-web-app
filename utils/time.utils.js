@@ -14,6 +14,15 @@ function currentTimeString() {
     return str;
 }
 
+function timestampToString(timestamp) {
+    let str
+    str += String((timestamp.getFullYear())) + "年"
+    str += _twoDigit(String((timestamp.getMonth()))) + "月"
+    str += _twoDigit(String((timestamp.getDate()))) + "日"
+    str += _twoDigit(String((timestamp.getHours()))) + "時"
+    str += _twoDigit(String((timestamp.getMinutes()))) + "分"
+}
+
 function yearMonthToDatetimeRange(year, month) {
     let start = new Date();
     start.setFullYear(year);
@@ -54,6 +63,7 @@ function _twoDigit(str) {
 module.exports = 
 {
     currentTimeString,
+    timestampToString,
     yearMonthToDatetimeRange,
     previousMonth,
     nextMonth
