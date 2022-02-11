@@ -1,12 +1,12 @@
-var express = require('express');
-var router = express.Router();
+var express = require('express')
+var router = express.Router()
 
 
-const consultantController = require('../controllers/consultant.controllers');
+const consultantController = require('../controllers/consultant.controllers')
 
 // GET/POST method to alter everything.
-router.get('/');
-router.post('/');
+router.get('/')
+router.post('/')
 
 // GET processes for information display.
 router.get('/dashboard', function (req, res) {}); // returns whole consultant obj
@@ -17,14 +17,14 @@ router.get('/purse', function (req, res) {}); // returns top 20 transaction reco
 router.get('/profile', function (req, res) {
 router.get('/profile', async function (req, res) {
     try {
-        let obj = await consultantController.getConsultantProfile(req.body.id);
-        res.status(200).json({ status: "success", data: obj });
+        let data = await consultantController.getConsultantProfile(req.body.id)
+        res.status(200).json({ status: "success", data: data })
     }
     catch(e) {
         console.error(e);
         res.status(500).json({ status: "error", message: `cannot get consultant with id ${req.body.id}`})
     }
-}); // return consultant.id & consultant.profile obj
+}) 
 
 
-module.exports = router;
+module.exports = router
