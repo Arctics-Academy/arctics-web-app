@@ -11,7 +11,7 @@ Information Needed:
 - Purse
 
 Operations:
-- [ ] Get Dashboard Information
+- [x] Get Dashboard Information
 - [ ] Cancel Appointment
 
 ### Notification (XD: Consultant Announcement)

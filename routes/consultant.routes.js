@@ -7,7 +7,17 @@ const consultantController = require('../controllers/consultant.controllers')
 
 // Routes
 // returns whole consultant obj
-router.get('/dashboard', function (req, res) {}) 
+// req.body: { id: "string" }
+router.get('/dashboard', async function (req, res) {
+    try {
+        let data = await consultantController.getConsultantDashboard(req.body.id)
+        res.status(200).json({ status: "success", data: data })
+    }
+    catch (e) {
+        console.log(e)
+        res.status(500).json({ status: "error", message: `cannot get consultant dashboard info with id ${req.body.id}`})
+    }
+}) 
 
 // returns all announcements & notifications
 // req.body: { id: "string" }
@@ -46,7 +56,6 @@ router.get('/meetings/list', async function (req, res) {
         console.log(e)
         res.status(500).json({ status: "error", message: `cannot get consultant meeting list with id ${req.body.id}`})
     }
-    
 })
 
 // returns purse & all transaction records

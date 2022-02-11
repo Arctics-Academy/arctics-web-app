@@ -5,6 +5,11 @@ const { ConsultantModel } = require('../models/consultant.models')
 const timeUtil = require('../utils/time.utils')
 
 
+const getConsultantDashboard = async function(id) {
+    let dashboard = await ConsultantModel.findOne({ id: id }).select('profile announcements meetings purse')
+    return dashboard
+}
+
 const getConsultantProfile = async function(id) {
     let profile = await ConsultantModel.findOne({ id: id }).select('profile')
     return profile
@@ -47,6 +52,7 @@ const getConsultantNotifications = async function(id) {
 // Exports
 module.exports = 
 { 
+    getConsultantDashboard,
     getConsultantProfile, 
     getConsultantPurse,
     getConsultantMeetingsCalendar,
