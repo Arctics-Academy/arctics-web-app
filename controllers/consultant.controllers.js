@@ -39,5 +39,12 @@ const getConsultantMeetingsList = async function(id) {
 }
 
 module.exports = { getConsultantProfile };{ 
+// Exports
+module.exports = 
+{ 
     getConsultantProfile, 
-    getConsultantPurse
+    getConsultantPurse,
+    getConsultantMeetingsCalendar,
+    getConsultantMeetingsList,
+    getConsultantNotifications
+}

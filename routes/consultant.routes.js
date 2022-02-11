@@ -1,12 +1,11 @@
+// App Modules
 var express = require('express')
 var router = express.Router()
 
-
+// Controllers
 const consultantController = require('../controllers/consultant.controllers')
 
-// GET/POST method to alter everything.
-router.get('/')
-router.post('/')
+// Routes
 // returns meetings for +- 1 month
 // req.body: { id: "string", date: "date" }
 router.get('/meetings/calendar', async function (req, res) {
@@ -62,4 +61,5 @@ router.get('/profile', async function (req, res) {
 }) 
 
 
+// Exports
 module.exports = router
