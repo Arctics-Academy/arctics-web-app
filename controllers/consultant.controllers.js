@@ -1,5 +1,6 @@
 // Models
 const { ConsultantModel } = require('../models/consultant.models')
+const { AnnouncementModel } = require('../models/system.models')
 
 // Utils
 const timeUtil = require('../utils/time.utils')
@@ -44,7 +45,14 @@ const getConsultantMeetingsList = async function(id) {
 }
 
 const getConsultantNotifications = async function(id) {
+    // load data
     let notifs = await ConsultantModel.findOne({ id: id }).select('announcements notifications')
+
+    // replace announcements
+    for (item in notifs.announcements) {
+        let temp = await AnnouncementModel.findOne({ id: item.id });
+        item = Object.assign(item, temp);
+    }
     return notifs
 }
 
