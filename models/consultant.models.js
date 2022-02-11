@@ -26,6 +26,17 @@ const ConsultantAnnouncementSchema = new mongoose.Schema({
     read: { type: Boolean, required: true, default: false }
 }, { _id: false })
 
+const ConsultantMeetingSchema = new mongoose.Schema({
+    id: { type: String, required: true },
+    active: { type: Boolean, required: true, default: true },
+    startTimestamp: { type: Date, required: true },
+    studentName: { type: String, required: true },
+    studentYear: { type: String, required: true },
+    studentItems: { type: [String], required: true, default: [] },
+    remark: { type: String, required: true, default: "" },
+    comment: { type: String, required: true, default: "" }
+}, { _id: false })
+
 const ConsultantSchema = new mongoose.Schema({
     id: { type: String, required: true, index: true, select: true, unique: true },
     profile: {
@@ -67,10 +78,11 @@ const ConsultantSchema = new mongoose.Schema({
         withdrawn: { type: Number, required: true, default: 0 },
         transactions: { type: [ConsultantTransactionSchema], required: true , default: [] }
     },
-    meetings: {
-        future: { type: [String], required: true, default: [] },
-        past: { type: [String], required: true, default: [] },
-        canceled: { type: [String], required: true, default: [] }
+    meetings: { 
+        future: { type: [ConsultantMeetingSchema], required: true, default: [] },
+        past: { type: [ConsultantMeetingSchema], required: true, default: [] },
+        cancelled: { type: [ConsultantMeetingSchema], required: true, default: [] }
+
     },
     announcements: {
         unreadCount: { type: Number, required: true, default: 0 },
