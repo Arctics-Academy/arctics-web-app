@@ -4,6 +4,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var dotenv = require('dotenv');
 var cors = require('cors');
+var csurf = require('csurf');
 var mongoose = require('mongoose')
 
 var indexRouter = require('./routes/index.routes');
@@ -18,15 +19,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'frontend', 'build')));
 
-// Cors Whitlist Unimplemented
-const cors_whitelist = [ 'https://arctics.academy', 'https://www.arctics.academy' ];
-const cors_options = {
-    origin: (origin, callback) => {
-        if (cors_whitelist.indexOf[origin] !== -1) callback(true, null);
-        else new Error('not allowed by cors');
-    }
-}
 app.use(cors());
+app.use(csurf({ cookie: true }))
 
 databaseConfig();
 
