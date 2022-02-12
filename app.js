@@ -4,6 +4,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var dotenv = require('dotenv');
 var cors = require('cors');
+var csurf = require('csurf');
 var mongoose = require('mongoose')
 
 var indexRouter = require('./routes/index.routes');
@@ -17,7 +18,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'frontend', 'build')));
+
 app.use(cors());
+app.use(csurf({ cookie: true }))
 
 databaseConfig();
 
