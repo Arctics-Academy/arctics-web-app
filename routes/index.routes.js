@@ -7,8 +7,8 @@ router.get('*', function(req, res) {
     res.status(200).sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
   }
   catch(e) {
-    console.debug(e);
-    res.sendStatus(404);
+    console.log(`Path Not Defined: GET ${req.originalUrl}`)
+    res.redirect('/');
   }
 });
 
