@@ -31,7 +31,7 @@ app.use(session({
 }))
 
 app.use(cors())
-app.use(csurf())
+// app.use(csurf())
 
 databaseConfig();
 
