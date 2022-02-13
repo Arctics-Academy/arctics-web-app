@@ -19,8 +19,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'frontend', 'build')));
 
-app.use(cors());
-app.use(csurf({ cookie: true }))
+app.use(cors())
+app.use(csurf())
 
 databaseConfig();
 
