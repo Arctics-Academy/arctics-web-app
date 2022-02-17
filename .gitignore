@@ -112,3 +112,4 @@ tests/sample/
 
 # Misc
 *.DS_Store
+.note
