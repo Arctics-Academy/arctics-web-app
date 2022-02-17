@@ -12,7 +12,6 @@ Information Needed:
 
 Operations:
 - [x] Get Dashboard Information
-- [x] Cancel Appointment
 
 ### Notification (XD: Consultant Announcement)
 
@@ -35,7 +34,6 @@ Information Needed:
 Operations
 - [x] Get Calendar Information
 - [x] Get List Information
-- [ ] Cancel Appointment
 - [ ] View Questions & Conditions
 
 ### Purse (XD: Wallet)
@@ -77,10 +75,13 @@ Operations:
 
 ## Backlog
 
-### Purse
-- [ ] Withdraw Money (Connect to AirTable)
-
-### Profile
-- [ ] Add Student Comment To Teacher Public Profile View
-- [ ] Edit Account Information (Email & Password)
-- [ ] Verify Email & Mobile Phone No
+- Dashboard
+    - [x] Cancel Appointment
+- Calendar & List
+    - [ ] Cancel Appointment
+- Purse
+    - [ ] Withdraw Money (Connect to AirTable)
+- Profile
+    - [ ] Add Student Comment To Teacher Public Profile View
+    - [ ] Edit Account Information (Email & Password)
+    - [ ] Verify Email & Mobile Phone No
