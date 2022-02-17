@@ -17,7 +17,7 @@ router.get('/dashboard', async function (req, res) {
         console.log(e)
         res.status(500).json({ status: "error", message: `cannot get consultant dashboard info with id ${req.body.id}`})
     }
-}) 
+})
 
 // returns all announcements & notifications
 // req.body: { id: "string" }
@@ -30,7 +30,20 @@ router.get('/notification', async function (req, res) {
         console.log(e)
         res.status(500).json({ status: "error", message: `cannot get consultant notifications with id ${req.body.id}`})
     }
-}) 
+})
+
+// action: read notification
+// req.body: { id: "string", announcementId: ["string"], notificationId: "string" }
+router.post('/notificaiton/read', async (req, res) => {
+    try {
+        await consultantController.consultantReadNotifications(req.body.id, req.body.announcementId, req.body.notificationId)
+        res.status(200).json({ status: "success", message: "consultant notifications read operation complete"})
+    }
+    catch (e) {
+        console.error(e)
+        res.status(500).json({ status: "error", message: "consultant notifications read opersation failed"})
+    }
+})
 
 // returns meetings for +- 1 month
 // req.body: { id: "string", date: "date" }
@@ -58,6 +71,18 @@ router.get('/meetings/list', async function (req, res) {
     }
 })
 
+// action: cancel meeting
+// req.body: { id: "string", meetingId: "string" }
+// router.post('/meetings/cancel', async function(req, res) {
+//     let result = await consultantController.consultantCancelMeeting(req.body.id, req.body.meetingId)
+//     if (result) {
+//         res.status(200).json({ status: "success", message: `meeting with ${req.meetingId} canceled successfully`})
+//     }
+//     else {
+//         res.status(500).json({ status: "error", message: "cannot cancel meeting, try again later"})
+//     }
+// })
+
 // returns purse & all transaction records
 // req.body: { id: "string" }
 router.get('/purse', async function (req, res) {
@@ -84,31 +109,6 @@ router.get('/profile', async function (req, res) {
     }
 })
 
-// action: cancel meeting
-// req.body: { id: "string", meetingId: "string" }
-router.post('/meetings/cancel', async function(req, res) {
-    let result = await consultantController.consultantCancelMeeting(req.body.id, req.body.meetingId)
-    if (result) {
-        res.status(200).json({ status: "success", message: `meeting with ${req.meetingId} canceled successfully`})
-    }
-    else {
-        res.status(500).json({ status: "error", message: "cannot cancel meeting, try again later"})
-    }
-})
-
-
-// action: read notification
-// req.body: { id: "string", announcementId: ["string"], notificationId: "string" }
-router.post('/notificaiton/read', async (req, res) => {
-    try {
-        await consultantController.consultantReadNotifications(req.body.id, req.body.announcementId, req.body.notificationId)
-        res.status(200).json({ status: "success", message: "consultant notifications read operation complete"})
-    }
-    catch (e) {
-        console.error(e)
-        res.status(500).json({ status: "error", message: "consultant notifications read opersation failed"})
-    }
-})
 
 // Exports
 module.exports = router
