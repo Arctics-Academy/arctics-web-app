@@ -124,6 +124,12 @@ const consultantReadNotifications = async (consultantId, announcementIdArray, no
     return true
 }
 
+const getMeetingQuestionsAndConditions = async (meetingId) => {
+    let meeting = await MeetingModel.findOne(meetingId)
+    if (!meeting) throw `drror x: meeting ${meetingId} returned empty object`
+    return { questions: meeting.details.questions, conditions: meeting.details.conditions }
+}
+
 
 // Util Functions
 const _compareMeeting = function(meeting1, meeting2) {
@@ -145,4 +151,6 @@ module.exports =
 
     consultantCancelMeeting,
     consultantReadNotifications,
+
+    getMeetingQuestionsAndConditions,
 }

@@ -83,6 +83,19 @@ router.get('/meetings/list', async function (req, res) {
 //     }
 // })
 
+// action: view meeting meeting information
+// req.body: { meetingId: "string" }
+router.get('/meetings/questions-and-conditions', async (req, res) => {
+    try {
+        let data = await consultantController.getMeetingQuestionsAndConditions(req.body.meetingId)
+        res.status(200).json({ status: "success", data: data })
+    }
+    catch (e) {
+        console.error(e)
+        res.status(500).json({ status: "error", message: "cannot get meeting details" })
+    }
+})
+
 // returns purse & all transaction records
 // req.body: { id: "string" }
 router.get('/purse', async function (req, res) {
