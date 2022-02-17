@@ -96,5 +96,19 @@ router.post('/meetings/cancel', async function(req, res) {
     }
 })
 
+
+// action: read notification
+// req.body: { id: "string", announcementId: ["string"], notificationId: "string" }
+router.post('/notificaiton/read', async (req, res) => {
+    try {
+        await consultantController.consultantReadNotifications(req.body.id, req.body.announcementId, req.body.notificationId)
+        res.status(200).json({ status: "success", message: "consultant notifications read operation complete"})
+    }
+    catch (e) {
+        console.error(e)
+        res.status(500).json({ status: "error", message: "consultant notifications read opersation failed"})
+    }
+})
+
 // Exports
 module.exports = router

@@ -22,7 +22,7 @@ Information Needed:
 
 Operations:
 - [x] Get Notification Information
-- [ ] Read Announcement / Notification
+- [x] Read Announcement / Notification
 
 ### Calendar & List (XD: Schedule & List)
 

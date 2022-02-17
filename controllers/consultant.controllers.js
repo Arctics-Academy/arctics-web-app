@@ -102,6 +102,28 @@ const consultantCancelMeeting = async function(consultantId, meetingId) {
     }
 }
 
+const consultantReadNotifications = async (consultantId, announcementIdArray, notificaionIdArray) => {
+    let consultant = await ConsultantModel.findOne(consultantId)
+    if (!consultant) throw `error x: consultant ${consultantId} returned empty object`
+    
+    for (announcement of consultant.announcements.list) {
+        if (announcementIdArray.includes(announcement.id)) {
+            announcement.read = true
+            consultant.announcements.unreadCount -= 1
+        }
+    }
+
+    for (notification of consultant.notifications.list) {
+        if (notificaionIdArray.includes(notification.id)) {
+            notification.read = true
+            consultant.notifications.unreadCount -= 1
+        }
+    }
+    
+    await consultant.save()
+    return true
+}
+
 
 // Util Functions
 const _compareMeeting = function(meeting1, meeting2) {
@@ -121,5 +143,6 @@ module.exports =
     getConsultantMeetingsList,
     getConsultantNotifications,
 
-    consultantCancelMeeting
+    consultantCancelMeeting,
+    consultantReadNotifications,
 }
