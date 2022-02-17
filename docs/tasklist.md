@@ -34,7 +34,7 @@ Information Needed:
 Operations
 - [x] Get Calendar Information
 - [x] Get List Information
-- [ ] View Questions & Conditions
+- [x] View Questions & Conditions
 
 ### Purse (XD: Wallet)
 
