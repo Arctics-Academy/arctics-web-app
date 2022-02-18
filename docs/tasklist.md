@@ -48,7 +48,7 @@ Information Needed:
 
 Operations:
 - [x] Get Purse Information
-- [ ] Get Account List Information
+- [x] Get Account List Information
 - [ ] Add Account
 
 
