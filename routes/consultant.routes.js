@@ -15,7 +15,7 @@ router.get('/dashboard', async function (req, res) {
     }
     catch (e) {
         console.log(e)
-        res.status(500).json({ status: "error", message: `cannot get consultant dashboard info with id ${req.body.id}`})
+        res.status(500).json({ status: "error", message: `cannot get consultant dashboard info with id ${req.body.id}` })
     }
 })
 
@@ -28,7 +28,7 @@ router.get('/notification', async function (req, res) {
     }
     catch (e) {
         console.log(e)
-        res.status(500).json({ status: "error", message: `cannot get consultant notifications with id ${req.body.id}`})
+        res.status(500).json({ status: "error", message: `cannot get consultant notifications with id ${req.body.id}` })
     }
 })
 
@@ -37,11 +37,11 @@ router.get('/notification', async function (req, res) {
 router.post('/notificaiton/read', async (req, res) => {
     try {
         await consultantController.consultantReadNotifications(req.body.id, req.body.announcementId, req.body.notificationId)
-        res.status(200).json({ status: "success", message: "consultant notifications read operation complete"})
+        res.status(200).json({ status: "success", message: `consultant notifications read operation complete` })
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: "consultant notifications read opersation failed"})
+        res.status(500).json({ status: "error", message: `consultant notifications read opersation failed` })
     }
 })
 
@@ -54,7 +54,7 @@ router.get('/meetings/calendar', async function (req, res) {
     }
     catch (e) {
         console.log(e)
-        res.status(500).json({ status: "error", message: `cannot get consultant calendar with id ${req.body.id}`})
+        res.status(500).json({ status: "error", message: `cannot get consultant calendar with id ${req.body.id}` })
     }
 })
 
@@ -67,7 +67,7 @@ router.get('/meetings/list', async function (req, res) {
     }
     catch (e) {
         console.log(e)
-        res.status(500).json({ status: "error", message: `cannot get consultant meeting list with id ${req.body.id}`})
+        res.status(500).json({ status: "error", message: `cannot get consultant meeting list with id ${req.body.id}` })
     }
 })
 
@@ -92,7 +92,7 @@ router.get('/meetings/questions-and-conditions', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: "cannot get meeting details" })
+        res.status(500).json({ status: "error", message: `cannot get meeting details` })
     }
 })
 
@@ -105,7 +105,7 @@ router.get('/purse', async function (req, res) {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: `cannot get consultant purse with id ${req.body.id}`})
+        res.status(500).json({ status: "error", message: `cannot get consultant purse with id ${req.body.id}` })
     }
 }) 
 
@@ -114,7 +114,7 @@ router.get('/purse', async function (req, res) {
 router.get('/purse/bank-info', async (req, res) => {
     try {
         let data = await consultantController.getConsultantBankInfo(req.body.id)
-        res.status(200).json({ status: "success", data: "data" })
+        res.status(200).json({ status: "success", data: data })
     }
     catch (e) {
         console.error(e)
@@ -131,7 +131,7 @@ router.post('/purse/bank-info', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: `cannot add consultant bank info`})
+        res.status(500).json({ status: "error", message: `cannot add consultant bank info` })
     }
 })
 
@@ -144,7 +144,7 @@ router.get('/profile', async function (req, res) {
     }
     catch(e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: `cannot get consultant profile with id ${req.body.id}`})
+        res.status(500).json({ status: "error", message: `cannot get consultant profile with id ${req.body.id}` })
     }
 })
 
