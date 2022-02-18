@@ -131,7 +131,7 @@ const consultantReadNotifications = async (consultantId, announcementIdArray, no
 
 const getMeetingQuestionsAndConditions = async (meetingId) => {
     let meeting = await MeetingModel.findOne(meetingId)
-    if (!meeting) throw `drror x: meeting ${meetingId} returned empty object`
+    if (!meeting) throw `error x: meeting ${meetingId} returned empty object`
     return { questions: meeting.details.questions, conditions: meeting.details.conditions }
 }
 
