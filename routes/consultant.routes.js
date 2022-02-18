@@ -148,6 +148,19 @@ router.get('/profile', async function (req, res) {
     }
 })
 
+// return consultant unread notification count
+// req.body: { id: "string" }
+router.get('/toolbar/notification-count', async (req, res) => {
+    try {
+        let data = await consultantController.getConsultantNotificationCount(req.body.id)
+        res.status(200).json({ status: "success", data: data })
+    }
+    catch (e) {
+        console.error(e)
+        res.status(500).json({ status: "error", message: `cannot get consultant notification count with id ${req.body.id}` })
+    }
+})
+
 
 // Exports
 module.exports = router

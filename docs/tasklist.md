@@ -71,7 +71,7 @@ Information Needed:
 - Notification Count
 
 Operations:
-- [ ] Get Total Notification Count
+- [x] Get Total Notification Count
 
 ## Backlog
 

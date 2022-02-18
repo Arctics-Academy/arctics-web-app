@@ -57,6 +57,11 @@ const getConsultantNotifications = async function(id) {
     return notifs
 }
 
+const getConsultantNotificationCount = async (id) => {
+    let consultant = await ConsultantModel.findOne(id).select('announcements.unreadCount notifications.unreadCount')
+    return consultant.announcement.unreadCount + consultant.notifications.unreadCount
+}
+
 const getConsultantBankInfo = async (id) => {
     let list = await ConsultantModel.findOne({ id: id }).select('purse.bankList')
     return list
@@ -168,6 +173,7 @@ module.exports =
     getConsultantMeetingsList,
     getConsultantNotifications,
     getConsultantBankInfo,
+    getConsultantNotificationCount,
 
     consultantCancelMeeting,
     consultantReadNotifications,
