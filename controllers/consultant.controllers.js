@@ -62,6 +62,20 @@ const getConsultantBankInfo = async (id) => {
     return list
 }
 
+const consultantAddBankInfo = async (id, data) => {
+    // data verification?
+    let consultant = await ConsultantModel.findOne({ id: id })
+    let bank = {
+        default: (consultant.pusre.length > 0 ? false : true),
+        usage: (data.usage === undefined ? "" : data.usage),
+        bankNo: data.bankNo,
+        accountNo: data.accountNo
+    }
+
+    consultant.purse.bankList.push(bank)
+    await consultant.save()
+}
+
 const consultantCancelMeeting = async function(consultantId, meetingId) {
     try {
         // Consultant Side
@@ -157,6 +171,7 @@ module.exports =
 
     consultantCancelMeeting,
     consultantReadNotifications,
+    consultantAddBankInfo,
 
     getMeetingQuestionsAndConditions,
 }

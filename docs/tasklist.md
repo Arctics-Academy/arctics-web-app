@@ -49,7 +49,7 @@ Information Needed:
 Operations:
 - [x] Get Purse Information
 - [x] Get Account List Information
-- [ ] Add Account
+- [x] Add Account
 
 
 ### Profile (XD: Consultant Accoutn)

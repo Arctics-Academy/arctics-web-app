@@ -122,6 +122,19 @@ router.get('/purse/bank-info', async (req, res) => {
     }
 })
 
+// action: add bank account
+// req.body: { id: "string", usage: "string", bankNo: "string", accountNo: "string" }
+router.post('/purse/bank-info', async (req, res) => {
+    try {
+        await consultantController.consultantAddBankInfo(req.body.id, req.body)
+        res.status(200).json({ status: "success", message: `consultant ${req.body.id} bank info added` })
+    }
+    catch (e) {
+        console.error(e)
+        res.status(500).json({ status: "error", message: `cannot add consultant bank info`})
+    }
+})
+
 // return consultant.id & consultant.profile obj
 // req.body: { id: "string" }
 router.get('/profile', async function (req, res) {
