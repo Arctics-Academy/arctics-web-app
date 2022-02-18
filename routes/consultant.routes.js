@@ -109,6 +109,19 @@ router.get('/purse', async function (req, res) {
     }
 }) 
 
+// action: get consultant bank no
+// req.body: { id: "string"}
+router.get('/purse/bank-info', async (req, res) => {
+    try {
+        let data = await consultantController.getConsultantBankInfo(req.body.id)
+        res.status(200).json({ status: "success", data: "data" })
+    }
+    catch (e) {
+        console.error(e)
+        res.status(500).json({ status: "error", message: `cannot get consultant bank info with id ${req.body.id}`})
+    }
+})
+
 // return consultant.id & consultant.profile obj
 // req.body: { id: "string" }
 router.get('/profile', async function (req, res) {

@@ -37,6 +37,13 @@ const ConsultantMeetingSchema = new mongoose.Schema({
     comment: { type: String, required: true, default: "" }
 }, { _id: false })
 
+const ConsultantBankSchema = new mongoose.Schema({
+    default: { type: Boolean, required: true, default: false },
+    usage: { type: String },
+    bankNo: { type: String, required: true },
+    accountNo: { type: String, required: true }
+}, { _id: false })
+
 const ConsultantSchema = new mongoose.Schema({
     id: { type: String, required: true, index: true, select: true, unique: true },
     profile: {
@@ -76,7 +83,8 @@ const ConsultantSchema = new mongoose.Schema({
     purse: {
         balance: { type: Number, required: true, default: 0 },
         withdrawn: { type: Number, required: true, default: 0 },
-        transactions: { type: [ConsultantTransactionSchema], required: true , default: [] }
+        transactions: { type: [ConsultantTransactionSchema], required: true , default: [] },
+        bankList: { type: [ConsultantBankSchema], required: true, default: [] }
     },
     meetings: { 
         future: { type: [ConsultantMeetingSchema], required: true, default: [] },
