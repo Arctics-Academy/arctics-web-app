@@ -170,6 +170,9 @@ const consultantAddStudentId = async (id, file) => {
 
     // send system verification email...
     // MISSING
+
+    // cleanup
+    fs.unlinkSync(file.path)
 }
 
 const getMeetingQuestionsAndConditions = async (meetingId) => {
