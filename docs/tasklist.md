@@ -61,7 +61,7 @@ Operations:
 - [x] Get Profile Information Object
 - [x] Edit Profile Information
 - [x] Upload Student ID
-- [ ] Edit Timetable Information
+- [x] Edit Timetable Information
 
 ## Component
 

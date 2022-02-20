@@ -175,6 +175,19 @@ router.post('/profile', StudentIdUploadMiddleware.single('profilePhoto'), async 
     }
 })
 
+// action: update consultant timetable
+// req.body: { id: "string", data: timetable obj }
+router.post('/profile/timetable', async (req, res) => {
+    try {
+        await consultantController.consultantUpdateTimetable(req.body.id, rqe.body.data)
+        res.status(200).json({ status: "success", message: `consultant ${req.body.id} timetable update successful` })
+    }
+    catch (e) {
+        console.error(e)
+        res.status(200).json({ status: "error", message: `consultant ${req.body.id} timetable update failed` })
+    }
+})
+
 // return consultant unread notification count
 // req.body: { id: "string" }
 router.get('/toolbar/notification-count', async (req, res) => {

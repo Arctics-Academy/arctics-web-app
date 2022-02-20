@@ -203,6 +203,14 @@ const consultantUpdateProfile = async (id, data, file) => {
     await consultant.save()
 }
 
+const consultantUpdateTimetable = async (id, timetable) => {
+    let consultant = await ConsultantModel.findOne({ id: id })
+
+    // should run validation checks?
+    consultant.profile.timetable = timetable
+
+    await consultant.save()
+}
 
 const getMeetingQuestionsAndConditions = async (meetingId) => {
     let meeting = await MeetingModel.findOne(meetingId)
@@ -236,6 +244,7 @@ module.exports =
     consultantAddBankInfo,
     consultantAddStudentId,
     consultantUpdateProfile,
+    consultantUpdateTimetable,
 
     getMeetingQuestionsAndConditions,
 }
