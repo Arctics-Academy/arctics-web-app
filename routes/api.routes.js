@@ -24,6 +24,10 @@ router.use('/demo', demoRouter);
 const consultantRouter = require('./consultant.routes');
 router.use('/consultant', consultantRouter);
 
+// system - admin console (needs to be updated)
+const systemRouter = require('./system.routes')
+router.use('/system', systemRouter)
+
 
 // exports
 module.exports = router;
