@@ -1,10 +1,13 @@
-var express = require('express');
-var router = express.Router();
+// setup
+const express = require('express');
+const router = express.Router();
 
-// Module dependancies.
-var { currentTimeString } = require('../utils/time.utils')
+// packages & modules
+const { currentTimeString } = require('../utils/time.utils')
 
-// ALL ping.
+
+// api routes
+// ping - basic server test
 router.all('/ping', function(req, res) {
   let bind = {
     status: "success",
@@ -13,12 +16,14 @@ router.all('/ping', function(req, res) {
   res.status(200).json(bind);
 });
 
-// Demo endpoints.
-var demoRouter = require('./demo.routes');
+// demo - everything before product launch
+const demoRouter = require('./demo.routes');
 router.use('/demo', demoRouter);
 
-// Consultant endpoints.
-var consultantRouter = require('./consultant.routes');
+// consultant - everything consultant side
+const consultantRouter = require('./consultant.routes');
 router.use('/consultant', consultantRouter);
 
+
+// exports
 module.exports = router;
