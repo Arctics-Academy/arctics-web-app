@@ -2,8 +2,9 @@
 var express = require('express')
 var router = express.Router()
 
-// Controllers
+// Controllers & Middleware
 const consultantController = require('../controllers/consultant.controllers')
+const { StudentIdUploadMiddleware } = require('../middlewares/upload.middlewares')
 
 // Routes
 // returns whole consultant obj
@@ -145,6 +146,19 @@ router.get('/profile', async function (req, res) {
     catch(e) {
         console.error(e)
         res.status(500).json({ status: "error", message: `cannot get consultant profile with id ${req.body.id}` })
+    }
+})
+
+// action: add consultant student id scan
+// req.body: { id: "string", studentIdScan: file }
+router.post('/profile/student-id-upload', StudentIdUploadMiddleware.single('studentIdScan'), async (req, res) => {
+    try {
+        await consultantController.consultantAddStudentId(req.body.id, req.file)
+        res.status(200).json({ status: "success", message: `upload student id scan for consultant ${req.body.id} successful` })
+    }
+    catch (e) {
+        console.error(e)
+        res.status(500).json({ status: "error", message: `upload student id scan for consultant ${req.body.id} failed` })
     }
 })
 

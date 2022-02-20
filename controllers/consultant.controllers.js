@@ -1,3 +1,6 @@
+// Packages
+const fs = require('fs')
+
 // Models
 const { ConsultantModel } = require('../models/consultant.models')
 const { MeetingModel } = require('../models/meeting.models')
@@ -148,6 +151,27 @@ const consultantReadNotifications = async (consultantId, announcementIdArray, no
     return true
 }
 
+const consultantAddStudentId = async (id, file) => {
+    // save info to database
+    let consultant = await ConsultantModel.findOne(id)
+
+    let imgFile = fs.readFileSync(file.path)
+    let imgEncoded = imgFile.toString()
+    
+    let media =
+    {
+        timestamp: new Date(),
+        type: file.mimetype,
+        data: new Buffer.from(imgEncoded, 'base64')
+    }
+
+    consultant.profile.studentCard = media
+    await consultant.save()
+
+    // send system verification email...
+    // MISSING
+}
+
 const getMeetingQuestionsAndConditions = async (meetingId) => {
     let meeting = await MeetingModel.findOne(meetingId)
     if (!meeting) throw `error x: meeting ${meetingId} returned empty object`
@@ -178,6 +202,7 @@ module.exports =
     consultantCancelMeeting,
     consultantReadNotifications,
     consultantAddBankInfo,
+    consultantAddStudentId,
 
     getMeetingQuestionsAndConditions,
 }

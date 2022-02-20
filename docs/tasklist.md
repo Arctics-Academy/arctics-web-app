@@ -60,7 +60,7 @@ Information Needed:
 Operations:
 - [x] Get Profile Information Object
 - [ ] Edit Profile Information
-- [ ] Upload Student ID
+- [x] Upload Student ID
 - [ ] Edit Timetable Information
 
 ## Component
