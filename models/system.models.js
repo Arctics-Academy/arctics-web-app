@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const MediaSchema = new mongoose.Schema({
     timestamp: { type: Date, required: true },
     type: { type: String, required: true },
-    data: { type: String, required: true }
+    data: { type: Buffer, required: true }
 }, { _id: false });
 
 const AnnouncementSchema = new mongoose.Schema({
