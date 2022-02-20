@@ -130,7 +130,7 @@ const consultantCancelMeeting = async function(consultantId, meetingId) {
 }
 
 const consultantReadNotifications = async (consultantId, announcementIdArray, notificaionIdArray) => {
-    let consultant = await ConsultantModel.findOne(consultantId)
+    let consultant = await ConsultantModel.findOne({ id: consultantId })
     if (!consultant) throw `error x: consultant ${consultantId} returned empty object`
     
     for (announcement of consultant.announcements.list) {
@@ -153,7 +153,7 @@ const consultantReadNotifications = async (consultantId, announcementIdArray, no
 
 const consultantAddStudentId = async (id, file) => {
     // save info to database
-    let consultant = await ConsultantModel.findOne(id)
+    let consultant = await ConsultantModel.findOne({ id: id })
 
     let imgFile = fs.readFileSync(file.path)
     let imgEncoded = imgFile.toString()
@@ -213,7 +213,7 @@ const consultantUpdateTimetable = async (id, timetable) => {
 }
 
 const getMeetingQuestionsAndConditions = async (meetingId) => {
-    let meeting = await MeetingModel.findOne(meetingId)
+    let meeting = await MeetingModel.findOne({ id: meetingId })
     if (!meeting) throw `error x: meeting ${meetingId} returned empty object`
     return { questions: meeting.details.questions, conditions: meeting.details.conditions }
 }
