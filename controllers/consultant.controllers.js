@@ -175,6 +175,35 @@ const consultantAddStudentId = async (id, file) => {
     fs.unlinkSync(file.path)
 }
 
+const consultantUpdateProfile = async (id, data, file) => {
+    let consultant = await ConsultantModel.findOne({ id: id })
+
+    for (const prop in data) {
+        try {
+            consultant.profile[prop] = data[prop]
+        }
+        catch (e) {
+            console.error(e)
+            continue
+        }
+    }
+
+    if (file) {
+        let imgFile = fs.readFileSync(file.path)
+        let imgEncoded = imgFile.toString()
+        let media = 
+        {
+            timestamp: new Date(),
+            type: file.mimetype,
+            data: new Buffer.from(imgEncoded, 'base64')
+        }
+        consultant.profile.photo = media
+    }
+
+    await consultant.save()
+}
+
+
 const getMeetingQuestionsAndConditions = async (meetingId) => {
     let meeting = await MeetingModel.findOne(meetingId)
     if (!meeting) throw `error x: meeting ${meetingId} returned empty object`
@@ -206,6 +235,7 @@ module.exports =
     consultantReadNotifications,
     consultantAddBankInfo,
     consultantAddStudentId,
+    consultantUpdateProfile,
 
     getMeetingQuestionsAndConditions,
 }

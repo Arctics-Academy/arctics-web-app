@@ -162,6 +162,19 @@ router.post('/profile/student-id-upload', StudentIdUploadMiddleware.single('stud
     }
 })
 
+//action: update consultant profile
+// req.body: { id: "string", data: profile object, profilePhoto: file }
+router.post('/profile', StudentIdUploadMiddleware.single('profilePhoto'), async (req, res) => {
+    try {
+        await consultantController.consultantUpdateProfile(req.body.id, req.body.data, req.file)
+        res.status(200).json({ status: "success", message: `consultant ${req.body.id} profile update successful` })
+    }
+    catch (e) {
+        console.error(e)
+        res.status(200).json({ status: "error", message: `consultant ${req.body.id} profile update failed` })
+    }
+})
+
 // return consultant unread notification count
 // req.body: { id: "string" }
 router.get('/toolbar/notification-count', async (req, res) => {

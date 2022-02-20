@@ -59,7 +59,7 @@ Information Needed:
 
 Operations:
 - [x] Get Profile Information Object
-- [ ] Edit Profile Information
+- [x] Edit Profile Information
 - [x] Upload Student ID
 - [ ] Edit Timetable Information
 
