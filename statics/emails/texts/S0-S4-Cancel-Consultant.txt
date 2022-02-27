@@ -1,0 +1,1 @@
+`很遺憾您於${month}月${date}日${hour}時${min}分的諮詢已被學生取消。諮詢編號為${meetingId}，諮詢顧問為${consultantName}顧問，諮詢學生為${studentName}同學，諮詢時間為${month}月${date}日${hour}時${min}分時段，詳情請見Arctics Academy網頁。由於學生於諮詢日期的兩天內取消訂單，我們將給付您35％的顧問費作為補償，我們感到萬分抱歉！`

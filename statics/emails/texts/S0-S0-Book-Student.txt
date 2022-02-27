@@ -1,0 +1,1 @@
+`您已成功預約與${consultantName}顧問的諮詢！諮詢編號為${meetingId}，諮詢顧問為${consultantName}顧問，諮詢學生為${studentName}同學，諮詢時間為${month}月${date}日${hour}時${min}分時段，詳情請見Arctics Academy網頁。提醒您於諮詢日期的兩天前匯款（不含諮詢當日），意即若您預約週一的諮詢，最遲匯款時間為週五23時59分。若逾時未匯款我們將會自動幫您取消預約。`
