@@ -4,7 +4,7 @@ dotenv.config();
 const { read_file_to_base64, read_file_to_string } = require('./file.utils')
 
 const pug = require('pug');
-var compiled_early_access_email = pug.compileFile('statics/emails/templates/early-access.pug');
+var compiled_early_access_email = pug.compileFile('statics/emails/pugs/DEMO-EarlyAccess.pug');
 
 const form_data = require('form-data');
 const mail_composer = require('nodemailer/lib/mail-composer');
@@ -21,7 +21,7 @@ let early_access_email = async (data) => {
         from: `"Arctics升學顧問" <hello@mailgun.arctics.academy>`,
         to: `"${data.lastname+data.firstname}" <${data.email}>`,
         subject: `Arctics升學平台 搶先體驗`,
-        text: read_file_to_string('statics/emails/texts/early-access.txt'),
+        text: read_file_to_string('statics/emails/texts/DEMO-EarlyAccess.txt'),
         html: compiled_early_access_email(data),
         attachments: 
         [
@@ -29,7 +29,7 @@ let early_access_email = async (data) => {
                 filename: `logo.png`,
                 encoding: `base64`,
                 contentType: `image/png`,
-                content: read_file_to_base64('statics/emails/images/logo.png'),
+                content: read_file_to_base64('statics/emails/imgs/logo.png'),
                 cid: `<logo.png@arctics.academy>`
             }
         ]
