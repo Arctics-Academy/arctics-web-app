@@ -9,4 +9,13 @@ let read_file_to_string = (path) => {
     return fs.readFileSync(path);
 }
 
-module.exports = { read_file_to_base64, read_file_to_string }
+const getEmailAddressee = (identifier) => {
+    return identifier.split("-").pop()
+}
+
+module.exports = 
+{ 
+    read_file_to_base64, 
+    read_file_to_string, 
+    getEmailAddressee 
+}
