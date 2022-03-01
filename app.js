@@ -1,6 +1,7 @@
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+var session = require('express-session')
 var logger = require('morgan');
 var dotenv = require('dotenv');
 var cors = require('cors');
@@ -18,19 +19,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'frontend', 'build')));
 
-// Cors Whitlist Unimplemented
-const cors_whitelist = [ 'https://arctics.academy', 'https://www.arctics.academy' ];
-const cors_options = {
-    origin: (origin, callback) => {
-        if (cors_whitelist.indexOf[origin] !== -1) callback(true, null);
-        else new Error('not allowed by cors');
-    }
-}
-app.use(cors());
 
 databaseConfig();
 
-app.use('/api', apiRouter);
+app.use('/api', createAuthSessionObj, apiRouter);
 app.use('*', indexRouter);
 
 
@@ -42,6 +34,18 @@ async function databaseConfig() {
         console.error(e);
         process.exit(1);
     }
+}
+
+function createAuthSessionObj(req, res, next) { 
+	if (!req.session.auth) {
+		req.session.auth = {
+			studentId: null,
+			studentAuth: false,
+			consultantId: null,
+			consultantAuth: false
+		}
+	}
+	next()
 }
 
 module.exports = app;

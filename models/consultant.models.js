@@ -46,6 +46,13 @@ const ConsultantBankSchema = new mongoose.Schema({
 
 const ConsultantSchema = new mongoose.Schema({
     id: { type: String, required: true, index: true, select: true, unique: true },
+    user: {
+        email: { type: String, required: true }, // Email
+        passwordEncrypted: { type: String, required: true },
+        passwordSalt: { type: String, required: true },
+        otpEmail: { type: String },
+        otpMobile: { type: String}
+    },
     profile: {
         // 基本資料-上
         photo: { type: MediaSchema },
@@ -57,8 +64,8 @@ const ConsultantSchema = new mongoose.Schema({
         // 基本資料
         price: { type: Number, required: true, default: 200 }, // 費用
         school: { type: String, required: true }, // 就讀&畢業
-        major: { type: String, required: true }, // 就讀&畢業
-        year: { type: String, required: true }, // 就讀&畢業
+        major: { type: String }, // 就讀&畢業
+        year: { type: Number, required: true }, // 就讀&畢業
         field: { type: String, required: true, default: [] }, // 學群
         labels: { type: [String], required: true, default: [] }, // 諮詢項目
         experiences: { type: String }, // 相關經歷&能力證明

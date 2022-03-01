@@ -2,6 +2,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const { read_file_to_base64, read_file_to_string, getEmailAddressee } = require('./file.utils')
+require('./error.utils')
 
 const pug = require('pug');
 var compiled_early_access_email = pug.compileFile('statics/emails/pugs/DEMO-EarlyAccess.pug');
@@ -54,6 +55,8 @@ mapS0Subject.set("S0-S3-Cancel-Student", "[Arctics Academy升大學顧問平台]
 mapS0Subject.set("S0-S4-Cancel-Consultant", "[Arctics Academy升大學顧問平台] 學生取消諮詢通知")
 mapS0Subject.set("S0-S4-Cancel-Student", "[Arctics Academy升大學顧問平台] 諮詢取消成功通知")
 
+const OtpCompiledEmail = pug.compileFile('statics/emails/pugs/SYS-OtpEmail.pug')
+const OtpTemplateString = read_file_to_string('statics/emails/texts/SYS-OtpEmail.txt')
 
 let early_access_email = async (data) => {
     // Build mime message using nodemailer
@@ -155,6 +158,62 @@ const sendS0Email = async (identifier, consultantObj, studentObj, meetingObj) =>
     }
 }
 
+const sendEmailOtp = (userObj, otpCode) => {
+    // Set up rendering parameters
+    let userName = userObj.profile.surname + userObj.profile.name
+    let isConsultant = true
+    let code = otpCode
+
+    // Test type of user
+    // if (userObj.id.substring(0, 2) === "ST") {
+    //     isConsultant = false
+    // }
+    const data = { userName, isConsultant, code }
+
+    // Email data
+    const emailName = userName
+    const emailAddress = userObj.profile.email
+    const emailSubject = `[Arctics Academy升大學顧問平台] 電子郵件驗證碼`
+    const emailText = eval(OtpTemplateString)
+    const emailHtml = OtpCompiledEmail(data)
+    
+    // Build email object
+    let mail_content = 
+    {
+        from: `"Arctics升學顧問" <hello@mailgun.arctics.academy>`,
+        to: `"${emailName}" <${emailAddress}>`,
+        subject: emailSubject,
+        text: emailText,
+        html: emailHtml,
+        attachments:
+        [
+            {
+                filename: `logo.png`,
+                encoding: `base64`,
+                contentType: `image/png`,
+                content: read_file_to_base64('statics/emails/imgs/logo.png'),
+                cid: `<logo.png@arctics.academy>`
+            }
+        ]
+    };
+    const raw_mime_mail = new mail_composer(mail_content) // converting to MIME
+    const compiled_mime_mail = await raw_mime_mail.compile().build()
+
+    // Build mailgun object
+    let mail_object = {
+        to: [ `"${emailName}" <${emailAddress}>` ],
+        message: compiled_mime_mail
+    }
+
+    // Send mail through mailgun
+    try {
+        await mailgun_instance.messages.create(mailgun_domain, mail_object);
+    } 
+    catch(e) {
+        console.log(e)
+    }
+}
+
 const privateToTwoCharString = (item) => {
     let itemStr = toString(item)
     if (itemStr.length >= 2) return itemStr
@@ -165,4 +224,5 @@ const privateToTwoCharString = (item) => {
 module.exports = { 
     early_access_email,
     sendS0Email,
+    sendEmailOtp,
 }
