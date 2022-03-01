@@ -6,4 +6,10 @@ const systemValidateConsultantStudentCard = async (id) => {
     await consultant.save()
 }
 
-module.exports = { systemValidateConsultantStudentCard }
+const getConsultantObject = async (id) => {
+    let consultant = await ConsultantModel.findOne({ id: id })
+    delete consultant.user
+    return consultant
+}
+
+module.exports = { systemValidateConsultantStudentCard, getConsultantObject }
