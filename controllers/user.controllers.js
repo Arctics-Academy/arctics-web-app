@@ -1,6 +1,6 @@
 const PasswordUtil = require('../utils/password.utils')
 const IdUtil = require('../utils/id.utils')
-require('../utils/error.utils')
+const { DuplicateUserError } = require('../utils/error.utils')
 
 const MobileUtil = require('../utils/mobile.utils')
 const EmailUtil = require('../utils/email.utils')
