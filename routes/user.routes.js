@@ -10,8 +10,7 @@ router.post('/consultant/register', async (req, res) => {
         res.status(200).json({ status: "success", data: data })
     }
     catch (e) {
-        console.log(typeof e)
-        if (typeof e === DuplicateUserError) {
+        if (e.name === "DuplicateUserError") {
             res.status(200).json({ status: "failed", message: "duplicate consultant was found"})
         }
         else {
