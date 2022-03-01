@@ -92,7 +92,7 @@ const registerConsultant = async (reqBody) => {
         console.error(e)
         throw DatabaseError(`failed to save new consultant (${reqBody.email}) to MongoDB`)
     }
-    return true
+    return newConsultant
 }
 
 // expected reqBody to be

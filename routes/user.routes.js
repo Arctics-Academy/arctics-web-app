@@ -6,8 +6,8 @@ const { registerConsultant, loginConsultant, sendEmailOTP, matchEmailOTP, sendMo
 
 router.post('/consultant/register', async (req, res) => {
     try {
-        await registerConsultant(req.body)
-        res.status(200).json({ status: "success", message: "consultant registeration succeeded"})
+        let data = await registerConsultant(req.body)
+        res.status(200).json({ status: "success", data: data })
     }
     catch (e) {
         if (typeof e === DuplicateUserError) {
