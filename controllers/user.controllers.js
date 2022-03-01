@@ -84,16 +84,18 @@ const registerConsultant = async (reqBody) => {
     }
     
     // Save To MongoDb
+    let data
     try {
         let newConsultant = new ConsultantModel(consultantObj)
         await newConsultant.save()
+        delete newConsultant.user
+        data = newConsultant
     } 
     catch (e) {
         console.error(e)
         throw DatabaseError(`failed to save new consultant (${reqBody.email}) to MongoDB`)
     }
-    delete newConsultant.user
-    return newConsultant
+    return data
 }
 
 // expected reqBody to be
