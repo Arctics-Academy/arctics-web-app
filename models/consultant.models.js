@@ -66,7 +66,7 @@ const ConsultantSchema = new mongoose.Schema({
         school: { type: String, required: true }, // 就讀&畢業
         major: { type: String }, // 就讀&畢業
         year: { type: Number, required: true }, // 就讀&畢業
-        field: { type: String, required: true, default: [] }, // 學群
+        field: { type: [String], required: true, default: [] }, // 學群
         labels: { type: [String], required: true, default: [] }, // 諮詢項目
         experiences: { type: String }, // 相關經歷&能力證明
         intro: { type: String }, // 個人簡介
