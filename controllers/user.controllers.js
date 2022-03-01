@@ -170,7 +170,7 @@ const matchMobileOTP = async (reqBody) => {
 
     // Match
     let verified = false
-    if (code === user.user.otpMobile) {
+    if (reqBody.code === user.user.otpMobile) {
         user.profile.mobileVerified = true
         verified = true
     }
@@ -231,7 +231,7 @@ const matchEmailOTP = async (reqBody) => {
     }
 
     let verified = false
-    if (code === user.user.otpEmail) {
+    if (reqBody.code === user.user.otpEmail) {
         user.profile.emailVerified = true
         verified = true
     }
