@@ -11,7 +11,7 @@ router.post('/consultant/register', async (req, res) => {
     }
     catch (e) {
         if (typeof e === DuplicateUserError) {
-            res.status(403).json({ status: "failed", message: "duplicate consultant was found"})
+            res.status(200).json({ status: "failed", message: "duplicate consultant was found"})
         }
         else {
             console.error(e)
@@ -29,7 +29,7 @@ router.post('/consultant/login', async (req, res) => {
             res.status(200).json(result)
         }
         else {
-            res.status(403).json(result)
+            res.status(200).json(result)
         }
     }
     catch (e) {
@@ -55,7 +55,7 @@ router.post('/consultant/email-otp', async (req, res) => {
             res.status(200).json({ status: "success", message: "email otp matched"})
         }
         else {
-            res.status(403).json({ status: "failed", message: "email otp did not match"})
+            res.status(200).json({ status: "failed", message: "email otp did not match"})
         }
     }
     catch (e) {
@@ -81,7 +81,7 @@ router.post('/consultant/mobile-otp', async (req, res) => {
             res.status(200).json({ status: "success", message: "email otp matched"})
         }
         else {
-            res.status(403).json({ status: "failed", message: "email otp did not match"})
+            res.status(200).json({ status: "failed", message: "email otp did not match"})
         }
     }
     catch (e) {
