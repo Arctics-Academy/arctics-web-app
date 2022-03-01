@@ -158,7 +158,7 @@ const sendS0Email = async (identifier, consultantObj, studentObj, meetingObj) =>
     }
 }
 
-const sendEmailOtp = (userObj, otpCode) => {
+const sendEmailOtp = async (userObj, otpCode) => {
     // Set up rendering parameters
     let userName = userObj.profile.surname + userObj.profile.name
     let isConsultant = true
