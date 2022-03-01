@@ -214,6 +214,46 @@ const sendEmailOtp = async (userObj, otpCode) => {
     }
 }
 
+const sendSystemStudentCardVerification = async (userObj, file) => {
+    const emailSubject = `[Arctics系統] 學生證驗證`
+    const emailText = toString(userObj) + "\n" + `https://arctics.academy/system/consultant/confirm-student-id/${userObj.id}`
+    
+    // Build email object
+    let mail_content = 
+    {
+        from: `"Arctics升學顧問" <hello@mailgun.arctics.academy>`,
+        to: "arcticsteam.official@gmail.com",
+        subject: emailSubject,
+        text: emailText,
+        attachments:
+        [
+            {
+                filename: file.filename,
+                encoding: `base64`,
+                contentType: file.mimetype,
+                content: read_file_to_base64(file.path),
+                cid: `<student_card@arctics.academy>`
+            }
+        ]
+    };
+    const raw_mime_mail = new mail_composer(mail_content) // converting to MIME
+    const compiled_mime_mail = await raw_mime_mail.compile().build()
+
+    // Build mailgun object
+    let mail_object = {
+        to: [ "arcticsteam.official@gmail.com" ],
+        message: compiled_mime_mail
+    }
+
+    // Send mail through mailgun
+    try {
+        await mailgun_instance.messages.create(mailgun_domain, mail_object);
+    } 
+    catch(e) {
+        console.log(e)
+    }
+}
+
 const privateToTwoCharString = (item) => {
     let itemStr = toString(item)
     if (itemStr.length >= 2) return itemStr
@@ -225,4 +265,6 @@ module.exports = {
     early_access_email,
     sendS0Email,
     sendEmailOtp,
+
+    sendSystemStudentCardVerification,
 }

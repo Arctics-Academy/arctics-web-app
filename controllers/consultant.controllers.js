@@ -189,6 +189,7 @@ const consultantUpdateProfile = async (id, data, file) => {
     }
 
     if (file) {
+        // Save to database
         let imgFile = fs.readFileSync(file.path)
         let imgEncoded = imgFile.toString()
         let media = 
@@ -198,6 +199,12 @@ const consultantUpdateProfile = async (id, data, file) => {
             data: new Buffer.from(imgEncoded, 'base64')
         }
         consultant.profile.photo = media
+
+        // Notify system
+        sendSystemStudentCardVerification(consultant, file)
+
+        // Cleanup
+        fs.unlinkSync(file.path)
     }
 
     await consultant.save()
