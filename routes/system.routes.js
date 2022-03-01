@@ -21,7 +21,7 @@ router.get('/consultant', async (req, res) => {
             res.status(200).json({ status: "success", data: data })
         }
         else {
-            res.status(400).json({ status: "failed", message: "session timed out"})
+            res.status(403).json({ status: "failed", message: "session timed out"})
         }
     }
     catch (e) {
