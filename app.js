@@ -13,7 +13,7 @@ var apiRouter = require('./routes/api.routes');
 var app = express();
 dotenv.config();
 
-app.use(cors())
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -28,6 +28,7 @@ app.use(session({
 		httpOnly: true
 	}
 }))
+app.use(cors())
 
 databaseConfig();
 

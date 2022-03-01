@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-require('../utils/error.utils')
+const { DuplicateUserError } = require('../utils/error.utils')
 require('../controllers/user.controllers')
 
 router.post('/consultant/register', async (req, res) => {
