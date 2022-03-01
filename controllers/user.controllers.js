@@ -16,9 +16,9 @@ const ConsultantModel = require('../models/consultant.models')
 // }
 
 const privateCheckDuplicateConsultant = async (email) => {
-    let consultantAry = await ConsultantModel.find({ 'user.email': email })
-    if (consultantAry.length !== 0) return true
-    return false;
+    let consultant = await ConsultantModel.findOne({ 'user.email': email })
+    if (consultant === null) return true
+    return false
 }
 
 // async function registerStudent(input) {
