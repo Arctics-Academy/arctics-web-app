@@ -38,7 +38,7 @@ router.post('/consultant/login', async (req, res) => {
     }
 })
 
-router.get('/consultant/email-otp', async (req, res) => {
+router.post('/consultant/email-otp/send', async (req, res) => {
     try {
         await sendEmailOTP(req.body)
         res.status(200).json({ status: "success", message: "email otp sent"})
@@ -49,7 +49,7 @@ router.get('/consultant/email-otp', async (req, res) => {
     }
 })
 
-router.post('/consultant/email-otp', async (req, res) => {
+router.post('/consultant/email-otp/verify', async (req, res) => {
     try {
         if (await matchEmailOTP(req.body)) {
             res.status(200).json({ status: "success", message: "email otp matched"})
@@ -64,7 +64,7 @@ router.post('/consultant/email-otp', async (req, res) => {
     }
 })
 
-router.get('/consultant/mobile-otp', async (req, res) => {
+router.post('/consultant/mobile-otp/send', async (req, res) => {
     try {
         await sendMobileOTP(req.body)
         res.status(200).json({ status: "success", message: "mobile otp sent"})
@@ -75,7 +75,7 @@ router.get('/consultant/mobile-otp', async (req, res) => {
     }
 })
 
-router.post('/consultant/mobile-otp', async (req, res) => {
+router.post('/consultant/mobile-otp/verify', async (req, res) => {
     try {
         if (await matchMobileOTP(req.body)) {
             res.status(200).json({ status: "success", message: "email otp matched"})
