@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const { DuplicateUserError } = require('../utils/error.utils')
-require('../controllers/user.controllers')
+const { registerConsultant, loginConsultant, sendEmailOTP, matchEmailOTP, sendMobileOTP, matchMobileOTP } = require('../controllers/user.controllers')
 
 router.post('/consultant/register', async (req, res) => {
     try {
