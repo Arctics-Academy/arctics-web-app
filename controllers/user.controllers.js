@@ -6,7 +6,7 @@ const MobileUtil = require('../utils/mobile.utils')
 const EmailUtil = require('../utils/email.utils')
 
 // const StudentModel = require('../models/student')
-const ConsultantModel = require('../models/consultant.models')
+const { ConsultantModel } = require('../models/consultant.models')
 
 
 // async function checkDuplicateStudent(email) {
