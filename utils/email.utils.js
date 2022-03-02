@@ -30,17 +30,17 @@ mapS0CompiledEmail.set("S0-S4-Cancel-Consultant", pug.compileFile('statics/email
 mapS0CompiledEmail.set("S0-S4-Cancel-Student", pug.compileFile('statics/emails/pugs/S0-S4-Cancel-Student.pug'))
 
 var mapS0TemplateString = new Map()
-mapS0TemplateString.set("S0-S0-Book-Consultant", read_file_to_string('statics/emails/texts/S0-S0-Book-Consultant.txt').toString('utf-8'))
-mapS0TemplateString.set("S0-S0-Book-Student", read_file_to_string('statics/emails/texts/S0-S0-Book-Student.txt').toString('utf-8'))
-mapS0TemplateString.set("S0-S1-Cancel-Consultant", read_file_to_string('statics/emails/texts/S0-S1-Cancel-Consultant.txt').toString('utf-8'))
-mapS0TemplateString.set("S0-S1-Cancel-Student", read_file_to_string('statics/emails/texts/S0-S1-Cancel-Student.txt').toString('utf-8'))
-mapS0TemplateString.set("S0-S2-Cancel-Consultant", read_file_to_string('statics/emails/texts/S0-S2-Cancel-Consultant.txt').toString('utf-8'))
-mapS0TemplateString.set("S0-S2-Cancel-Student", read_file_to_string('statics/emails/texts/S0-S2-Cancel-Student.txt').toString('utf-8'))
-mapS0TemplateString.set("S0-S2-Pay-Student", read_file_to_string('statics/emails/texts/S0-S2-Pay-Student.txt').toString('utf-8'))
-mapS0TemplateString.set("S0-S3-Cancel-Consultant", read_file_to_string('statics/emails/texts/S0-S3-Cancel-Consultant.txt').toString('utf-8'))
-mapS0TemplateString.set("S0-S3-Cancel-Student", read_file_to_string('statics/emails/texts/S0-S3-Cancel-Student.txt').toString('utf-8'))
-mapS0TemplateString.set("S0-S4-Cancel-Consultant", read_file_to_string('statics/emails/texts/S0-S4-Cancel-Consultant.txt').toString('utf-8'))
-mapS0TemplateString.set("S0-S4-Cancel-Student", read_file_to_string('statics/emails/texts/S0-S4-Cancel-Student.txt').toString('utf-8'))
+mapS0TemplateString.set("S0-S0-Book-Consultant", read_file_to_string('statics/emails/texts/S0-S0-Book-Consultant.txt'))
+mapS0TemplateString.set("S0-S0-Book-Student", read_file_to_string('statics/emails/texts/S0-S0-Book-Student.txt'))
+mapS0TemplateString.set("S0-S1-Cancel-Consultant", read_file_to_string('statics/emails/texts/S0-S1-Cancel-Consultant.txt'))
+mapS0TemplateString.set("S0-S1-Cancel-Student", read_file_to_string('statics/emails/texts/S0-S1-Cancel-Student.txt'))
+mapS0TemplateString.set("S0-S2-Cancel-Consultant", read_file_to_string('statics/emails/texts/S0-S2-Cancel-Consultant.txt'))
+mapS0TemplateString.set("S0-S2-Cancel-Student", read_file_to_string('statics/emails/texts/S0-S2-Cancel-Student.txt'))
+mapS0TemplateString.set("S0-S2-Pay-Student", read_file_to_string('statics/emails/texts/S0-S2-Pay-Student.txt'))
+mapS0TemplateString.set("S0-S3-Cancel-Consultant", read_file_to_string('statics/emails/texts/S0-S3-Cancel-Consultant.txt'))
+mapS0TemplateString.set("S0-S3-Cancel-Student", read_file_to_string('statics/emails/texts/S0-S3-Cancel-Student.txt'))
+mapS0TemplateString.set("S0-S4-Cancel-Consultant", read_file_to_string('statics/emails/texts/S0-S4-Cancel-Consultant.txt'))
+mapS0TemplateString.set("S0-S4-Cancel-Student", read_file_to_string('statics/emails/texts/S0-S4-Cancel-Student.txt'))
 
 var mapS0Subject = new Map()
 mapS0Subject.set("S0-S0-Book-Consultant", "[Arctics Academy升大學顧問平台] 學生預約諮詢通知")
@@ -56,7 +56,7 @@ mapS0Subject.set("S0-S4-Cancel-Consultant", "[Arctics Academy升大學顧問平�
 mapS0Subject.set("S0-S4-Cancel-Student", "[Arctics Academy升大學顧問平台] 諮詢取消成功通知")
 
 const OtpCompiledEmail = pug.compileFile('statics/emails/pugs/SYS-OtpEmail.pug')
-const OtpTemplateString = read_file_to_string('statics/emails/texts/SYS-OtpEmail.txt').toString('utf-8')
+const OtpTemplateString = read_file_to_string('statics/emails/texts/SYS-OtpEmail.txt')
 
 let early_access_email = async (data) => {
     // Build mime message using nodemailer
