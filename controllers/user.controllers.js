@@ -118,7 +118,7 @@ const loginConsultant = async (reqBody) => {
     // Login
     if (consultant.user.passwordEncrypted === hashed) {
         consultant = new Object(consultant)
-        delete consultant.user
+        consultant.user = null
         return { status: "success", data: consultant }
     }
     else {
