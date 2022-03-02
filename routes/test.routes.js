@@ -5,7 +5,6 @@ const { ConsultantModel } = require('../models/consultant.models')
 
 router.post('/consultant/meetings/add', async (req, res) => {
     try {
-        console.log('in try')
         let consultant = await ConsultantModel.findOne({ id: req.body.id })
 
         let timestamp = new Date()
@@ -15,13 +14,9 @@ router.post('/consultant/meetings/add', async (req, res) => {
         timestamp.setHours(req.body.hours)
         timestamp.setMinutes(req.body.mins)
 
-        console.log("timestamp", timestamp)
-        console.log("new Date()", new Date())
-        
-
         let meetingObj = {
             id: req.body.meetingId,
-            active: (timestamp < Date().now ? false : true),
+            status: (timestamp < Date().now ? "past" : "future"),
             startTimestamp: timestamp,
             studentName: req.body.studentName,
             studentYear: req.body.studentYear,

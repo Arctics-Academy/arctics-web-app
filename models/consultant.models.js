@@ -28,7 +28,7 @@ const ConsultantAnnouncementSchema = new mongoose.Schema({
 
 const ConsultantMeetingSchema = new mongoose.Schema({
     id: { type: String, required: true },
-    active: { type: Boolean, required: true, default: true },
+    status: { type: String, required: true, default: "future" },
     startTimestamp: { type: Date, required: true },
     studentName: { type: String, required: true },
     studentYear: { type: String, required: true },
