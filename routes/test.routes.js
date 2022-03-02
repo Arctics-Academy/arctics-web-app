@@ -45,14 +45,16 @@ router.post('/consultant/meetings/add', async (req, res) => {
 router.post('/consultant/notifications/add', async (req, res) => {
     try {
         let consultant = await ConsultantModel.findOne({ id: req.body.id })
+        console.log(consultant)
         let notif = {
-            id: req.body.id,
+            id: req.body.notificationId,
             timestamp: new Date(),
             title: req.body.title,
             content: req.body.content
         }
 
-        consultant.notifications.push(notif)
+        consultant.notifications.list.push(notif)
+        consultant.notifications.unreadCount += 1
         await consultant.save()
         res.sendStatus(200)
     }
