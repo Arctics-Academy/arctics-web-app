@@ -9,7 +9,8 @@ const { StudentIdUploadMiddleware } = require('../middlewares/upload.middlewares
 // Routes
 // returns whole consultant obj
 // req.body: { id: "string" }
-router.get('/dashboard', async function (req, res) {
+// tested
+router.post('/dashboard/get', async function (req, res) {
     try {
         let data = await consultantController.getConsultantDashboard(req.body.id)
         res.status(200).json({ status: "success", data: data })
@@ -22,7 +23,8 @@ router.get('/dashboard', async function (req, res) {
 
 // returns all announcements & notifications
 // req.body: { id: "string" }
-router.get('/notification', async function (req, res) {
+// tested
+router.post('/notification/get', async function (req, res) {
     try {
         let data = await consultantController.getConsultantNotifications(req.body.id)
         res.status(200).json({ status: "success", data: data })
@@ -48,7 +50,8 @@ router.post('/notificaiton/read', async (req, res) => {
 
 // returns meetings for +- 1 month
 // req.body: { id: "string", date: "date" }
-router.get('/meetings/calendar', async function (req, res) {
+// tested
+router.post('/meetings/calendar/get', async function (req, res) {
     try {
         let data = await consultantController.getConsultantMeetingsCalendar(req.body.id, req.body.date)
         res.status(200).json({ status: "success", data: data })
@@ -61,7 +64,8 @@ router.get('/meetings/calendar', async function (req, res) {
 
 // returns all meetings
 // req.body: { id: "string" }
-router.get('/meetings/list', async function (req, res) {
+// tested
+router.post('/meetings/list/get', async function (req, res) {
     try {
         let data = await consultantController.getConsultantMeetingsList(req.body.id)
         res.status(200).json({ status: "success", data: data })
@@ -86,7 +90,7 @@ router.get('/meetings/list', async function (req, res) {
 
 // action: view meeting meeting information
 // req.body: { meetingId: "string" }
-router.get('/meetings/questions-and-conditions', async (req, res) => {
+router.post('/meetings/questions-and-conditions/get', async (req, res) => {
     try {
         let data = await consultantController.getMeetingQuestionsAndConditions(req.body.meetingId)
         res.status(200).json({ status: "success", data: data })
@@ -99,7 +103,7 @@ router.get('/meetings/questions-and-conditions', async (req, res) => {
 
 // returns purse & all transaction records
 // req.body: { id: "string" }
-router.get('/purse', async function (req, res) {
+router.post('/purse/get', async function (req, res) {
     try {
         let data = await consultantController.getConsultantPurse(req.body.id)
         res.status(200).json({ status: "success", data: data })
@@ -112,7 +116,8 @@ router.get('/purse', async function (req, res) {
 
 // action: get consultant bank no
 // req.body: { id: "string"}
-router.get('/purse/bank-info', async (req, res) => {
+// tested
+router.post('/purse/bank/get', async (req, res) => {
     try {
         let data = await consultantController.getConsultantBankInfo(req.body.id)
         res.status(200).json({ status: "success", data: data })
@@ -125,7 +130,8 @@ router.get('/purse/bank-info', async (req, res) => {
 
 // action: add bank account
 // req.body: { id: "string", usage: "string", bankNo: "string", accountNo: "string" }
-router.post('/purse/bank-info', async (req, res) => {
+// tested
+router.post('/purse/bank/update', async (req, res) => {
     try {
         await consultantController.consultantAddBankInfo(req.body.id, req.body)
         res.status(200).json({ status: "success", message: `consultant ${req.body.id} bank info added` })
@@ -138,7 +144,8 @@ router.post('/purse/bank-info', async (req, res) => {
 
 // return consultant.id & consultant.profile obj
 // req.body: { id: "string" }
-router.get('/profile', async function (req, res) {
+// tested
+router.post('/profile/get', async function (req, res) {
     try {
         let data = await consultantController.getConsultantProfile(req.body.id)
         res.status(200).json({ status: "success", data: data })
@@ -151,7 +158,7 @@ router.get('/profile', async function (req, res) {
 
 // action: add consultant student id scan
 // req.body: { id: "string", studentIdScan: file }
-router.post('/profile/student-id-upload', StudentIdUploadMiddleware.single('studentIdScan'), async (req, res) => {
+router.post('/profile/student-id/update', StudentIdUploadMiddleware.single('studentIdScan'), async (req, res) => {
     try {
         await consultantController.consultantAddStudentId(req.body.id, req.file)
         res.status(200).json({ status: "success", message: `upload student id scan for consultant ${req.body.id} successful` })
@@ -164,7 +171,8 @@ router.post('/profile/student-id-upload', StudentIdUploadMiddleware.single('stud
 
 //action: update consultant profile
 // req.body: { id: "string", data: profile object, profilePhoto: file }
-router.post('/profile', StudentIdUploadMiddleware.single('profilePhoto'), async (req, res) => {
+// tested
+router.post('/profile/update', StudentIdUploadMiddleware.single('profilePhoto'), async (req, res) => {
     try {
         await consultantController.consultantUpdateProfile(req.body.id, req.body.data, req.file)
         res.status(200).json({ status: "success", message: `consultant ${req.body.id} profile update successful` })
@@ -177,9 +185,10 @@ router.post('/profile', StudentIdUploadMiddleware.single('profilePhoto'), async 
 
 // action: update consultant timetable
 // req.body: { id: "string", data: timetable obj }
-router.post('/profile/timetable', async (req, res) => {
+// tested
+router.post('/profile/timetable/get', async (req, res) => {
     try {
-        await consultantController.consultantUpdateTimetable(req.body.id, rqe.body.data)
+        await consultantController.consultantUpdateTimetable(req.body.id, req.body.data)
         res.status(200).json({ status: "success", message: `consultant ${req.body.id} timetable update successful` })
     }
     catch (e) {
@@ -190,7 +199,8 @@ router.post('/profile/timetable', async (req, res) => {
 
 // return consultant unread notification count
 // req.body: { id: "string" }
-router.get('/toolbar/notification-count', async (req, res) => {
+// tested
+router.post('/toolbar/notification-count/get', async (req, res) => {
     try {
         let data = await consultantController.getConsultantNotificationCount(req.body.id)
         res.status(200).json({ status: "success", data: data })

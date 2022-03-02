@@ -27,20 +27,22 @@ const getConsultantPurse = async function(id) {
 
 const getConsultantMeetingsCalendar = async function(id, date) {
     // load meetings
-    let meeting = await ConsultantModel.findOne({ id: id }).select('meetings')
+    let consultant = await ConsultantModel.findOne({ id: id }).select('meetings')
     
     // filter settings
+    date = new Date(date)
     year = date.getFullYear()
     month = date.getMonth()
     let start = timeUtil.yearMonthToDatetimeRange(timeUtil.previousMonth(year, month))[0]
     let end = timeUtil.yearMonthToDatetimeRange(timeUtil.nextMonth(year, month))[1]
     
     // filter all
-    meeting.future = meeting.future.filter(meeting => (start < meeting.timestamp < end))
-    meeting.past = meeting.past.filter(meeting => (start < meeting.timestamp < end))
-    meeting.canceled = meeting.canceled.filter(meeting => (start < meeting.timestamp < end))
+    let answer = {}
+    answer.future = consultant.meetings.future.filter(meeting => (start < meeting.timestamp < end))
+    answer.past = consultant.meetings.past.filter(meeting => (start < meeting.timestamp < end))
+    answer.cancelled = consultant.meetings.cancelled.filter(meeting => (start < meeting.timestamp < end))
     
-    return meeting
+    return answer
 }
 
 const getConsultantMeetingsList = async function(id) {
@@ -61,8 +63,8 @@ const getConsultantNotifications = async function(id) {
 }
 
 const getConsultantNotificationCount = async (id) => {
-    let consultant = await ConsultantModel.findOne(id).select('announcements.unreadCount notifications.unreadCount')
-    return consultant.announcement.unreadCount + consultant.notifications.unreadCount
+    let consultant = await ConsultantModel.findOne({ id: id }).select('announcements.unreadCount notifications.unreadCount')
+    return consultant.announcements.unreadCount + consultant.notifications.unreadCount
 }
 
 const getConsultantBankInfo = async (id) => {
@@ -74,7 +76,7 @@ const consultantAddBankInfo = async (id, data) => {
     // data verification?
     let consultant = await ConsultantModel.findOne({ id: id })
     let bank = {
-        default: (consultant.pusre.length > 0 ? false : true),
+        default: (consultant.purse.length > 0 ? false : true),
         usage: (data.usage === undefined ? "" : data.usage),
         bankNo: data.bankNo,
         accountNo: data.accountNo
@@ -178,9 +180,9 @@ const consultantAddStudentId = async (id, file) => {
 const consultantUpdateProfile = async (id, data, file) => {
     let consultant = await ConsultantModel.findOne({ id: id })
 
-    for (const prop in data) {
+    for (prop in data.profile) {
         try {
-            consultant.profile[prop] = data[prop]
+            consultant.profile[prop] = data.profile[prop]
         }
         catch (e) {
             console.error(e)
