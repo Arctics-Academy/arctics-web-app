@@ -24,7 +24,7 @@ router.post('/dashboard/get', async function (req, res) {
 // returns all announcements & notifications
 // req.body: { id: "string" }
 // tested
-router.post('/notification/get', async function (req, res) {
+router.post('/notifications/get', async function (req, res) {
     try {
         let data = await consultantController.getConsultantNotifications(req.body.id)
         res.status(200).json({ status: "success", data: data })
@@ -36,8 +36,9 @@ router.post('/notification/get', async function (req, res) {
 })
 
 // action: read notification
-// req.body: { id: "string", announcementId: ["string"], notificationId: "string" }
-router.post('/notificaiton/read', async (req, res) => {
+// req.body: { id: "string", announcementId: ["string"], notificationId: ["string"] }
+// tested
+router.post('/notifications/read', async (req, res) => {
     try {
         await consultantController.consultantReadNotifications(req.body.id, req.body.announcementId, req.body.notificationId)
         res.status(200).json({ status: "success", message: `consultant notifications read operation complete` })

@@ -13,7 +13,7 @@ const ConsultantTransactionSchema = new mongoose.Schema({
 }, { _id: false })
 
 const ConsultantNotificationSchema = new mongoose.Schema({
-    id: { type: Number, required: true },
+    id: { type: String, required: true },
     timestamp: { type: Date, required: true },
     title: { type: String, required: true },
     content: { type: String },
