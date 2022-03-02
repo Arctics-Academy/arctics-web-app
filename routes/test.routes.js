@@ -37,9 +37,50 @@ router.post('/consultant/meetings/add', async (req, res) => {
         res.sendStatus(200)
     }
     catch(e) {
-        console.log(e)
+        console.error(e)
         res.sendStatus(500)
     }
 })
+
+router.post('/consultant/notifications/add', async (req, res) => {
+    try {
+        let consultant = await ConsultantModel.findOne({ id: req.body.id })
+        let notif = {
+            id: req.body.id,
+            timestamp: new Date(),
+            title: req.body.title,
+            content: req.body.content
+        }
+
+        consultant.notifications.push(notif)
+        await consultant.save()
+        res.sendStatus(200)
+    }
+    catch (e) {
+        console.error(e)
+        res.sendStatus(500)
+    }
+})
+
+// router.post('/consultant/announcements/add', async (req, res) => {
+//     try {
+//         let consultant = await ConsultantModel.findOne({ id: req.body.id })
+//         let announ = {
+//             id: req.body.id,
+//             timestamp: new Date(),
+//             title: req.body.title,
+//             content: req.body.content
+//         }
+
+//         consultant.announcements.push(announ)
+//         await consultant.save()
+//         res.sendStatus(200)
+//     }
+//     catch (e) {
+//         console.error(e)
+//         res.sendStatus(500)
+//     }
+// })
+
 
 module.exports = router
