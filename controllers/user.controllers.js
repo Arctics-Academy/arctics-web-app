@@ -106,19 +106,20 @@ const registerConsultant = async (reqBody) => {
 // TODO: write to session object
 const loginConsultant = async (reqBody) => {
     // Check whether consultant exists
-    let consultantAry = await ConsultantModel.find({ 'user.email': reqBody.email })
-	if (consultantAry === []) {
+    let consultant = await ConsultantModel.findOne({ 'user.email': reqBody.email })
+	if (consultant === null) {
 		throw new UserDoesNotExistError(`consultant (${reqBody.email}) does not exist`)
 	}
 
     // Login Setup
-    let salt = consultantAry[0].user.passwordSalt
+    let salt = consultant.user.passwordSalt
     let hashed = PasswordUtil.matchHashPassword(reqBody.password, salt)
 
     // Login
-    if (consultantAry[0].user.passwordEncrypted === hashed) {
-        delete consultantAry[0].user
-        return { status: "success", data: consultantAry[0] }
+    if (consultant.user.passwordEncrypted === hashed) {
+        consultant = new Object(consultant)
+        delete consultant.user
+        return { status: "success", data: consultant }
     }
     else {
         return { status: "failed" }
