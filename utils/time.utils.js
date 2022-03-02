@@ -24,24 +24,31 @@ function timestampToString(timestamp) {
 }
 
 function yearMonthToDatetimeRange(year, month) {
-    let start = new Date();
-    start.setFullYear(year);
-    start.setMonth(month);
-    start.setDate(1);
-    
-    let end = new Date();
-    if (month === 12) {
-        end.setFullYear(year+1);
-        end.setMonth(1);
-        end.setDate(1);
+    let start = new Date()
+    if (month === 0) {
+        start.setFullYear(year-1)
+        start.setMonth(11)
+        start.setDate(1)
     }
     else {
-        end.setFullYear(year);
-        end.setMonth(month+1);
-        end.setDate(1);
+        start.setFullYear(year)
+        start.setMonth(month-1)
+        start.setDate(1)
+    }
+    
+    let end = new Date()
+    if (month === 11) {
+        end.setFullYear(year+1)
+        end.setMonth(0)
+        end.setDate(1)
+    }
+    else {
+        end.setFullYear(year)
+        end.setMonth(month+1)
+        end.setDate(1)
     }
 
-    return [start, end];
+    return [start, end]
 }
 
 function previousMonth(year, month) {

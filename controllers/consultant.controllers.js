@@ -33,14 +33,13 @@ const getConsultantMeetingsCalendar = async function(id, date) {
     date = new Date(date)
     year = date.getFullYear()
     month = date.getMonth()
-    let start = timeUtil.yearMonthToDatetimeRange(timeUtil.previousMonth(year, month))[0]
-    let end = timeUtil.yearMonthToDatetimeRange(timeUtil.nextMonth(year, month))[1]
+    let [start, end] = timeUtil.yearMonthToDatetimeRange(year, month)
     
     // filter all
     let answer = {}
-    answer.future = consultant.meetings.future.filter(meeting => (start < meeting.timestamp < end))
-    answer.past = consultant.meetings.past.filter(meeting => (start < meeting.timestamp < end))
-    answer.cancelled = consultant.meetings.cancelled.filter(meeting => (start < meeting.timestamp < end))
+    answer.future = consultant.meetings.future.filter(meeting => (start < meeting.startTimestamp && meeting.startTimestamp < end))
+    answer.past = consultant.meetings.past.filter(meeting => (start < meeting.startTimestamp && meeting.startTimestamp < end))
+    answer.cancelled = consultant.meetings.cancelled.filter(meeting => (start < meeting.startTimestamp && meeting.startTimestamp < end))
     
     return answer
 }
