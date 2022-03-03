@@ -187,7 +187,6 @@ const consultantUpdateProfile = async (id, data) => {
 
     for (prop in data) {
         try {
-            console.log("calling data prop", prop, "original", consultant.profile[prop], "new", data[prop])
             consultant.profile[prop] = data[prop]
         }
         catch (e) {
