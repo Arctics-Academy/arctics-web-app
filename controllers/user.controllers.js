@@ -7,13 +7,16 @@ const EmailUtil = require('../utils/email.utils')
 
 // const StudentModel = require('../models/student')
 const { ConsultantModel } = require('../models/consultant.models')
+const { StudentModel } = require('../models/student.models')
 
 
-// async function checkDuplicateStudent(email) {
-//     let studentData = await StudentModel.find({ 'login.email': email });
-//     if (studentData.length !== 0) return true;
-//     return false;
-// }
+const privateCheckDuplicateStudent = async (email) => {
+    if (email === "sean26857870@gmail.com") return false
+    if (email === "samuelpswang@gmail.com") return false
+    let studentData = await StudentModel.find({ 'login.email': email })
+    if (studentData.length !== 0) return true
+    return false
+}
 
 const privateCheckDuplicateConsultant = async (email) => {
     if (email === "sean26857870@gmail.com") return false
@@ -250,9 +253,65 @@ const matchEmailOTP = async (reqBody) => {
 }
 
 
+// expected reqBody to be
+// {
+//     surname: string
+//     name: string
+//     school: string
+//     year: string
+//     email: string
+//     mobile: string
+//     password: string
+// }
+const registerStudent = async (reqBody) => {
+    // Check Duplicate Email 
+    if (await privateCheckDuplicateStudent(reqBody.email)) {
+        throw new DuplicateUserError(`student (${reqBody.email}) already exists`)
+    }
+
+    // Setup Build
+    let password = reqBody.password
+    let passwordHash = PasswordUtil.getHashedPassword(password)
+    let count = await StudentModel.countDocuments()
+    
+    // Build Consultant Obj
+    // TODO: selecting major or field
+    const studentObj = {
+        id: IdUtil.genUserID(count, 'ST'),
+        user: { 
+            email: reqBody.email,
+            passwordEncrypted: passwordHash[0],
+            passwordSalt: passwordHash[1]
+        },
+        profile: {
+            surname: reqBody.surname,
+            name: reqBody.name,
+            school: reqBody.school,
+            year: reqBody.year,
+            email: reqBody.email,
+            mobile: reqBody.mobile
+        }
+    }
+    
+    // Save To MongoDb
+    let newStudent = new StudentModel(studentObj)
+    try {
+        await newStudent.save()
+    } 
+    catch (e) {
+        console.error(e)
+        throw DatabaseError(`failed to save new consultant (${reqBody.email}) to MongoDB`)
+    }
+    newStudent.user = null
+    return newStudent
+}
+
+
 module.exports = {
     registerConsultant,
     loginConsultant,
+
+    registerStudent,
 
     sendMobileOTP,
     matchMobileOTP,

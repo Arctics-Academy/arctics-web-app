@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const { DuplicateUserError } = require('../utils/error.utils')
-const { registerConsultant, loginConsultant, sendEmailOTP, matchEmailOTP, sendMobileOTP, matchMobileOTP } = require('../controllers/user.controllers')
+const { registerConsultant, loginConsultant, sendEmailOTP, matchEmailOTP, sendMobileOTP, matchMobileOTP, registerStudent } = require('../controllers/user.controllers')
 
 router.post('/consultant/register', async (req, res) => {
     try {
@@ -91,7 +91,22 @@ router.post('/consultant/mobile-otp/verify', async (req, res) => {
 })
 
 
-// router.post('/student/register')
+router.post('/student/register', async (req, res) => {
+    try {
+        let data = await registerStudent(req.body)
+        res.status(200).json({ status: "success", data: data })
+    }
+    catch (e) {
+        if (e.name === "DuplicateUserError") {
+            res.status(200).json({ status: "failed", message: "duplicate student was found"})
+        }
+        else {
+            console.error(e)
+            res.status(500).json({ status: "error", message: "internal error; try again later"})
+        }
+    }
+})
+
 // router.post('/student/login')
 
 // router.get('/student/email-otp')
