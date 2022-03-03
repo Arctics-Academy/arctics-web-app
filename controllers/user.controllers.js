@@ -48,6 +48,7 @@ const privateCheckDuplicateConsultant = async (email) => {
 
 // expected reqBody to be
 // {
+//     surname: string
 //     name: string
 //     school: string
 //     year: string
