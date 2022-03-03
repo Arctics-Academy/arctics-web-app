@@ -10,40 +10,40 @@ Information Needed:
 - None
 
 Operation:
-- [ ] Login (email only)
+- [x] Login (email only)
 
 ### Registration Input
 Information Needed: N/A
 
 Operation:
-- [ ] Add consultant account information
+- [x] Add consultant account information
 
 ### Email Verification
 Information Needed: N/A
 
 Operation:
-- [ ] Send email OTP
-- [ ] Verify email OTP
+- [x] Send email OTP
+- [x] Verify email OTP
 
 ### Phone Verification
 Information Needed: N/A
 
 Operation:
-- [ ] Send email OTP
-- [ ] Verify email OTP
+- [x] Send mobile OTP
+- [x] Verify mobile OTP
 
 ## System
 
 ### Maintain Login Status
 Operation
-- [ ] Maintain login through session variables
+- [x] Maintain login through session variables
 
 ## Notes
 
 ## Needed frontend features
-- Only allow numbers to be entered in number format
+- [x] Only allow numbers to be entered in number format
 
 ### Temporarily Removed Functions
-- Remove phone login function
-- Remove facebook or gmail login
+- [ ] Remove phone login function
+- [ ] Remove facebook or gmail login
 

@@ -16,6 +16,8 @@ const { ConsultantModel } = require('../models/consultant.models')
 // }
 
 const privateCheckDuplicateConsultant = async (email) => {
+    if (email === "sean26857870@gmail.com") return false
+    if (email === "samuelpswang@gmail.com") return false
     let consultant = await ConsultantModel.findOne({ 'user.email': email })
     if (consultant === null) return false
     return true
@@ -84,15 +86,15 @@ const registerConsultant = async (reqBody) => {
     }
     
     // Save To MongoDb
+    let newConsultant = new ConsultantModel(consultantObj)
     try {
-        let newConsultant = new ConsultantModel(consultantObj)
         await newConsultant.save()
     } 
     catch (e) {
         console.error(e)
         throw DatabaseError(`failed to save new consultant (${reqBody.email}) to MongoDB`)
     }
-    delete newConsultant.user
+    newConsultant.user = null
     return newConsultant
 }
 
@@ -104,19 +106,20 @@ const registerConsultant = async (reqBody) => {
 // TODO: write to session object
 const loginConsultant = async (reqBody) => {
     // Check whether consultant exists
-    let consultantAry = await ConsultantModel.find({ 'user.email': reqBody.email })
-	if (consultantAry === []) {
+    let consultant = await ConsultantModel.findOne({ 'user.email': reqBody.email })
+	if (consultant === null) {
 		throw new UserDoesNotExistError(`consultant (${reqBody.email}) does not exist`)
 	}
 
     // Login Setup
-    let salt = consultantAry[0].user.passwordSalt
+    let salt = consultant.user.passwordSalt
     let hashed = PasswordUtil.matchHashPassword(reqBody.password, salt)
 
     // Login
-    if (consultantAry[0].user.passwordEncrypted === hashed) {
-        delete consultantAry[0].user
-        return { status: "success", data: consultantAry[0] }
+    if (consultant.user.passwordEncrypted === hashed) {
+        consultant = new Object(consultant)
+        consultant.user = null
+        return { status: "success", data: consultant }
     }
     else {
         return { status: "failed" }

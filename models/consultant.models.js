@@ -13,7 +13,7 @@ const ConsultantTransactionSchema = new mongoose.Schema({
 }, { _id: false })
 
 const ConsultantNotificationSchema = new mongoose.Schema({
-    id: { type: Number, required: true },
+    id: { type: String, required: true },
     timestamp: { type: Date, required: true },
     title: { type: String, required: true },
     content: { type: String },
@@ -28,7 +28,7 @@ const ConsultantAnnouncementSchema = new mongoose.Schema({
 
 const ConsultantMeetingSchema = new mongoose.Schema({
     id: { type: String, required: true },
-    active: { type: Boolean, required: true, default: true },
+    status: { type: String, required: true, default: "future" },
     startTimestamp: { type: Date, required: true },
     studentName: { type: String, required: true },
     studentYear: { type: String, required: true },
@@ -65,7 +65,7 @@ const ConsultantSchema = new mongoose.Schema({
         price: { type: Number, required: true, default: 200 }, // 費用
         school: { type: String, required: true }, // 就讀&畢業
         major: { type: String }, // 就讀&畢業
-        year: { type: Number, required: true }, // 就讀&畢業
+        year: { type: String, required: true }, // 就讀&畢業
         field: { type: [String], required: true, default: [] }, // 學群
         labels: { type: [String], required: true, default: [] }, // 諮詢項目
         experiences: { type: String }, // 相關經歷&能力證明

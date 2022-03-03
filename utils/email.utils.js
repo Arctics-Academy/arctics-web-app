@@ -43,17 +43,17 @@ mapS0TemplateString.set("S0-S4-Cancel-Consultant", read_file_to_string('statics/
 mapS0TemplateString.set("S0-S4-Cancel-Student", read_file_to_string('statics/emails/texts/S0-S4-Cancel-Student.txt'))
 
 var mapS0Subject = new Map()
-mapS0Subject.set("S0-S0-Book-Consultant", "[Arctics Academy升大學顧問平台] 學生預約諮詢通知")
-mapS0Subject.set("S0-S0-Book-Student", "[Arctics Academy升大學顧問平台] 諮詢預約成功通知")
-mapS0Subject.set("S0-S1-Cancel-Consultant", "[Arctics Academy升大學顧問平台] 學生取消諮詢通知")
-mapS0Subject.set("S0-S1-Cancel-Student", "[Arctics Academy升大學顧問平台] 諮詢取消成功通知")
-mapS0Subject.set("S0-S2-Cancel-Consultant", "[Arctics Academy升大學顧問平台] 學生取消諮詢通知") 
-mapS0Subject.set("S0-S2-Cancel-Student", "[Arctics Academy升大學顧問平台] 諮詢取消成功通知")
-mapS0Subject.set("S0-S2-Pay-Student", "[Arctics Academy升大學顧問平台] 付款成功通知")
-mapS0Subject.set("S0-S3-Cancel-Consultant", "[Arctics Academy升大學顧問平台] 系統取消諮詢通知")
-mapS0Subject.set("S0-S3-Cancel-Student", "[Arctics Academy升大學顧問平台] 系統取消諮詢通知")
-mapS0Subject.set("S0-S4-Cancel-Consultant", "[Arctics Academy升大學顧問平台] 學生取消諮詢通知")
-mapS0Subject.set("S0-S4-Cancel-Student", "[Arctics Academy升大學顧問平台] 諮詢取消成功通知")
+mapS0Subject.set("S0-S0-Book-Consultant", "`[Arctics Academy升大學顧問平台] 學生預約諮詢通知 (${meetingId})`")
+mapS0Subject.set("S0-S0-Book-Student", "`[Arctics Academy升大學顧問平台] 諮詢預約成功通知 (${meetingId})`")
+mapS0Subject.set("S0-S1-Cancel-Consultant", "`[Arctics Academy升大學顧問平台] 學生取消諮詢通知 (${meetingId})`")
+mapS0Subject.set("S0-S1-Cancel-Student", "`[Arctics Academy升大學顧問平台] 諮詢取消成功通知 (${meetingId})`")
+mapS0Subject.set("S0-S2-Cancel-Consultant", "`[Arctics Academy升大學顧問平台] 學生取消諮詢通知 (${meetingId})`") 
+mapS0Subject.set("S0-S2-Cancel-Student", "`[Arctics Academy升大學顧問平台] 諮詢取消成功通知 (${meetingId})`")
+mapS0Subject.set("S0-S2-Pay-Student", "`[Arctics Academy升大學顧問平台] 付款成功通知 (${meetingId})`")
+mapS0Subject.set("S0-S3-Cancel-Consultant", "`[Arctics Academy升大學顧問平台] 系統取消諮詢通知 (${meetingId})`")
+mapS0Subject.set("S0-S3-Cancel-Student", "`[Arctics Academy升大學顧問平台] 系統取消諮詢通知 (${meetingId})`")
+mapS0Subject.set("S0-S4-Cancel-Consultant", "`[Arctics Academy升大學顧問平台] 學生取消諮詢通知 (${meetingId})`")
+mapS0Subject.set("S0-S4-Cancel-Student", "`[Arctics Academy升大學顧問平台] 諮詢取消成功通知 (${meetingId})`")
 
 const OtpCompiledEmail = pug.compileFile('statics/emails/pugs/SYS-OtpEmail.pug')
 const OtpTemplateString = read_file_to_string('statics/emails/texts/SYS-OtpEmail.txt')
@@ -117,7 +117,7 @@ const sendS0Email = async (identifier, consultantObj, studentObj, meetingObj) =>
         consultantObj.profile.surname+consultantObj.profile.name : 
         studentObj.profile.surname+studentObj.profile.name)
     const emailAddress = (sendToConsultant ? consultantObj.profile.email : studentObj.profile.email)
-    const emailSubject = mapS0Subject.get(identifier)
+    const emailSubject = eval(mapS0Subject.get(identifier))
     const emailText = eval(mapS0TemplateString.get(identifier))
     const emailHtml = mapS0CompiledEmail.get(identifier)(data)
     
@@ -173,7 +173,7 @@ const sendEmailOtp = async (userObj, otpCode) => {
     // Email data
     const emailName = userName
     const emailAddress = userObj.profile.email
-    const emailSubject = `[Arctics Academy升大學顧問平台] 電子郵件驗證碼`
+    const emailSubject = `[Arctics Academy升大學顧問平台] 電子郵件驗證碼 (${code})`
     const emailText = eval(OtpTemplateString)
     const emailHtml = OtpCompiledEmail(data)
     
@@ -215,13 +215,21 @@ const sendEmailOtp = async (userObj, otpCode) => {
 }
 
 const sendSystemStudentCardVerification = async (userObj, file) => {
-    const emailSubject = `[Arctics系統] 學生證驗證`
-    const emailText = toString(userObj) + "\n" + `https://arctics.academy/system/consultant/confirm-student-id/${userObj.id}`
+    const emailSubject = `[Arctics系統] 學生證驗證 (ID: ${userObj.id})`
+    let emailText = ""
+    emailText += `嗨Arctics員工：\n\n`
+    emailText += `麻煩驗證以下資料～\n`
+    emailText += `顧問姓名：${userObj.profile.surname+userObj.profile.name}\n`
+    emailText += `顧問年級：${userObj.profile.year}\n`
+    emailText += `顧問學系：${userObj.profile.major}\n`
+    emailText += `顧問電子郵件：${userObj.profile.email}\n`
+    emailText += `若學生證正確請點以下網址：\nhttps://arctics.academy/system/consultant/confirm-student-id/${userObj.id}\n\n`
+    emailText += `謝謝您\nSam的系統小幫手 敬上`
     
     // Build email object
     let mail_content = 
     {
-        from: `"Arctics升學顧問" <hello@mailgun.arctics.academy>`,
+        from: `"Arctics系統小幫手" <system@mailgun.arctics.academy>`,
         to: "arcticsteam.official@gmail.com",
         subject: emailSubject,
         text: emailText,

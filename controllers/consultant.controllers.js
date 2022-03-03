@@ -8,6 +8,8 @@ const { AnnouncementModel } = require('../models/system.models')
 
 // Utils
 const timeUtil = require('../utils/time.utils')
+const { FileNotFoundError, UserDoesNotExistError } = require('../utils/error.utils')
+const { sendSystemStudentCardVerification } = require('../utils/email.utils')
 
 
 const getConsultantDashboard = async function(id) {
@@ -27,20 +29,21 @@ const getConsultantPurse = async function(id) {
 
 const getConsultantMeetingsCalendar = async function(id, date) {
     // load meetings
-    let meeting = await ConsultantModel.findOne({ id: id }).select('meetings')
+    let consultant = await ConsultantModel.findOne({ id: id }).select('meetings')
     
     // filter settings
+    date = new Date(date)
     year = date.getFullYear()
     month = date.getMonth()
-    let start = timeUtil.yearMonthToDatetimeRange(timeUtil.previousMonth(year, month))[0]
-    let end = timeUtil.yearMonthToDatetimeRange(timeUtil.nextMonth(year, month))[1]
+    let [start, end] = timeUtil.yearMonthToDatetimeRange(year, month)
     
     // filter all
-    meeting.future = meeting.future.filter(meeting => (start < meeting.timestamp < end))
-    meeting.past = meeting.past.filter(meeting => (start < meeting.timestamp < end))
-    meeting.canceled = meeting.canceled.filter(meeting => (start < meeting.timestamp < end))
+    let answer = {}
+    answer.future = consultant.meetings.future.filter(meeting => (start < meeting.startTimestamp && meeting.startTimestamp < end))
+    answer.past = consultant.meetings.past.filter(meeting => (start < meeting.startTimestamp && meeting.startTimestamp < end))
+    answer.cancelled = consultant.meetings.cancelled.filter(meeting => (start < meeting.startTimestamp && meeting.startTimestamp < end))
     
-    return meeting
+    return answer
 }
 
 const getConsultantMeetingsList = async function(id) {
@@ -61,8 +64,8 @@ const getConsultantNotifications = async function(id) {
 }
 
 const getConsultantNotificationCount = async (id) => {
-    let consultant = await ConsultantModel.findOne(id).select('announcements.unreadCount notifications.unreadCount')
-    return consultant.announcement.unreadCount + consultant.notifications.unreadCount
+    let consultant = await ConsultantModel.findOne({ id: id }).select('announcements.unreadCount notifications.unreadCount')
+    return consultant.announcements.unreadCount + consultant.notifications.unreadCount
 }
 
 const getConsultantBankInfo = async (id) => {
@@ -73,8 +76,11 @@ const getConsultantBankInfo = async (id) => {
 const consultantAddBankInfo = async (id, data) => {
     // data verification?
     let consultant = await ConsultantModel.findOne({ id: id })
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+    }
     let bank = {
-        default: (consultant.pusre.length > 0 ? false : true),
+        default: (consultant.purse.length > 0 ? false : true),
         usage: (data.usage === undefined ? "" : data.usage),
         bankNo: data.bankNo,
         accountNo: data.accountNo
@@ -90,6 +96,9 @@ const consultantCancelMeeting = async function(consultantId, meetingId) {
         // a. Move meeting
         let startTimestamp
         let consultant = await ConsultantModel.findOne({ id: consultantId })
+        if (consultant === null) {
+            throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+        }
         for (let i = 0; i < consultant.future.size(); i++) {
             if (consultant.future[i].id === meetingId) {
                 startTimestamp = consultant.future[i].startTimestamp
@@ -131,7 +140,9 @@ const consultantCancelMeeting = async function(consultantId, meetingId) {
 
 const consultantReadNotifications = async (consultantId, announcementIdArray, notificaionIdArray) => {
     let consultant = await ConsultantModel.findOne({ id: consultantId })
-    if (!consultant) throw `error x: consultant ${consultantId} returned empty object`
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+    }
     
     for (announcement of consultant.announcements.list) {
         if (announcementIdArray.includes(announcement.id)) {
@@ -152,33 +163,40 @@ const consultantReadNotifications = async (consultantId, announcementIdArray, no
 }
 
 const consultantAddStudentId = async (id, file) => {
-    // save info to database
-    let consultant = await ConsultantModel.findOne({ id: id })
+    // Check file
+    if (file === undefined) {
+        throw new FileNotFoundError(`consultant (${id}) profile photo not received`)
+    }
 
+    // Save to database
+    let consultant = await ConsultantModel.findOne({ id: id })
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+    }
     let imgFile = fs.readFileSync(file.path)
     let imgEncoded = imgFile.toString()
-    
-    let media =
-    {
+    let media ={
         timestamp: new Date(),
         type: file.mimetype,
         data: new Buffer.from(imgEncoded, 'base64')
     }
-
     consultant.profile.studentCard = media
     await consultant.save()
 
-    // send system verification email...
-    // MISSING
+    // Send system verification
+    sendSystemStudentCardVerification(consultant, file)
 
-    // cleanup
+    // Cleanup
     fs.unlinkSync(file.path)
 }
 
-const consultantUpdateProfile = async (id, data, file) => {
+const consultantUpdateProfile = async (id, data) => {
     let consultant = await ConsultantModel.findOne({ id: id })
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+    }
 
-    for (const prop in data) {
+    for (prop in data) {
         try {
             consultant.profile[prop] = data[prop]
         }
@@ -188,8 +206,19 @@ const consultantUpdateProfile = async (id, data, file) => {
         }
     }
 
-    if (file) {
-        // Save to database
+    await consultant.save()
+}
+
+const consultantAddProfilePhoto = async (id, file) => {
+    let consultant = await ConsultantModel.findOne({ id: id })
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+    }
+    
+    if (file === undefined) {
+        consultant.profile.photo = null
+    }
+    else {
         let imgFile = fs.readFileSync(file.path)
         let imgEncoded = imgFile.toString()
         let media = 
@@ -199,11 +228,6 @@ const consultantUpdateProfile = async (id, data, file) => {
             data: new Buffer.from(imgEncoded, 'base64')
         }
         consultant.profile.photo = media
-
-        // Notify system
-        sendSystemStudentCardVerification(consultant, file)
-
-        // Cleanup
         fs.unlinkSync(file.path)
     }
 
@@ -212,6 +236,9 @@ const consultantUpdateProfile = async (id, data, file) => {
 
 const consultantUpdateTimetable = async (id, timetable) => {
     let consultant = await ConsultantModel.findOne({ id: id })
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+    }
 
     // should run validation checks?
     consultant.profile.timetable = timetable
@@ -250,6 +277,7 @@ module.exports =
     consultantReadNotifications,
     consultantAddBankInfo,
     consultantAddStudentId,
+    consultantAddProfilePhoto,
     consultantUpdateProfile,
     consultantUpdateTimetable,
 
