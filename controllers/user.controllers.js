@@ -303,12 +303,40 @@ const registerStudent = async (reqBody) => {
     return newStudent
 }
 
+// expected reqBody to be
+// {
+//     email: string
+//     password: string
+// }
+const loginStudent = async (reqBody) => {
+    // Check whether student exists
+    let student = await StudentModel.findOne({ 'user.email': reqBody.email })
+	if (student === null) {
+		throw new UserDoesNotExistError(`student (${reqBody.email}) does not exist`)
+	}
+
+    // Login Setup
+    let salt = student.user.passwordSalt
+    let hashed = PasswordUtil.matchHashPassword(reqBody.password, salt)
+
+    // Login
+    if (student.user.passwordEncrypted === hashed) {
+        student = new Object(consultant)
+        student.user = null
+        return student
+    }
+    else {
+        return "incorrect email or password"
+    }
+}
+
 
 module.exports = {
     registerConsultant,
     loginConsultant,
 
     registerStudent,
+    loginStudent,
 
     sendMobileOTP,
     matchMobileOTP,
