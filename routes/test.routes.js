@@ -64,6 +64,29 @@ router.post('/consultant/notifications/add', async (req, res) => {
     }
 })
 
+router.post('/consultant/transaction/add', async (req, res) => {
+    try {
+        let consultant = await ConsultantModel.findOne({ id: req.body.id })
+        let transaction = {
+            timestamp: new Date(),
+            content: req.body.content,
+            amount: req.body.amount,
+            balance: (consultant.purse.balance+req.body.amount),
+            withdrawn: (req.body.amount<0 ? consultant.purse.withdrawn-req.body.amount : consultant.purse.withdrawn)
+        }
+        consultant.purse.balance = transaction.balance
+        consultant.purse.withdrawn = transaction.withdrawn
+        consultant.purse.transactions.push(transaction)
+        await consultant.save()
+        res.sendStatus(200)
+    }
+    catch (e) {
+        console.error(e)
+        res.sendStatus(500)
+    }
+
+})
+
 // router.post('/consultant/announcements/add', async (req, res) => {
 //     try {
 //         let consultant = await ConsultantModel.findOne({ id: req.body.id })
