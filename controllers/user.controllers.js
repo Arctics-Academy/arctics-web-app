@@ -274,8 +274,8 @@ const registerStudent = async (reqBody) => {
     let passwordHash = PasswordUtil.getHashedPassword(password)
     let count = await StudentModel.countDocuments()
     
-    // Build Consultant Obj
     // TODO: selecting major or field
+    // Build Student Obj
     const studentObj = {
         id: IdUtil.genUserID(count, 'ST'),
         user: { 
