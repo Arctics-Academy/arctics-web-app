@@ -76,6 +76,9 @@ const getConsultantBankInfo = async (id) => {
 const consultantAddBankInfo = async (id, data) => {
     // data verification?
     let consultant = await ConsultantModel.findOne({ id: id })
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+    }
     let bank = {
         default: (consultant.purse.length > 0 ? false : true),
         usage: (data.usage === undefined ? "" : data.usage),
@@ -93,6 +96,9 @@ const consultantCancelMeeting = async function(consultantId, meetingId) {
         // a. Move meeting
         let startTimestamp
         let consultant = await ConsultantModel.findOne({ id: consultantId })
+        if (consultant === null) {
+            throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+        }
         for (let i = 0; i < consultant.future.size(); i++) {
             if (consultant.future[i].id === meetingId) {
                 startTimestamp = consultant.future[i].startTimestamp
@@ -134,7 +140,9 @@ const consultantCancelMeeting = async function(consultantId, meetingId) {
 
 const consultantReadNotifications = async (consultantId, announcementIdArray, notificaionIdArray) => {
     let consultant = await ConsultantModel.findOne({ id: consultantId })
-    if (!consultant) throw `error x: consultant ${consultantId} returned empty object`
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+    }
     
     for (announcement of consultant.announcements.list) {
         if (announcementIdArray.includes(announcement.id)) {
@@ -162,6 +170,9 @@ const consultantAddStudentId = async (id, file) => {
 
     // Save to database
     let consultant = await ConsultantModel.findOne({ id: id })
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+    }
     let imgFile = fs.readFileSync(file.path)
     let imgEncoded = imgFile.toString()
     let media ={
@@ -200,6 +211,9 @@ const consultantUpdateProfile = async (id, data) => {
 
 const consultantAddProfilePhoto = async (id, file) => {
     let consultant = await ConsultantModel.findOne({ id: id })
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+    }
     
     if (file === undefined) {
         consultant.profile.photo = null
@@ -222,6 +236,9 @@ const consultantAddProfilePhoto = async (id, file) => {
 
 const consultantUpdateTimetable = async (id, timetable) => {
     let consultant = await ConsultantModel.findOne({ id: id })
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+    }
 
     // should run validation checks?
     consultant.profile.timetable = timetable
