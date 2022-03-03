@@ -174,7 +174,7 @@ router.post('/profile/student-id/update', StudentIdUploadMiddleware.single('stud
 // req.body: { id: "string", data: profile object }
 router.post('/profile/update', async (req, res) => {
     try {
-        await consultantController.consultantUpdateProfile(req.body.id, req.body.data)
+        await consultantController.consultantUpdateProfile(req.body.id, req.body.profile)
         res.status(200).json({ status: "success", message: `consultant ${req.body.id} profile update successful` })
     }
     catch (e) {

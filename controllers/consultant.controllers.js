@@ -8,7 +8,7 @@ const { AnnouncementModel } = require('../models/system.models')
 
 // Utils
 const timeUtil = require('../utils/time.utils')
-const { FileNotFoundError } = require('../utils/error.utils')
+const { FileNotFoundError, UserDoesNotExistError } = require('../utils/error.utils')
 const { sendSystemStudentCardVerification } = require('../utils/email.utils')
 
 
@@ -181,9 +181,13 @@ const consultantAddStudentId = async (id, file) => {
 
 const consultantUpdateProfile = async (id, data) => {
     let consultant = await ConsultantModel.findOne({ id: id })
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+    }
 
     for (prop in data) {
         try {
+            console.log("calling data prop", prop, "original", consultant.profile[prop], "new", data[prop])
             consultant.profile[prop] = data[prop]
         }
         catch (e) {
