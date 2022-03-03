@@ -4,7 +4,7 @@ var router = express.Router()
 
 // Controllers & Middleware
 const consultantController = require('../controllers/consultant.controllers')
-const { StudentIdUploadMiddleware } = require('../middlewares/upload.middlewares')
+const { StudentIdUploadMiddleware, ProfilePhotoUploadMiddleware } = require('../middlewares/upload.middlewares')
 
 // Routes
 // returns whole consultant obj
@@ -185,7 +185,7 @@ router.post('/profile/update', async (req, res) => {
 
 // action: add/update profile photo
 // req.body: { id: "string", profilePhoto: file}
-router.post('/profile/photo/update', async (req, res) => {
+router.post('/profile/photo/update', ProfilePhotoUploadMiddleware.single('profilePhoto'), async (req, res) => {
     try {
         await consultantController.consultantAddProfilePhoto(req.body.id, req.file)
         res.status(200).json({ status: "success", message: `consultant ${req.body.id} profile photo upload successful` })
