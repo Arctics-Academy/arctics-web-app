@@ -9,7 +9,7 @@ const imageFileExtRegex = /\.(png|jpg|jpeg|pdf)$/
 // Student Id Middleware
 const studentIdStorage = multer.diskStorage({
     destination: './frontend/uploads/student-ids', 
-    filename: (req, file, cb) => { cb(null, `StudentID-${req.id}-${path.extname(file.originalname)}`) }
+    filename: (req, file, cb) => { cb(null, `StudentID-${req.body.id}-${path.extname(file.originalname)}`) }
 })
 
 const StudentIdUploadMiddleware = multer({
@@ -29,7 +29,7 @@ const StudentIdUploadMiddleware = multer({
 // Profile Photo Middleware
 const profilePhotoStorage = multer.diskStorage({
     destination: './frontend/uploads/profile-photos', 
-    filename: (req, file, cb) => { cb(null, `ProfilePhoto-${req.id}-${path.extname(file.originalname)}`) }
+    filename: (req, file, cb) => { cb(null, `ProfilePhoto-${req.body.id}-${path.extname(file.originalname)}`) }
 })
 
 const ProfilePhotoUploadMiddleware = multer({
