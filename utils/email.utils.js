@@ -216,19 +216,19 @@ const sendEmailOtp = async (userObj, otpCode) => {
 
 const sendSystemStudentCardVerification = async (userObj, file) => {
     const emailSubject = `[Arctics系統] 學生證驗證 (ID: ${userObj.id})`
-    let emailText
+    let emailText = ""
     emailText += `嗨Arctics員工：\n\n`
     emailText += `麻煩驗證以下資料～\n`
     emailText += `顧問姓名：${userObj.profile.surname+userObj.profile.name}\n`
     emailText += `顧問年級：${userObj.profile.year}\n`
     emailText += `顧問學系：${userObj.profile.major}\n`
-    emailText += `學生證正確請點以下網址：\nhttps://arctics.academy/system/consultant/confirm-student-id/${userObj.id}\n\n`
+    emailText += `若學生證正確請點以下網址：\nhttps://arctics.academy/system/consultant/confirm-student-id/${userObj.id}\n\n`
     emailText += `謝謝您\nSam的系統小幫手 敬上`
     
     // Build email object
     let mail_content = 
     {
-        from: `"系統小幫手" <system@mailgun.arctics.academy>`,
+        from: `"Arctics系統小幫手" <system@mailgun.arctics.academy>`,
         to: "arcticsteam.official@gmail.com",
         subject: emailSubject,
         text: emailText,
