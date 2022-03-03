@@ -182,9 +182,9 @@ const consultantAddStudentId = async (id, file) => {
 const consultantUpdateProfile = async (id, data) => {
     let consultant = await ConsultantModel.findOne({ id: id })
 
-    for (prop in data.profile) {
+    for (prop in data) {
         try {
-            consultant.profile[prop] = data.profile[prop]
+            consultant.profile[prop] = data[prop]
         }
         catch (e) {
             console.error(e)
