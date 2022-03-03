@@ -9,6 +9,7 @@ const { AnnouncementModel } = require('../models/system.models')
 // Utils
 const timeUtil = require('../utils/time.utils')
 const { FileNotFoundError } = require('../utils/error.utils')
+const { sendSystemStudentCardVerification } = require('../utils/email.utils')
 
 
 const getConsultantDashboard = async function(id) {
