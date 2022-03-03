@@ -71,7 +71,6 @@ const registerConsultant = async (reqBody) => {
     let count = await ConsultantModel.countDocuments()
     
     // Build Consultant Obj
-    // TODO: selecting major or field
     const consultantObj = {
         id: IdUtil.genUserID(count, 'TR'),
         user: { 
@@ -107,7 +106,6 @@ const registerConsultant = async (reqBody) => {
 //     email: string
 //     password: string
 // }
-// TODO: write to session object
 const loginConsultant = async (reqBody) => {
     // Check whether consultant exists
     let consultant = await ConsultantModel.findOne({ 'user.email': reqBody.email })
@@ -274,7 +272,6 @@ const registerStudent = async (reqBody) => {
     let passwordHash = PasswordUtil.getHashedPassword(password)
     let count = await StudentModel.countDocuments()
     
-    // TODO: selecting major or field
     // Build Student Obj
     const studentObj = {
         id: IdUtil.genUserID(count, 'ST'),
