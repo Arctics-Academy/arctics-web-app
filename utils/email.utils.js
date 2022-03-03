@@ -173,7 +173,7 @@ const sendEmailOtp = async (userObj, otpCode) => {
     // Email data
     const emailName = userName
     const emailAddress = userObj.profile.email
-    const emailSubject = `[Arctics Academy升大學顧問平台] 電子郵件驗證碼`
+    const emailSubject = `[Arctics Academy升大學顧問平台] 電子郵件驗證碼 (${code})`
     const emailText = eval(OtpTemplateString)
     const emailHtml = OtpCompiledEmail(data)
     
