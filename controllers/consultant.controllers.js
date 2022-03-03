@@ -8,6 +8,7 @@ const { AnnouncementModel } = require('../models/system.models')
 
 // Utils
 const timeUtil = require('../utils/time.utils')
+const { FileNotFoundError } = require('../utils/error.utils')
 
 
 const getConsultantDashboard = async function(id) {
@@ -153,30 +154,31 @@ const consultantReadNotifications = async (consultantId, announcementIdArray, no
 }
 
 const consultantAddStudentId = async (id, file) => {
-    // save info to database
-    let consultant = await ConsultantModel.findOne({ id: id })
+    // Check file
+    if (file === undefined) {
+        throw new FileNotFoundError(`consultant (${id}) profile photo not received`)
+    }
 
+    // Save to database
+    let consultant = await ConsultantModel.findOne({ id: id })
     let imgFile = fs.readFileSync(file.path)
     let imgEncoded = imgFile.toString()
-    
-    let media =
-    {
+    let media ={
         timestamp: new Date(),
         type: file.mimetype,
         data: new Buffer.from(imgEncoded, 'base64')
     }
-
     consultant.profile.studentCard = media
     await consultant.save()
 
-    // send system verification email...
-    // MISSING
+    // Send system verification
+    sendSystemStudentCardVerification(consultant, file)
 
-    // cleanup
+    // Cleanup
     fs.unlinkSync(file.path)
 }
 
-const consultantUpdateProfile = async (id, data, file) => {
+const consultantUpdateProfile = async (id, data) => {
     let consultant = await ConsultantModel.findOne({ id: id })
 
     for (prop in data.profile) {
@@ -189,8 +191,16 @@ const consultantUpdateProfile = async (id, data, file) => {
         }
     }
 
-    if (file) {
-        // Save to database
+    await consultant.save()
+}
+
+const consultantAddProfilePhoto = async (id, file) => {
+    let consultant = await ConsultantModel.findOne({ id: id })
+    
+    if (file === undefined) {
+        consultant.profile.photo = null
+    }
+    else {
         let imgFile = fs.readFileSync(file.path)
         let imgEncoded = imgFile.toString()
         let media = 
@@ -200,11 +210,6 @@ const consultantUpdateProfile = async (id, data, file) => {
             data: new Buffer.from(imgEncoded, 'base64')
         }
         consultant.profile.photo = media
-
-        // Notify system
-        sendSystemStudentCardVerification(consultant, file)
-
-        // Cleanup
         fs.unlinkSync(file.path)
     }
 
@@ -251,6 +256,7 @@ module.exports =
     consultantReadNotifications,
     consultantAddBankInfo,
     consultantAddStudentId,
+    consultantAddProfilePhoto,
     consultantUpdateProfile,
     consultantUpdateTimetable,
 

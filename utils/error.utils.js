@@ -89,6 +89,14 @@ class MailgunError extends SystemError {
     }
 }
 
+class FileNotFoundError extends SystemError {
+    constructor(message) {
+        super()
+        this.name = "FileNotFoundError"
+        this.message = message
+    }
+}
+
 
 // Error Exports
 module.exports = 
@@ -106,5 +114,6 @@ module.exports =
     DatabaseError,
     AwsSnsError,
     MailgunError,
+    FileNotFoundError,
 }
   

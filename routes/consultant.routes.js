@@ -161,12 +161,6 @@ router.post('/profile/get', async function (req, res) {
 // req.body: { id: "string", studentIdScan: file }
 router.post('/profile/student-id/update', StudentIdUploadMiddleware.single('studentIdScan'), async (req, res) => {
     try {
-        console.log(req.body.id)
-        console.log(req.file)
-        if (!req.file) {
-            res.status(200).json({ status: "failed", message: "did not receive file"})
-            return
-        }
         await consultantController.consultantAddStudentId(req.body.id, req.file)
         res.status(200).json({ status: "success", message: `upload student id scan for consultant ${req.body.id} successful` })
     }
@@ -176,13 +170,25 @@ router.post('/profile/student-id/update', StudentIdUploadMiddleware.single('stud
     }
 })
 
-//action: update consultant profile
-// req.body: { id: "string", data: profile object, profilePhoto: file }
-// tested
-router.post('/profile/update', StudentIdUploadMiddleware.single('profilePhoto'), async (req, res) => {
+// action: update consultant profile
+// req.body: { id: "string", data: profile object }
+router.post('/profile/update', async (req, res) => {
     try {
-        await consultantController.consultantUpdateProfile(req.body.id, req.body.data, req.file)
+        await consultantController.consultantUpdateProfile(req.body.id, req.body.data)
         res.status(200).json({ status: "success", message: `consultant ${req.body.id} profile update successful` })
+    }
+    catch (e) {
+        console.error(e)
+        res.status(200).json({ status: "error", message: `consultant ${req.body.id} profile update failed` })
+    }
+})
+
+// action: add/update profile photo
+// req.body: { id: "string", profilePhoto: file}
+router.post('/profile/photo/update', async (req, res) => {
+    try {
+        await consultantController.consultantAddProfilePhoto(req.body.id, req.file)
+        res.status(200).json({ status: "success", message: `consultant ${req.body.id} profile photo upload successful` })
     }
     catch (e) {
         console.error(e)
