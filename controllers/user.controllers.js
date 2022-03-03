@@ -94,7 +94,7 @@ const registerConsultant = async (reqBody) => {
         console.error(e)
         throw DatabaseError(`failed to save new consultant (${reqBody.email}) to MongoDB`)
     }
-    delete newConsultant.user
+    newConsultant.user = null
     return newConsultant
 }
 
