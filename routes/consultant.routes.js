@@ -161,6 +161,8 @@ router.post('/profile/get', async function (req, res) {
 // req.body: { id: "string", studentIdScan: file }
 router.post('/profile/student-id/update', StudentIdUploadMiddleware.single('studentIdScan'), async (req, res) => {
     try {
+        console.log(req.body.id)
+        console.log(req.file)
         if (!req.file) {
             res.status(200).json({ status: "failed", message: "did not receive file"})
             return
