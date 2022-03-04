@@ -38,6 +38,18 @@ router.post('/consultant/login', async (req, res) => {
     }
 })
 
+router.post('/consultant/logout', async (req, res) => {
+    try {
+        req.session.auth.consultantAuth = false
+        req.session.auth.consultantId = null
+        res.status(200).json({ status: "success", message: `consultant logout successful` })
+    }
+    catch (e) {
+        console.error(e)
+        res.status(500).json({ status: "error", message: "internal error; try again later"})
+    }
+})
+
 router.post('/consultant/email-otp/send', async (req, res) => {
     try {
         await sendEmailOTP(req.body)
