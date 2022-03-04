@@ -266,6 +266,24 @@ const consultantUpdatePassword = async (reqBody) => {
     }
 }
 
+const consultantUpdateEmail = async (reqBody) => {
+    let consultant = await ConsultantModel.findOne({ id: reqBody.id })
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+    }
+
+    let consultantSearch = await ConsultantModel.find({ "user.email": reqBody.email })
+    if (consultantSearch.length !== 0) {
+        return { status: "failed", message: "another account with the same email already exists" }
+    }
+    
+    consultant.user.email = reqBody.email
+    consultant.profile.email = reqBody.email
+    consultant.profile.emailVerified = false
+    await consultant.save()
+    return { status: "success", message: "consultant email update successful" }
+}
+
 const getMeetingQuestionsAndConditions = async (meetingId) => {
     let meeting = await MeetingModel.findOne({ id: meetingId })
     if (!meeting) throw `error x: meeting ${meetingId} returned empty object`
@@ -301,6 +319,7 @@ module.exports =
     consultantUpdateProfile,
     consultantUpdateTimetable,
     consultantUpdatePassword,
+    consultantUpdateEmail,
 
     getMeetingQuestionsAndConditions,
 }
