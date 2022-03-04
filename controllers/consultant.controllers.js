@@ -174,7 +174,7 @@ const consultantAddStudentId = async (id, file) => {
         throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
     }
     let imgFile = fs.readFileSync(file.path)
-    let imgEncoded = imgFile.toString()
+    let imgEncoded = imgFile.toString('base64')
     let media ={
         timestamp: new Date(),
         type: file.mimetype,
@@ -220,7 +220,7 @@ const consultantAddProfilePhoto = async (id, file) => {
     }
     else {
         let imgFile = fs.readFileSync(file.path)
-        let imgEncoded = imgFile.toString()
+        let imgEncoded = imgFile.toString('base64')
         let media = 
         {
             timestamp: new Date(),
