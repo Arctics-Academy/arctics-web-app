@@ -250,7 +250,7 @@ const consultantUpdateTimetable = async (id, timetable) => {
 const consultantUpdatePassword = async (reqBody) => {
     let consultant = await ConsultantModel.findOne({ id: reqBody.id })
     if (consultant === null) {
-        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+        throw new UserDoesNotExistError(`consultant with id ${reqBody.id} does not exist`)
     }
     
     let passwordEncrypted = PasswordUtil.matchHashPassword(reqBody.oldPassword, consultant.user.passwordSalt)
@@ -269,7 +269,7 @@ const consultantUpdatePassword = async (reqBody) => {
 const consultantUpdateEmail = async (reqBody) => {
     let consultant = await ConsultantModel.findOne({ id: reqBody.id })
     if (consultant === null) {
-        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+        throw new UserDoesNotExistError(`consultant with id ${reqBody.id} does not exist`)
     }
 
     let consultantSearch = await ConsultantModel.find({ "user.email": reqBody.email })
