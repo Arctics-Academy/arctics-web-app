@@ -238,6 +238,20 @@ router.post('/profile/email/update', async (req, res) => {
     }
 })
 
+// action: update consultant mobile
+// req.body: { id: "string", mobile: "string" }
+// tested
+router.post('/profile/mobile/update', async (req, res) => {
+    try {
+        let result = await consultantController.consultantUpdateMobile(req.body)
+        res.status(200).json(result)
+    }
+    catch (e) {
+        console.error(e)
+        res.status(200).json({ status: "error", message: `consultant ${req.body.id} mobile update failed` })
+    }
+})
+
 // return consultant unread notification count
 // req.body: { id: "string" }
 // tested

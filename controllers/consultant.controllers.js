@@ -284,6 +284,18 @@ const consultantUpdateEmail = async (reqBody) => {
     return { status: "success", message: "consultant email update successful" }
 }
 
+const consultantUpdateMobile = async (reqBody) => {
+    let consultant = await ConsultantModel.findOne({ id: reqBody.id })
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${reqBody.id} does not exist`)
+    }
+    
+    consultant.profile.mobile = reqBody.mobile
+    consultant.profile.mobileVerified = false
+    await consultant.save()
+    return { status: "success", message: "consultant mobile update successful" }
+}
+
 const getMeetingQuestionsAndConditions = async (meetingId) => {
     let meeting = await MeetingModel.findOne({ id: meetingId })
     if (!meeting) throw `error x: meeting ${meetingId} returned empty object`
@@ -320,6 +332,7 @@ module.exports =
     consultantUpdateTimetable,
     consultantUpdatePassword,
     consultantUpdateEmail,
+    consultantUpdateMobile,
 
     getMeetingQuestionsAndConditions,
 }
