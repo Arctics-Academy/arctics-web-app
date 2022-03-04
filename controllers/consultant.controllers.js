@@ -8,6 +8,7 @@ const { AnnouncementModel } = require('../models/system.models')
 
 // Utils
 const timeUtil = require('../utils/time.utils')
+const PasswordUtil = require('../utils/password.utils')
 const { FileNotFoundError, UserDoesNotExistError } = require('../utils/error.utils')
 const { sendSystemStudentCardVerification } = require('../utils/email.utils')
 
@@ -246,6 +247,25 @@ const consultantUpdateTimetable = async (id, timetable) => {
     await consultant.save()
 }
 
+const consultantUpdatePassword = async (reqBody) => {
+    let consultant = await ConsultantModel.findOne({ id: reqBody.id })
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+    }
+    
+    let passwordEncrypted = PasswordUtil.matchHashPassword(reqBody.oldPassword, consultant.user.passwordSalt)
+    if (consultant.user.passwordEncrypted !== passwordEncrypted) {
+        return { status: "failed", message: "incorrect original password" }
+    }
+    else {
+        let [passwordEncrypted, passwordSalt] = PasswordUtil.getHashedPassword(reqBody.newPassword)
+        consultant.user.passwordEncrypted = passwordEncrypted
+        consultant.user.passwordSalt = passwordSalt
+        await consultant.save()
+        return { status: "success", message: "password successfully changed"}
+    }
+}
+
 const getMeetingQuestionsAndConditions = async (meetingId) => {
     let meeting = await MeetingModel.findOne({ id: meetingId })
     if (!meeting) throw `error x: meeting ${meetingId} returned empty object`
@@ -280,6 +300,7 @@ module.exports =
     consultantAddProfilePhoto,
     consultantUpdateProfile,
     consultantUpdateTimetable,
+    consultantUpdatePassword,
 
     getMeetingQuestionsAndConditions,
 }

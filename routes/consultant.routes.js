@@ -210,6 +210,20 @@ router.post('/profile/timetable/get', async (req, res) => {
     }
 })
 
+// action: update consultant password
+// req.body: { id: "string", oldPassword: "string", newPassword: "string" }
+// tested
+router.post('/profile/password/update', async (req, res) => {
+    try {
+        let result = await consultantController.consultantUpdatePassword(req.body)
+        res.status(200).json(result)
+    }
+    catch (e) {
+        console.error(e)
+        res.status(200).json({ status: "error", message: `consultant ${req.body.id} password update failed` })
+    }
+})
+
 // return consultant unread notification count
 // req.body: { id: "string" }
 // tested
