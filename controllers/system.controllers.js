@@ -8,6 +8,7 @@ const systemValidateConsultantStudentCard = async (id) => {
 
 const getConsultantObject = async (id) => {
     let consultant = await ConsultantModel.findOne({ id: id })
+    console.log(id, consultant)
     consultant.user = null
     return consultant
 }
