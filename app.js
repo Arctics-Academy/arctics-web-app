@@ -5,7 +5,7 @@ var session = require('express-session')
 var logger = require('morgan');
 var dotenv = require('dotenv');
 var cors = require('cors');
-var csurf = require('csurf');
+// var csurf = require('csurf');
 var mongoose = require('mongoose')
 var session = require('express-session')
 
