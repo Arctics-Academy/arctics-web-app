@@ -103,5 +103,13 @@ dist
 # TernJS port file
 .tern-port
 
+# IDE
+.vscode/
+.idea/
+
+# Load Sample Data Functions
+tests/sample/
+
 # Misc
 *.DS_Store
+.note

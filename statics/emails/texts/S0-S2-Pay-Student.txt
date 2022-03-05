@@ -1,0 +1,1 @@
+`您與${consultantName}顧問的諮詢費用已確認收到。諮詢編號為${meetingId}，諮詢顧問為${consultantName}顧問，諮詢學生為${studentName}同學，諮詢開始時間為${month}月${date}日${hour}時${min}分時段，詳情請見Arctics Academy網頁。提醒您會議開始前30分鐘可以進入會議測試設備和待諮詢時段開始。進入諮詢的方式為：Arctics Academy首頁 > 我的諮詢 > 前往會議 > 視訊。`

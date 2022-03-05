@@ -3,18 +3,17 @@ const { Schema } = mongoose;
 
 
 subscriberSchema = new Schema({
-    timestamp: { type: Date, required: true },
-    email: { type: String, required: true, unique: true }
-}, { collection: 'SubscriberForms' });
-const subscriberModel = mongoose.model('SubscriberForm', subscriberSchema);
+    email: { type: String, required: true, unique: true } // unique?
+}, { collection: "SubscriberForms" });
+const subscriberModel = mongoose.model('subscriber', subscriberSchema);
 
 messageSchema = new Schema({
     timestamp: { type: Date, required: true },
     name: { type: String, required: true },
     contact: { type: String, required: true },
     content: { type: String, required: true }
-}, { collection: 'MessageForms' });
-const messageModel = mongoose.model('MessageForm', messageSchema);
+}, { collection: "MessageForms"});
+const messageModel = mongoose.model('message', messageSchema);
 
 earlyAccessSchema = new Schema({
     timestamp: { type: Date, required: true },
@@ -24,8 +23,8 @@ earlyAccessSchema = new Schema({
     school: { type: String, required: true },
     major: { type: String, required: true },
     year: { type: Number, require: true }
-}, { collection: 'EarlyAccesForms' });
-const earlyAccessModel = mongoose.model('EarlyAccesForms', earlyAccessSchema);
+}, { collection: "EarlyAccessForms"});
+const earlyAccessModel = mongoose.model('early-access', earlyAccessSchema);
 
 
 module.exports = { subscriberModel, messageModel, earlyAccessModel };

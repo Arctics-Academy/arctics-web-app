@@ -1,29 +1,40 @@
-var express = require('express');
-var router = express.Router();
+// setup
+const express = require('express');
+const router = express.Router();
 
-/**
- * Module dependancies.
- */
-var { currentTimeString } = require('../utils/time.utils')
+// packages & modules
+const { currentTimeString } = require('../utils/time.utils')
 
 
-/**
- * ALL ping.
- */
+// api routes
+// ping - basic server test
 router.all('/ping', function(req, res) {
-  let bind = {
-    status: "success",
-    message: `request received at ${currentTimeString()}`
-  };
-  res.status(200).json(bind);
-});
+	let bind = {
+		status: "success",
+		message: `request received at ${currentTimeString()}`
+	}
+	res.status(200).json(bind)
+})
+
+// demo - everything before product launch
+const demoRouter = require('./demo.routes')
+router.use('/demo', demoRouter)
+
+// consultant - everything consultant side
+const consultantRouter = require('./consultant.routes')
+router.use('/consultant', consultantRouter)
+
+// user - everything with user management, such as egister & login
+const userRouter = require('./user.routes')
+router.use('/user', userRouter)
+
+// system - admin console (needs to be updated)
+const systemRouter = require('./system.routes')
+router.use('/system', systemRouter)
+
+const testRouter = require('./test.routes')
+router.use('/test', testRouter)
 
 
-/**
- * Demo endpoints.
- */
-var demoRouter = require('./demo.routes');
-router.use('/demo', demoRouter);
-
-
+// exports
 module.exports = router;

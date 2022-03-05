@@ -1,0 +1,13 @@
+extends S0-Base.pug
+
+block content
+  p 親愛的#{studentName}同學您好：
+  p 您已取消與#{consultantName}顧問的諮詢。取消的諮詢細節如下：
+  ul(style="list-style-type: none; padding-left: 0; margin: 0; margin-bottom: 12px;")
+    li(style="padding-left: 0; margin-left: 0;") 諮詢編號：#{meetindId}
+    li(style="padding-left: 0; margin-left: 0;") 諮詢顧問：#{consultantName} 顧問
+    li(style="padding-left: 0; margin-left: 0;") 諮詢學生：#{studentName} 同學
+    li(style="padding-left: 0; margin-left: 0;") 諮詢時間：#{month}月#{date}日#{hour}時#{min}分時段
+  p 我們將在扣除手續費後，全額退款給您。歡迎您再次預約！
+  p 若您有任何問題，歡迎隨時與我們聯絡。謝謝！
+  p 敬祝 安康#[br]Arctics團隊 敬上

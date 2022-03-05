@@ -8,11 +8,13 @@ Repository for server application at [www.arctics.academy](https://www.arctics.a
 root
 ├── bin/
 │   └── www
-├── frontend/
-│   └── build/
+├── public/
+│   ├── build/
+│   └── uploads/
 ├── routes/
 ├── models/
 ├── controllers/
+├── middlewares/
 ├── utils/
 ├── statics/
 │   └── emails/
@@ -23,10 +25,11 @@ root
 └── ...
 ```
 * `bin/` contains app entry point in file `www`, which will call script in `app.js`. Service connections & top-level routing handled in `app.js`.
-* `frontend/` contains build of frontend, see below for deployment steps (V in MVC).
+* `public/` contains build of frontend and user uploads, see below for deployment steps (V in MVC).
 * `routes/` contains all routing functions. `index.routes` handles client frontend requests; `api.routes` handles frontend AJAX requests.
 * `models/` contains all `mongoose` models (M in MVC).
 * `controllers/` contains logic of application, such as scheduling appointments etc. (C in MVC).
+* `middlewares/` contains all middlewares, handles file uploads and security checks.
 * `utils/` contains utility functions needed in multiple controllers, such as calculating time and others.
 * `statics/` contains all content (except frontend) that will be edployed through backend services (e.g. emails).
 * `docs/` contains API documentation, feature faults, back logs.

@@ -1,0 +1,8 @@
+extends S0-Base.pug
+
+block content
+  p 親愛的#{userName}#{(isConsultant ? "顧問" : "同學")}您好：
+  p 歡迎您加入Arctics的大家庭！您的六位數Email驗證碼如下：
+  p(style="text-align: center") #[span(style="font-size: 250%; background-color: #f2d60f; margin-left: 4px;  padding-left: 4px; padding-right: 4px; border-radius: 4px; color: #003b6b;") #{code[0]}]#[span(style="font-size: 250%; background-color: #f2d60f; margin-left: 4px;  padding-left: 4px; padding-right: 4px; border-radius: 4px; color: #003b6b;") #{code[1]}]#[span(style="font-size: 250%; background-color: #f2d60f; margin-left: 4px;  padding-left: 4px; padding-right: 4px; border-radius: 4px; color: #003b6b;") #{code[2]}]#[span(style="font-size: 250%; background-color: #f2d60f; margin-left: 4px;  padding-left: 4px; padding-right: 4px; border-radius: 4px; color: #003b6b;") #{code[3]}]#[span(style="font-size: 250%; background-color: #f2d60f; margin-left: 4px;  padding-left: 4px; padding-right: 4px; border-radius: 4px; color: #003b6b;") #{code[4]}]#[span(style="font-size: 250%; background-color: #f2d60f; margin-left: 4px;  padding-left: 4px; padding-right: 4px; border-radius: 4px; color: #003b6b;") #{code[5]}]
+  p 提醒您於10分鐘之內輸入系統，謝謝！
+  p 敬祝 安康#[br]Arctics團隊 敬上
