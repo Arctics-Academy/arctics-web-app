@@ -8,6 +8,7 @@ const { AnnouncementModel } = require('../models/system.models')
 
 // Utils
 const timeUtil = require('../utils/time.utils')
+const PasswordUtil = require('../utils/password.utils')
 const { FileNotFoundError, UserDoesNotExistError } = require('../utils/error.utils')
 const { sendSystemStudentCardVerification } = require('../utils/email.utils')
 
@@ -174,7 +175,7 @@ const consultantAddStudentId = async (id, file) => {
         throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
     }
     let imgFile = fs.readFileSync(file.path)
-    let imgEncoded = imgFile.toString()
+    let imgEncoded = imgFile.toString('base64')
     let media ={
         timestamp: new Date(),
         type: file.mimetype,
@@ -220,7 +221,7 @@ const consultantAddProfilePhoto = async (id, file) => {
     }
     else {
         let imgFile = fs.readFileSync(file.path)
-        let imgEncoded = imgFile.toString()
+        let imgEncoded = imgFile.toString('base64')
         let media = 
         {
             timestamp: new Date(),
@@ -244,6 +245,55 @@ const consultantUpdateTimetable = async (id, timetable) => {
     consultant.profile.timetable = timetable
 
     await consultant.save()
+}
+
+const consultantUpdatePassword = async (reqBody) => {
+    let consultant = await ConsultantModel.findOne({ id: reqBody.id })
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${reqBody.id} does not exist`)
+    }
+    
+    let passwordEncrypted = PasswordUtil.matchHashPassword(reqBody.oldPassword, consultant.user.passwordSalt)
+    if (consultant.user.passwordEncrypted !== passwordEncrypted) {
+        return { status: "failed", message: "incorrect original password" }
+    }
+    else {
+        let [passwordEncrypted, passwordSalt] = PasswordUtil.getHashedPassword(reqBody.newPassword)
+        consultant.user.passwordEncrypted = passwordEncrypted
+        consultant.user.passwordSalt = passwordSalt
+        await consultant.save()
+        return { status: "success", message: "password successfully changed"}
+    }
+}
+
+const consultantUpdateEmail = async (reqBody) => {
+    let consultant = await ConsultantModel.findOne({ id: reqBody.id })
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${reqBody.id} does not exist`)
+    }
+
+    let consultantSearch = await ConsultantModel.find({ "user.email": reqBody.email })
+    if (consultantSearch.length !== 0) {
+        return { status: "failed", message: "another account with the same email already exists" }
+    }
+    
+    consultant.user.email = reqBody.email
+    consultant.profile.email = reqBody.email
+    consultant.profile.emailVerified = false
+    await consultant.save()
+    return { status: "success", message: "consultant email update successful" }
+}
+
+const consultantUpdateMobile = async (reqBody) => {
+    let consultant = await ConsultantModel.findOne({ id: reqBody.id })
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${reqBody.id} does not exist`)
+    }
+    
+    consultant.profile.mobile = reqBody.mobile
+    consultant.profile.mobileVerified = false
+    await consultant.save()
+    return { status: "success", message: "consultant mobile update successful" }
 }
 
 const getMeetingQuestionsAndConditions = async (meetingId) => {
@@ -280,6 +330,9 @@ module.exports =
     consultantAddProfilePhoto,
     consultantUpdateProfile,
     consultantUpdateTimetable,
+    consultantUpdatePassword,
+    consultantUpdateEmail,
+    consultantUpdateMobile,
 
     getMeetingQuestionsAndConditions,
 }

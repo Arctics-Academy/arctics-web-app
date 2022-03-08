@@ -7,20 +7,26 @@ var { early_access_email } = require('../utils/email.utils')
 
 router.post('/subscriber-form', async function(req, res) {
     try {
-        let data = { email: req.body.email };
+        let data = { timestamp: new Date(), email: req.body.email };
         let newSubscriber = new subscriberModel(data);
         await newSubscriber.save();
         res.status(200).json({ status: "success", message: "subscriber added" });
     }
     catch(e) {
-        console.error(e);
-        res.status(500).json({ status: "error", message: "subscriber form parse failure" });
+        if (e.name === 'MongoServerError' && e.code === 11000) {
+            res.status(200).json({ status: "success", message: "subscriber already in database" });
+        }
+        else {
+            console.error(e);
+            res.status(500).json({ status: "error", message: "subscriber form parse failure" });
+        }
     }
 });
 
 router.post('/message-form', async function(req, res) {
     try {
         let data = { 
+            timestamp: new Date(),
             name: req.body.form.name,
             contact: req.body.form.phone,
             content: req.body.form.message
@@ -39,6 +45,8 @@ router.post('/message-form', async function(req, res) {
 router.post('/early-access', async function(req, res) {
     try {
         let data = req.body.form;
+        data.timestamp = new Date();
+
         let newEarlyAccess = new earlyAccessModel(data);
         await newEarlyAccess.save();
         await early_access_email(data);

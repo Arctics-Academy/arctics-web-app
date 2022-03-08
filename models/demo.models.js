@@ -8,6 +8,7 @@ subscriberSchema = new Schema({
 const subscriberModel = mongoose.model('subscriber', subscriberSchema);
 
 messageSchema = new Schema({
+    timestamp: { type: Date, required: true },
     name: { type: String, required: true },
     contact: { type: String, required: true },
     content: { type: String, required: true }
@@ -15,6 +16,7 @@ messageSchema = new Schema({
 const messageModel = mongoose.model('message', messageSchema);
 
 earlyAccessSchema = new Schema({
+    timestamp: { type: Date, required: true },
     email: { type: String, required: true, index: true },
     firstname: { type: String, required: true },
     lastname: { type: String, required: true },

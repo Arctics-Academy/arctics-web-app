@@ -5,7 +5,9 @@ var session = require('express-session')
 var logger = require('morgan');
 var dotenv = require('dotenv');
 var cors = require('cors');
+// var csurf = require('csurf');
 var mongoose = require('mongoose')
+var session = require('express-session')
 
 var indexRouter = require('./routes/index.routes');
 var apiRouter = require('./routes/api.routes');
@@ -13,11 +15,9 @@ var apiRouter = require('./routes/api.routes');
 var app = express();
 dotenv.config();
 
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'frontend', 'build')));
 app.use(session({
 	secret: 'arctics-platform',

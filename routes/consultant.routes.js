@@ -4,7 +4,7 @@ var router = express.Router()
 
 // Controllers & Middleware
 const consultantController = require('../controllers/consultant.controllers')
-const { StudentIdUploadMiddleware } = require('../middlewares/upload.middlewares')
+const { StudentIdUploadMiddleware, ProfilePhotoUploadMiddleware } = require('../middlewares/upload.middlewares')
 
 // Routes
 // returns whole consultant obj
@@ -185,7 +185,7 @@ router.post('/profile/update', async (req, res) => {
 
 // action: add/update profile photo
 // req.body: { id: "string", profilePhoto: file}
-router.post('/profile/photo/update', async (req, res) => {
+router.post('/profile/photo/update', ProfilePhotoUploadMiddleware.single('profilePhoto'), async (req, res) => {
     try {
         await consultantController.consultantAddProfilePhoto(req.body.id, req.file)
         res.status(200).json({ status: "success", message: `consultant ${req.body.id} profile photo upload successful` })
@@ -207,6 +207,48 @@ router.post('/profile/timetable/get', async (req, res) => {
     catch (e) {
         console.error(e)
         res.status(200).json({ status: "error", message: `consultant ${req.body.id} timetable update failed` })
+    }
+})
+
+// action: update consultant password
+// req.body: { id: "string", oldPassword: "string", newPassword: "string" }
+// tested
+router.post('/profile/password/update', async (req, res) => {
+    try {
+        let result = await consultantController.consultantUpdatePassword(req.body)
+        res.status(200).json(result)
+    }
+    catch (e) {
+        console.error(e)
+        res.status(200).json({ status: "error", message: `consultant ${req.body.id} password update failed` })
+    }
+})
+
+// action: update consultant email
+// req.body: { id: "string", email: "string" }
+// tested
+router.post('/profile/email/update', async (req, res) => {
+    try {
+        let result = await consultantController.consultantUpdateEmail(req.body)
+        res.status(200).json(result)
+    }
+    catch (e) {
+        console.error(e)
+        res.status(200).json({ status: "error", message: `consultant ${req.body.id} email update failed` })
+    }
+})
+
+// action: update consultant mobile
+// req.body: { id: "string", mobile: "string" }
+// tested
+router.post('/profile/mobile/update', async (req, res) => {
+    try {
+        let result = await consultantController.consultantUpdateMobile(req.body)
+        res.status(200).json(result)
+    }
+    catch (e) {
+        console.error(e)
+        res.status(200).json({ status: "error", message: `consultant ${req.body.id} mobile update failed` })
     }
 })
 

@@ -222,8 +222,8 @@ const sendSystemStudentCardVerification = async (userObj, file) => {
     emailText += `顧問姓名：${userObj.profile.surname+userObj.profile.name}\n`
     emailText += `顧問年級：${userObj.profile.year}\n`
     emailText += `顧問學系：${userObj.profile.major}\n`
-    emailText += `顧問電子郵件：${userObj.profile.email}\n`
-    emailText += `若學生證正確請點以下網址：\nhttps://arctics.academy/system/consultant/confirm-student-id/${userObj.id}\n\n`
+    emailText += `顧問電子郵件：${userObj.profile.email}\n\n`
+    emailText += `若學生證正確請點以下網址：\nhttps://arctics.academy/api/system/consultant/confirm-student-id/${userObj.id}\n\n`
     emailText += `謝謝您\nSam的系統小幫手 敬上`
     
     // Build email object
