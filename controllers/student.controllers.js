@@ -32,10 +32,16 @@ const studentUpdateProfile = async function (reqBody) {
     await student.save()
 }
 
+const getStudentNotificationCount = async (reqBody) => {
+    let student = await StudentModel.findOne({ id: reqBody.id }).select('announcements.unreadCount notifications.unreadCount')
+    return student.announcements.unreadCount + student.notifications.unreadCount
+}
+
 
 module.exports = 
 {
     getStudentProfile,
+    getStudentNotificationCount,
 
     studentUpdateProfile,
 }

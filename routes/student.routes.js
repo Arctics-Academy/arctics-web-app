@@ -43,5 +43,20 @@ router.post('/profile/update', async (req, res) => {
     }
 })
 
+router.post('/toolbar/notification-count/get', async (req, res) => {
+    // req.body: 
+    // { 
+    //     id: "string"
+    // }
+    try {
+        let data = await StudentController.getStudentNotificationCount(req.body)
+        res.status(200).json({ status: "success", data: data })
+    }
+    catch (e) {
+        console.error(e)
+        res.status(500).json({ status: "error", message: `cannot get student notification count with id ${req.body.id}` })
+    }
+})
+
 
 module.exports = router
