@@ -8,6 +8,7 @@ var cors = require('cors');
 // var csurf = require('csurf');
 var mongoose = require('mongoose')
 var session = require('express-session')
+var MongoStore = require('connect-mongo')
 
 var indexRouter = require('./routes/index.routes');
 var apiRouter = require('./routes/api.routes');
@@ -24,8 +25,10 @@ app.use(session({
 	resave: true,
 	saveUninitialized: true,
 	cookie: { 
-		maxAge: 8*60*(60*1000)
-	}
+		maxAge: 60*(60*1000),
+		httpOnly: true
+	},
+	store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
 }))
 app.use(cors())
 
