@@ -5,7 +5,6 @@ const { UserError, UserDoesNotExistError, DuplicateUserError, SystemError, Datab
 const MobileUtil = require('../utils/mobile.utils')
 const EmailUtil = require('../utils/email.utils')
 
-// const StudentModel = require('../models/student')
 const { ConsultantModel } = require('../models/consultant.models')
 const { StudentModel } = require('../models/student.models')
 
@@ -25,29 +24,6 @@ const privateCheckDuplicateConsultant = async (email) => {
     if (consultant === null) return false
     return true
 }
-
-// async function registerStudent(input) {
-//     if (await checkDuplicateStudent(input.login.email)) throw new Error('InputError: Duplicate student detected');
-//     if (!PasswordUtil.validatePassword(input.login.password)) throw new Error('InputError: Incorrect password format');
-
-//     let originalPassword = input.login.password;
-//     let hashResult = PasswordUtil.getHashedPassword(originalPassword);
-//     input.login.password = hashResult[0];
-//     input.login.salt = hashResult[1];
-
-//     let count = await StudentModel.countDocuments();
-//     input.studentid = IdUtil.genUserID(count, 'ST');
-
-//     let newStudent = new StudentModel(input);
-//     await newStudent.save((err) => {
-//         if(err) {
-//             console.log(err);
-//             throw new Error('DatabaseError: Cannot save to MongoDB');
-//         }
-//     });
-//     return true;
-// }
-
 
 // expected reqBody to be
 // {
