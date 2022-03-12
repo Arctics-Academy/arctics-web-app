@@ -16,7 +16,6 @@ router.get('/consultant/confirm-student-id/:consultantId', async (req, res) => {
 
 router.get('/consultant', async (req, res) => {
     try {
-        console.log(req.session)
         if (req.session.auth.consultantAuth) {
             let data = await getConsultantObject(req.session.auth.consultantId)
             res.status(200).json({ status: "success", data: data })
