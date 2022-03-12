@@ -31,6 +31,7 @@ router.post('/consultant/login', async (req, res) => {
         else {
             res.status(200).json(result)
         }
+        console.log(req.session)
     }
     catch (e) {
         console.error(e)
@@ -43,6 +44,7 @@ router.post('/consultant/logout', async (req, res) => {
         req.session.auth.consultantAuth = false
         req.session.auth.consultantId = null
         res.status(200).json({ status: "success", message: `consultant logout successful` })
+        console.log(req.session)
     }
     catch (e) {
         console.error(e)
