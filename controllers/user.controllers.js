@@ -135,6 +135,9 @@ const sendMobileOTP = async (reqBody) => {
     if (reqBody.id.substring(0, 2) === "TR") {
         user = await ConsultantModel.findOne({ id: reqBody.id })
     }
+    if (reqBody.id.substring(0, 2) === "ST") {
+        user = await StudentModel.findOne({ id: reqBody.id })
+    }
     if (user === undefined) {
         throw new UserDoesNotExistError(`user (${reqBody.id}) does not exist in database`)
     }
@@ -169,6 +172,9 @@ const matchMobileOTP = async (reqBody) => {
     if (reqBody.id.substring(0, 2) === "TR") {
         user = await ConsultantModel.findOne({ id: reqBody.id })
     }
+    if (reqBody.id.substring(0, 2) === "ST") {
+        user = await StudentModel.findOne({ id: reqBody.id })
+    }
     if (user === undefined) {
         throw new UserDoesNotExistError(`user (${reqBody.id}) does not exist in database`)
     }
@@ -197,6 +203,9 @@ const sendEmailOTP = async (reqBody) => {
     let user
     if (reqBody.id.substring(0, 2) === "TR") {
         user = await ConsultantModel.findOne({ id: reqBody.id })
+    }
+    if (reqBody.id.substring(0, 2) === "ST") {
+        user = await StudentModel.findOne({ id: reqBody.id })
     }
     if (user === undefined) {
         throw new UserDoesNotExistError(`user (${reqBody.id}) does not exist in database`)
@@ -230,6 +239,9 @@ const matchEmailOTP = async (reqBody) => {
     let user
     if (reqBody.id.substring(0, 2) === "TR") {
         user = await ConsultantModel.findOne({ id: reqBody.id })
+    }
+    if (reqBody.id.substring(0, 2) === "ST") {
+        user = await StudentModel.findOne({ id: reqBody.id })
     }
     if (user === undefined) {
         throw new UserDoesNotExistError(`user (${reqBody.id}) does not exist in database`)
