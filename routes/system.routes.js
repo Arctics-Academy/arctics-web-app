@@ -1,7 +1,8 @@
 const express = require('express')
 const router = express.Router()
 
-const { getConsultantObject, systemValidateConsultantStudentCard } = require('../controllers/system.controllers')
+const { getConsultantObject, systemValidateConsultantStudentCard, getStudentObject } = require('../controllers/system.controllers')
+
 
 router.get('/consultant/confirm-student-id/:consultantId', async (req, res) => {
     try {
@@ -21,7 +22,7 @@ router.get('/consultant', async (req, res) => {
             res.status(200).json({ status: "success", data: data })
         }
         else {
-            res.status(200).json({ status: "failed", message: "session timed out"})
+            res.status(200).json({ status: "failed", message: "consultant session timed out"})
         }
     }
     catch (e) {
@@ -29,5 +30,22 @@ router.get('/consultant', async (req, res) => {
         res.status(500).json({ status: "error", message: "internal server error; try logging in again"})
     }
 })
+
+router.get('/student', async (req, res) => {
+    try {
+        if (req.session.auth.studentAuth) {
+            let data = await getStudentObject(req.session.auth.studentId)
+            res.status(200).json({ status: "success", data: data })
+        }
+        else {
+            res.status(200).json({ status: "failed", message: "student session timed out"})
+        }
+    }
+    catch (e) {
+        console.error(e)
+        res.status(500).json({ status: "error", message: "internal server error; try logging in again"})
+    }
+})
+
 
 module.exports = router
