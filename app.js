@@ -28,7 +28,7 @@ app.use(session({
 		maxAge: 60*(60*1000),
 		httpOnly: true
 	},
-	store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
+	store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI_SYSTEM })
 }))
 app.use(cors())
 
@@ -40,7 +40,7 @@ app.use('*', indexRouter);
 
 async function databaseConfig() {
     try {
-        await mongoose.connect(process.env.MONGO_URI);
+        await mongoose.connect(process.env.MONGODB_URI_USER);
     }
     catch(e) {
         console.error(e);
