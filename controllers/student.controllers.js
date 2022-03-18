@@ -1,5 +1,6 @@
 // Models
 const { StudentModel } = require('../models/student.models')
+const { DiscountCodeModel } = require('../models/system.models')
 
 // Utils
 const { UserDoesNotExistError } = require('../utils/error.utils')
@@ -37,6 +38,26 @@ const getStudentNotificationCount = async (reqBody) => {
     return student.announcements.unreadCount + student.notifications.unreadCount
 }
 
+const studentVerifyDiscountCode = async (reqBody) => {
+    let discount = await DiscountCodeModel.findOne({ code: reqBody.discount });
+    if (!discount) {
+        return { status: "failed", code: 1, message: `discount with code (${reqBody.discount} does not exist` };
+    }
+    else {
+        // time check
+        let now = new Date();
+        if (now > discount.expiredTimestamp) {
+            return { status: "failed", code: 2, message: `discount with code (${reqBody.discount}) has already expired` };
+        }
+        // user check
+        if (discount.userExclusive && !discount.userAllowed.includes(reqBody.id)) {
+            return { status: "failed", code: 3, message: `discount with code (${reqBody.discount}) is not accessible by student (${reqBody.id})` };
+        }
+        // passed all checks
+        return { status: "success", code: 0, data: discount };
+    }
+}
+
 
 module.exports = 
 {
@@ -44,4 +65,5 @@ module.exports =
     getStudentNotificationCount,
 
     studentUpdateProfile,
+    studentVerifyDiscountCode,
 }

@@ -58,5 +58,21 @@ router.post('/toolbar/notification-count/get', async (req, res) => {
     }
 })
 
+router.post('/toolbar/check-discount-code/verify', async (req, res) => {
+    // req.body: 
+    // {
+    //     id: "string",
+    //     discount: "string"
+    // }
+    try {
+        let response = await StudentController.studentVerifyDiscountCode(req.body);
+        res.status(200).json(response);
+    }
+    catch (e) {
+        console.error(e);
+        res.status(200).json({ status: "error", message: `student ${req.body.id} discount code check failed` });
+    }
+})
+
 
 module.exports = router
