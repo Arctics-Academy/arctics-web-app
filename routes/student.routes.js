@@ -7,6 +7,21 @@ const StudentController = require('../controllers/student.controllers')
 
 
 // Routes
+router.post('/dashboard/get', async function (req, res) {
+    // expect req.body
+    // {
+    //     id: "string"
+    // }
+    try {
+        let data = await StudentController.getStudentDashboard(req.body)
+        res.status(200).json({ status: "success", data: data })
+    }
+    catch (e) {
+        console.log(e)
+        res.status(500).json({ status: "error", message: `cannot get student dashboard info with id ${req.body.id}` })
+    }
+});
+
 router.post('/profile/get', async (req, res) => {
     // expect req.body
     // {

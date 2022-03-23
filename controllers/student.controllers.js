@@ -5,6 +5,10 @@ const { DiscountCodeModel } = require('../models/system.models')
 // Utils
 const { UserDoesNotExistError } = require('../utils/error.utils')
 
+const getStudentDashboard = async function(reqBody) {
+    let dashboard = StudentModel.findOne({ id: reqBody.id }).select("profile announcements meetings");
+    return dashbaord
+}
 
 const getStudentProfile = async function(reqBody) {
     let profile = await StudentModel.findOne({ id: reqBody.id }).select('profile')
@@ -61,6 +65,7 @@ const studentVerifyDiscountCode = async (reqBody) => {
 
 module.exports = 
 {
+    getStudentDashboard,
     getStudentProfile,
     getStudentNotificationCount,
 
