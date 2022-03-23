@@ -8,8 +8,9 @@ const FilterController = require('../controllers/filter.controllers');
 
 
 // Routes
+// returns dashboard information
 router.post('/dashboard/get', async function (req, res) {
-    // expect req.body
+    // req.body
     // {
     //     id: "string"
     // }
@@ -19,10 +20,11 @@ router.post('/dashboard/get', async function (req, res) {
     }
     catch (e) {
         console.log(e)
-        res.status(500).json({ status: "error", message: `cannot get student dashboard info with id ${req.body.id}` })
+        res.status(200).json({ status: "error", message: `cannot get student dashboard info with id ${req.body.id}` })
     }
 });
 
+// returns student list information
 router.post('/list/get', async (req, res) => {
     // req.body
     // {
@@ -38,6 +40,7 @@ router.post('/list/get', async (req, res) => {
     }
 });
 
+// adds items to student list
 router.post('/list/add', async (req, res) => {
     // req.body
     // {
@@ -54,6 +57,7 @@ router.post('/list/add', async (req, res) => {
     }
 });
 
+// deletes item from student list
 router.post('/list/delete', async (req, res) => {
     // req.body
     // {
@@ -70,6 +74,7 @@ router.post('/list/delete', async (req, res) => {
     }
 })
 
+// clears student list
 router.post('/list/clear', async (req, res) => {
     // req.body
     // {
@@ -85,6 +90,7 @@ router.post('/list/clear', async (req, res) => {
     }
 });
 
+// returns student profile information
 router.post('/profile/get', async (req, res) => {
     // expect req.body
     // {
@@ -96,10 +102,11 @@ router.post('/profile/get', async (req, res) => {
     }
     catch(e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: `cannot get student profile with id ${req.body.id}` })
+        res.status(200).json({ status: "error", message: `cannot get student profile with id ${req.body.id}` })
     }
 })
 
+// updates student profile
 router.post('/profile/update', async (req, res) => {
     // expect req.body
     // {
@@ -121,6 +128,7 @@ router.post('/profile/update', async (req, res) => {
     }
 })
 
+// returns student notification count
 router.post('/toolbar/notification-count/get', async (req, res) => {
     // req.body: 
     // { 
@@ -132,10 +140,11 @@ router.post('/toolbar/notification-count/get', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: `cannot get student notification count with id ${req.body.id}` })
+        res.status(200).json({ status: "error", message: `cannot get student notification count with id ${req.body.id}` })
     }
 })
 
+// verfies entered discount code
 router.post('/toolbar/check-discount-code/verify', async (req, res) => {
     // req.body: 
     // {
@@ -152,6 +161,7 @@ router.post('/toolbar/check-discount-code/verify', async (req, res) => {
     }
 })
 
+// returns consultants from filter
 router.post('/toolbar/filter', async (req, res) => {
     // req.body
     // {
@@ -173,4 +183,5 @@ router.post('/toolbar/filter', async (req, res) => {
 });
 
 
+// Exports
 module.exports = router

@@ -17,7 +17,7 @@ router.get('/consultant', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: "internal server error; try logging in again"})
+        res.status(200).json({ status: "error", message: "internal server error; try logging in again"})
     }
 })
 
@@ -33,7 +33,7 @@ router.get('/student', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: "internal server error; try logging in again"})
+        res.status(200).json({ status: "error", message: "internal server error; try logging in again"})
     }
 })
 
@@ -46,7 +46,7 @@ router.get('/consultant/confirm-student-id/:consultantId', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "success", message: `資料庫有問題 請通知Sam手動認證` })
+        res.status(200).json({ status: "error", message: `資料庫有問題 請通知Sam手動認證` })
     }
 })
 

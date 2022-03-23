@@ -15,7 +15,7 @@ router.post('/consultant/register', async (req, res) => {
         }
         else {
             console.error(e)
-            res.status(500).json({ status: "error", message: "internal error; try again later"})
+            res.status(200).json({ status: "error", message: "internal error; try again later"})
         }
     }
 })
@@ -34,7 +34,7 @@ router.post('/consultant/login', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: "internal error; try again later"})
+        res.status(200).json({ status: "error", message: "internal error; try again later"})
     }
 })
 
@@ -46,7 +46,7 @@ router.post('/consultant/logout', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: "internal error; try again later"})
+        res.status(200).json({ status: "error", message: "internal error; try again later"})
     }
 })
 
@@ -57,7 +57,7 @@ router.post('/consultant/email-otp/send', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: "internal error; try again later"})
+        res.status(200).json({ status: "error", message: "internal error; try again later"})
     }
 })
 
@@ -72,7 +72,7 @@ router.post('/consultant/email-otp/verify', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: "internal error; try again later"})
+        res.status(200).json({ status: "error", message: "internal error; try again later"})
     }
 })
 
@@ -83,7 +83,7 @@ router.post('/consultant/mobile-otp/send', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: "internal error; try again later"})
+        res.status(200).json({ status: "error", message: "internal error; try again later"})
     }
 })
 
@@ -98,7 +98,7 @@ router.post('/consultant/mobile-otp/verify', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: "internal error; try again later"})
+        res.status(200).json({ status: "error", message: "internal error; try again later"})
     }
 })
 
@@ -114,7 +114,7 @@ router.post('/student/register', async (req, res) => {
         }
         else {
             console.error(e)
-            res.status(500).json({ status: "error", message: "internal error; try again later"})
+            res.status(200).json({ status: "error", message: "internal error; try again later"})
         }
     }
 })
@@ -133,7 +133,7 @@ router.post('/student/login', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: "internal error; try again later"})
+        res.status(200).json({ status: "error", message: "internal error; try again later"})
     }
 })
 
@@ -144,7 +144,7 @@ router.post('/student/email-otp/send', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: "internal error; try again later"})
+        res.status(200).json({ status: "error", message: "internal error; try again later"})
     }
 })
 
@@ -159,7 +159,7 @@ router.post('/student/email-otp/verify', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: "internal error; try again later"})
+        res.status(200).json({ status: "error", message: "internal error; try again later"})
     }
 })
 
@@ -170,7 +170,7 @@ router.post('/student/mobile-otp/send', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: "internal error; try again later"})
+        res.status(200).json({ status: "error", message: "internal error; try again later"})
     }
 })
 
@@ -185,7 +185,7 @@ router.post('/student/mobile-otp/verify', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: "internal error; try again later"})
+        res.status(200).json({ status: "error", message: "internal error; try again later"})
     }
 })
 
