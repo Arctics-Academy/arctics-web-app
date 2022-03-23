@@ -5,7 +5,7 @@ const { ConsultantModel } = require('../models/consultant.models');
 const { castToStudentListConsultant } = require('../utils/profile.utils')
 
 // Functions
-async function filterConsultants(reqBody) {
+const filterConsultants = async (reqBody) => {
     let mongoQuery = {
         "profile.school": (reqBody.query.school ? { $in: reqBody.query.school } : { $exists: true }),
         "profile.field": (reqBody.query.field ? { $in: reqBody.query.field }: { $exists: true }),

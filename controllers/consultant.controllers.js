@@ -13,22 +13,22 @@ const { FileNotFoundError, UserDoesNotExistError } = require('../utils/error.uti
 const { sendSystemStudentCardVerification } = require('../utils/email.utils')
 
 
-const getConsultantDashboard = async function(id) {
+const getConsultantDashboard = async (id) => {
     let dashboard = await ConsultantModel.findOne({ id: id }).select('profile announcements meetings purse')
     return dashboard
 }
 
-const getConsultantProfile = async function(id) {
+const getConsultantProfile = async (id) => {
     let profile = await ConsultantModel.findOne({ id: id }).select('profile')
     return profile
 }
 
-const getConsultantPurse = async function(id) {
+const getConsultantPurse = async (id) => {
     let purse = await ConsultantModel.findOne({ id: id }).select('purse')
     return purse
 }
 
-const getConsultantMeetingsCalendar = async function(id, date) {
+const getConsultantMeetingsCalendar = async (id, date) => {
     // load meetings
     let consultant = await ConsultantModel.findOne({ id: id }).select('meetings')
     
@@ -47,12 +47,12 @@ const getConsultantMeetingsCalendar = async function(id, date) {
     return answer
 }
 
-const getConsultantMeetingsList = async function(id) {
+const getConsultantMeetingsList = async (id) => {
     let meeting = await ConsultantModel.findOne({ id: id }).select('meetings')
     return meeting
 }
 
-const getConsultantNotifications = async function(id) {
+const getConsultantNotifications = async (id) => {
     // load data
     let notifs = await ConsultantModel.findOne({ id: id }).select('announcements notifications')
 
@@ -91,7 +91,7 @@ const consultantAddBankInfo = async (id, data) => {
     await consultant.save()
 }
 
-const consultantCancelMeeting = async function(consultantId, meetingId) {
+const consultantCancelMeeting = async (consultantId, meetingId) => {
     try {
         // Consultant Side
         // a. Move meeting

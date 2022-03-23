@@ -7,12 +7,12 @@ const { DiscountCodeModel } = require('../models/system.models')
 const { UserDoesNotExistError } = require('../utils/error.utils')
 const { castToStudentListConsultant } = require('../utils/profile.utils')
 
-const getStudentDashboard = async function(reqBody) {
+const getStudentDashboard = async (reqBody) => {
     let dashboard = await StudentModel.findOne({ id: reqBody.id }).select("profile announcements meetings");
     return dashboard
 }
 
-const getStudentProfile = async function(reqBody) {
+const getStudentProfile = async (reqBody) => {
     let profile = await StudentModel.findOne({ id: reqBody.id }).select('profile')
     if (profile === null) {
         throw new UserDoesNotExistError(`student with id ${reqBody.id} does not exist`)
@@ -20,7 +20,7 @@ const getStudentProfile = async function(reqBody) {
     return profile
 }
 
-const getStudentList = async function(reqBody) {
+const getStudentList = async (reqBody) => {
     let list = await StudentModel.findOne({ id: reqBody.id }).select("list");
     return list
 }
@@ -30,7 +30,7 @@ const getStudentNotificationCount = async (reqBody) => {
     return student.announcements.unreadCount + student.notifications.unreadCount
 }
 
-const studentUpdateProfile = async function (reqBody) {
+const studentUpdateProfile = async (reqBody) => {
     let student = await StudentModel.findOne({ id: reqBody.id })
     if (student === null) {
         throw new UserDoesNotExistError(`consultant with id ${reqBody.id} does not exist`)
@@ -49,7 +49,7 @@ const studentUpdateProfile = async function (reqBody) {
     await student.save()
 }
 
-const studentAddToList = async function(reqBody) {
+const studentAddToList = async (reqBody) => {
     let student = await StudentModel.findOne({ id: reqBody.id }).select("list");
     let newListItem = await ConsultantModel.findOne({ id: reqBody.id }).select("profile");
     newListItem = castToStudentListConsultant(newListItem);
@@ -57,13 +57,13 @@ const studentAddToList = async function(reqBody) {
     await student.save();
 }
 
-const studentDeleteFromList = async function(reqBody) {
+const studentDeleteFromList = async (reqBody) => {
     let student = await StudentModel.findOne({ id: reqBody.id }).select("list");
     student.list = student.list.filter(item => item.consultantId !== reqBody.consultantId);
     await student.save();
 }
 
-const studentClearList = async function(reqBody) {
+const studentClearList = async (reqBody) => {
     let student = await StudentModel.findOne({ id: reqBody.id }).select("list");
     student.list = [];
     await student.save();
