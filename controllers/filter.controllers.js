@@ -1,6 +1,9 @@
 // Models
 const { ConsultantModel } = require('../models/consultant.models');
 
+// Utils
+const { castToStudentListConsultant } = require('../utils/profile.utils')
+
 // Functions
 async function filterConsultants(reqBody) {
     let mongoQuery = {
@@ -13,17 +16,7 @@ async function filterConsultants(reqBody) {
     let rawResults = await ConsultantModel.find(mongoQuery).select("id profile");
     let cleanedResults;
     for (consultant in rawResults) {
-        let studentListConsultant = {
-            consultantId: consultant.id,
-            photo: consultant.profile.photo,
-            price: consultant.profile.price,
-            school: consultant.profile.school,
-            count: consultant.profile.count,
-            labels: consultant.profile.labels,
-            intro: consultant.profile.intro,
-            star: consultant.profile.star
-        };
-        cleanedResults.push(studentListConsultant);
+        cleanedResults.push(castToStudentListConsultant(consultant));
     }
     
     return cleanedResults;
