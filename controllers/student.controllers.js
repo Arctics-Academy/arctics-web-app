@@ -69,6 +69,12 @@ const studentClearList = async (reqBody) => {
     await student.save();
 }
 
+const studentViewConsultant = async (reqBody) => {
+    let consultant = await ConsultantModel.findOne({ id: reqBody.consultantId }).select("id profile timetable");
+    return consultant;
+    // TODO: Union consultant meetings, student meetings, and consultant timetable
+}
+
 const studentVerifyDiscountCode = async (reqBody) => {
     let discount = await DiscountCodeModel.findOne({ code: reqBody.discount });
     if (!discount) {
@@ -101,5 +107,6 @@ module.exports =
     studentAddToList,
     studentDeleteFromList,
     studentClearList,
+    studentViewConsultant,
     studentVerifyDiscountCode,
 }

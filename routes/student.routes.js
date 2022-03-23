@@ -182,6 +182,22 @@ router.post('/tools/filter', async (req, res) => {
     }
 });
 
+// returns requested consultant profile obj
+router.post('/tools/consultant-profile/get', async (req, res) => {
+    // req.body
+    // {
+    //     consultantId: "string"
+    // }
+    try {
+        let data = await StudentController.studentViewConsultant(req.body);
+        res.status(200).json({ status: "success", data: data });
+    } 
+    catch (e) {
+        console.error(e);
+        res.send(200).json({ status: "error", message: `uncaught student controller error`});
+    }
+})
+
 
 // Exports
 module.exports = router
