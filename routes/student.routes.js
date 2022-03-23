@@ -129,7 +129,7 @@ router.post('/profile/update', async (req, res) => {
 })
 
 // returns student notification count
-router.post('/toolbar/notification-count/get', async (req, res) => {
+router.post('/tools/notification-count/get', async (req, res) => {
     // req.body: 
     // { 
     //     id: "string"
@@ -145,7 +145,7 @@ router.post('/toolbar/notification-count/get', async (req, res) => {
 })
 
 // verfies entered discount code
-router.post('/toolbar/check-discount-code/verify', async (req, res) => {
+router.post('/tools/check-discount-code/verify', async (req, res) => {
     // req.body: 
     // {
     //     id: "string",
@@ -162,7 +162,7 @@ router.post('/toolbar/check-discount-code/verify', async (req, res) => {
 })
 
 // returns consultants from filter
-router.post('/toolbar/filter', async (req, res) => {
+router.post('/tools/filter', async (req, res) => {
     // req.body
     // {
     //     query: 
