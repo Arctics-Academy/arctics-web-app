@@ -6,8 +6,8 @@ const { DiscountCodeModel } = require('../models/system.models')
 const { UserDoesNotExistError } = require('../utils/error.utils')
 
 const getStudentDashboard = async function(reqBody) {
-    let dashboard = StudentModel.findOne({ id: reqBody.id }).select("profile announcements meetings");
-    return dashbaord
+    let dashboard = await StudentModel.findOne({ id: reqBody.id }).select("profile announcements meetings");
+    return dashboard
 }
 
 const getStudentProfile = async function(reqBody) {
