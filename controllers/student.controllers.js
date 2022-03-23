@@ -1,9 +1,11 @@
 // Models
 const { StudentModel } = require('../models/student.models')
+const { ConsultantModel } = require('../models/consultant.models')
 const { DiscountCodeModel } = require('../models/system.models')
 
 // Utils
 const { UserDoesNotExistError } = require('../utils/error.utils')
+const { castToStudentListConsultant } = require('../utils/profile.utils')
 
 const getStudentDashboard = async function(reqBody) {
     let dashboard = await StudentModel.findOne({ id: reqBody.id }).select("profile announcements meetings");
@@ -16,6 +18,11 @@ const getStudentProfile = async function(reqBody) {
         throw new UserDoesNotExistError(`student with id ${reqBody.id} does not exist`)
     }
     return profile
+}
+
+const getStudentList = async function(reqBody) {
+    let list = await StudentModel.findOne({ id: reqBody.id }).select("list");
+    return list
 }
 
 const studentUpdateProfile = async function (reqBody) {
@@ -42,6 +49,26 @@ const getStudentNotificationCount = async (reqBody) => {
     return student.announcements.unreadCount + student.notifications.unreadCount
 }
 
+const studentAddToList = async function(reqBody) {
+    let student = await StudentModel.findOne({ id: reqBody.id }).select("list");
+    let newListItem = await ConsultantModel.findOne({ id: reqBody.id }).select("profile");
+    newListItem = castToStudentListConsultant(newListItem);
+    student.list.push(newListItem);
+    await student.save();
+}
+
+const studentDeleteFromList = async function(reqBody) {
+    let student = await StudentModel.findOne({ id: reqBody.id }).select("list");
+    student.list = student.list.filter(item => item.consultantId !== reqBody.consultantId);
+    await student.save();
+}
+
+const studentClearList = async function(reqBody) {
+    let student = await StudentModel.findOne({ id: reqBody.id }).select("list");
+    student.list = [];
+    await student.save();
+}
+
 const studentVerifyDiscountCode = async (reqBody) => {
     let discount = await DiscountCodeModel.findOne({ code: reqBody.discount });
     if (!discount) {
@@ -66,9 +93,13 @@ const studentVerifyDiscountCode = async (reqBody) => {
 module.exports = 
 {
     getStudentDashboard,
+    getStudentList,
     getStudentProfile,
     getStudentNotificationCount,
 
     studentUpdateProfile,
+    studentAddToList,
+    studentDeleteFromList,
+    studentClearList,
     studentVerifyDiscountCode,
 }

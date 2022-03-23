@@ -23,6 +23,68 @@ router.post('/dashboard/get', async function (req, res) {
     }
 });
 
+router.post('/list/get', async (req, res) => {
+    // req.body
+    // {
+    //     id: "string"
+    // }
+    try {
+        let data = await StudentController.getStudentList(req.body)
+        res.status(200).json({ status: "success", data: data })
+    }
+    catch (e) {
+        console.log(e)
+        res.status(200).json({ status: "error", message: `cannot get student list info with id ${req.body.id}` })
+    }
+});
+
+router.post('/list/add', async (req, res) => {
+    // req.body
+    // {
+    //     id: "string"
+    //     consultantId: "string"  
+    // }
+    try {
+        await StudentController.studentAddToList(req.body)
+        res.status(200).json({ status: "success", message: `consultant added to student list` })
+    }
+    catch (e) {
+        console.log(e)
+        res.status(200).json({ status: "error", message: `student (${req.body.id}) list update failed` });
+    }
+});
+
+router.post('/list/delete', async (req, res) => {
+    // req.body
+    // {
+    //     id: "string"
+    //     consultantId: "string"  
+    // }
+    try {
+        await StudentController.studentDeleteFromList(req.body);
+        res.status(200).json({ status: "success", message: `consultant deleted from student list` });
+    }
+    catch (e) {
+        console.log(e);
+        res.status(200).json({ status: "error", message: `student (${req.body.id}) list update failed` });
+    }
+})
+
+router.post('/list/clear', async (req, res) => {
+    // req.body
+    // {
+    //     id: "string"
+    // }
+    try {
+        await StudentController.studentClearList(req.body);
+        res.status(200).json({ status: "success", message: `student consultant list cleared` });
+    }
+    catch (e) {
+        console.log(e);
+        res.status(200).json({ status: "error", message: `student (${req.body.id}) list update failed` });
+    }
+});
+
 router.post('/profile/get', async (req, res) => {
     // expect req.body
     // {
