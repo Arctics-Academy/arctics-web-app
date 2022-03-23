@@ -25,6 +25,11 @@ const getStudentList = async function(reqBody) {
     return list
 }
 
+const getStudentNotificationCount = async (reqBody) => {
+    let student = await StudentModel.findOne({ id: reqBody.id }).select('announcements.unreadCount notifications.unreadCount')
+    return student.announcements.unreadCount + student.notifications.unreadCount
+}
+
 const studentUpdateProfile = async function (reqBody) {
     let student = await StudentModel.findOne({ id: reqBody.id })
     if (student === null) {
@@ -42,11 +47,6 @@ const studentUpdateProfile = async function (reqBody) {
     }
 
     await student.save()
-}
-
-const getStudentNotificationCount = async (reqBody) => {
-    let student = await StudentModel.findOne({ id: reqBody.id }).select('announcements.unreadCount notifications.unreadCount')
-    return student.announcements.unreadCount + student.notifications.unreadCount
 }
 
 const studentAddToList = async function(reqBody) {
