@@ -25,6 +25,11 @@ const getStudentList = async (reqBody) => {
     return list
 }
 
+const getStudentMeetings = async (reqBody) => {
+    let student = await StudentModel.findOne({ id: reqBody.id }).select("meetings");
+    return student;
+}
+
 const getStudentNotificationCount = async (reqBody) => {
     let student = await StudentModel.findOne({ id: reqBody.id }).select('announcements.unreadCount notifications.unreadCount')
     return student.announcements.unreadCount + student.notifications.unreadCount
@@ -100,6 +105,7 @@ module.exports =
 {
     getStudentDashboard,
     getStudentList,
+    getStudentMeetings,
     getStudentProfile,
     getStudentNotificationCount,
 

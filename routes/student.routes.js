@@ -90,6 +90,22 @@ router.post('/list/clear', async (req, res) => {
     }
 });
 
+// returns all meetings
+router.post('/meetings/list/get', async function (req, res) {
+    // req.body
+    // {
+    //     id: "string"
+    // }
+    try {
+        let data = await StudentController.getStudentMeetings(req.body)
+        res.status(200).json({ status: "success", data: data })
+    }
+    catch (e) {
+        console.log(e)
+        res.status(200).json({ status: "error", message: `cannot get student meeting list with id ${req.body.id}` })
+    }
+})
+
 // returns student profile information
 router.post('/profile/get', async (req, res) => {
     // expect req.body
