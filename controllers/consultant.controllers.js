@@ -7,36 +7,48 @@ const { MeetingModel } = require('../models/meeting.models')
 const { AnnouncementModel } = require('../models/system.models')
 
 // Utils
-const timeUtil = require('../utils/time.utils')
+const TimeUtil = require('../utils/time.utils')
 const PasswordUtil = require('../utils/password.utils')
 const { FileNotFoundError, UserDoesNotExistError } = require('../utils/error.utils')
 const { sendSystemStudentCardVerification } = require('../utils/email.utils')
 
 
 const getConsultantDashboard = async (id) => {
-    let dashboard = await ConsultantModel.findOne({ id: id }).select('profile announcements meetings purse')
-    return dashboard
+    let consultant = await ConsultantModel.findOne({ id: id }).select('profile announcements meetings purse');
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`);
+    }
+    return consultant;
 }
 
 const getConsultantProfile = async (id) => {
-    let profile = await ConsultantModel.findOne({ id: id }).select('profile')
-    return profile
+    let consultant = await ConsultantModel.findOne({ id: id }).select('profile');
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`);
+    }
+    return consultant;
 }
 
 const getConsultantPurse = async (id) => {
-    let purse = await ConsultantModel.findOne({ id: id }).select('purse')
-    return purse
+    let consultant = await ConsultantModel.findOne({ id: id }).select('purse');
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`);
+    }
+    return consultant;
 }
 
 const getConsultantMeetingsCalendar = async (id, date) => {
     // load meetings
     let consultant = await ConsultantModel.findOne({ id: id }).select('meetings')
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`);
+    }
     
     // filter settings
     date = new Date(date)
     year = date.getFullYear()
     month = date.getMonth()
-    let [start, end] = timeUtil.yearMonthToDatetimeRange(year, month)
+    let [start, end] = TimeUtil.yearMonthToDatetimeRange(year, month)
     
     // filter all
     let answer = {}
@@ -48,37 +60,49 @@ const getConsultantMeetingsCalendar = async (id, date) => {
 }
 
 const getConsultantMeetingsList = async (id) => {
-    let meeting = await ConsultantModel.findOne({ id: id }).select('meetings')
-    return meeting
+    let consultant = await ConsultantModel.findOne({ id: id }).select('meetings');
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`);
+    }
+    return consultant;
 }
 
 const getConsultantNotifications = async (id) => {
     // load data
-    let notifs = await ConsultantModel.findOne({ id: id }).select('announcements notifications')
+    let consultant = await ConsultantModel.findOne({ id: id }).select('announcements notifications')
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`);
+    }
 
     // replace announcements
-    for (item in notifs.announcements) {
+    for (item in consultant.announcements) {
         let temp = await AnnouncementModel.findOne({ id: item.id })
         item = Object.assign(item, temp)
     }
-    return notifs
+    return consultant
 }
 
 const getConsultantNotificationCount = async (id) => {
-    let consultant = await ConsultantModel.findOne({ id: id }).select('announcements.unreadCount notifications.unreadCount')
+    let consultant = await ConsultantModel.findOne({ id: id }).select('announcements.unreadCount notifications.unreadCount');
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`);
+    }
     return consultant.announcements.unreadCount + consultant.notifications.unreadCount
 }
 
 const getConsultantBankInfo = async (id) => {
-    let list = await ConsultantModel.findOne({ id: id }).select('purse.bankList')
-    return list
+    let consultant = await ConsultantModel.findOne({ id: id }).select('purse.bankList');
+    if (consultant === null) {
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`);
+    }
+    return consultant;
 }
 
 const consultantAddBankInfo = async (id, data) => {
     // data verification?
-    let consultant = await ConsultantModel.findOne({ id: id })
+    let consultant = await ConsultantModel.findOne({ id: id });
     if (consultant === null) {
-        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`);
     }
     let bank = {
         default: (consultant.purse.length > 0 ? false : true),
@@ -96,9 +120,9 @@ const consultantCancelMeeting = async (consultantId, meetingId) => {
         // Consultant Side
         // a. Move meeting
         let startTimestamp
-        let consultant = await ConsultantModel.findOne({ id: consultantId })
+        let consultant = await ConsultantModel.findOne({ id: consultantId });
         if (consultant === null) {
-            throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+            throw new UserDoesNotExistError(`consultant with id ${id} does not exist`);
         }
         for (let i = 0; i < consultant.future.size(); i++) {
             if (consultant.future[i].id === meetingId) {
@@ -108,12 +132,12 @@ const consultantCancelMeeting = async (consultantId, meetingId) => {
                 break
             }
         }
-        consultant.canceled.sort(_compareMeeting)
+        consultant.canceled.sort(privateCompareMeeting)
         // b. Add notification
         consultant.notifications.push({
             id: consultant.notifications.size(),
             timestamp: new Date(),
-            title: `您在${timeUtil.timestampToString(startTimestamp)}的諮詢已經取消，請前往「我的諮詢」查看！`,
+            title: `您在${TimeUtil.timestampToString(startTimestamp)}的諮詢已經取消，請前往「我的諮詢」查看！`,
             content: null,
             read: false
         })
@@ -140,9 +164,9 @@ const consultantCancelMeeting = async (consultantId, meetingId) => {
 }
 
 const consultantReadNotifications = async (consultantId, announcementIdArray, notificaionIdArray) => {
-    let consultant = await ConsultantModel.findOne({ id: consultantId })
+    let consultant = await ConsultantModel.findOne({ id: consultantId });
     if (consultant === null) {
-        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`);
     }
     
     for (announcement of consultant.announcements.list) {
@@ -192,9 +216,9 @@ const consultantAddStudentId = async (id, file) => {
 }
 
 const consultantUpdateProfile = async (id, data) => {
-    let consultant = await ConsultantModel.findOne({ id: id })
+    let consultant = await ConsultantModel.findOne({ id: id });
     if (consultant === null) {
-        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`);
     }
 
     for (prop in data) {
@@ -211,9 +235,9 @@ const consultantUpdateProfile = async (id, data) => {
 }
 
 const consultantAddProfilePhoto = async (id, file) => {
-    let consultant = await ConsultantModel.findOne({ id: id })
+    let consultant = await ConsultantModel.findOne({ id: id });
     if (consultant === null) {
-        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`);
     }
     
     if (file === undefined) {
@@ -236,9 +260,9 @@ const consultantAddProfilePhoto = async (id, file) => {
 }
 
 const consultantUpdateTimetable = async (id, timetable) => {
-    let consultant = await ConsultantModel.findOne({ id: id })
+    let consultant = await ConsultantModel.findOne({ id: id });
     if (consultant === null) {
-        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`)
+        throw new UserDoesNotExistError(`consultant with id ${id} does not exist`);
     }
 
     // should run validation checks?
@@ -248,9 +272,9 @@ const consultantUpdateTimetable = async (id, timetable) => {
 }
 
 const consultantUpdatePassword = async (reqBody) => {
-    let consultant = await ConsultantModel.findOne({ id: reqBody.id })
+    let consultant = await ConsultantModel.findOne({ id: reqBody.id });
     if (consultant === null) {
-        throw new UserDoesNotExistError(`consultant with id ${reqBody.id} does not exist`)
+        throw new UserDoesNotExistError(`consultant with id ${reqBody.id} does not exist`);
     }
     
     let passwordEncrypted = PasswordUtil.matchHashPassword(reqBody.oldPassword, consultant.user.passwordSalt)
@@ -267,9 +291,9 @@ const consultantUpdatePassword = async (reqBody) => {
 }
 
 const consultantUpdateEmail = async (reqBody) => {
-    let consultant = await ConsultantModel.findOne({ id: reqBody.id })
+    let consultant = await ConsultantModel.findOne({ id: reqBody.id });
     if (consultant === null) {
-        throw new UserDoesNotExistError(`consultant with id ${reqBody.id} does not exist`)
+        throw new UserDoesNotExistError(`consultant with id ${reqBody.id} does not exist`);
     }
 
     let consultantSearch = await ConsultantModel.find({ "user.email": reqBody.email })
@@ -285,9 +309,9 @@ const consultantUpdateEmail = async (reqBody) => {
 }
 
 const consultantUpdateMobile = async (reqBody) => {
-    let consultant = await ConsultantModel.findOne({ id: reqBody.id })
+    let consultant = await ConsultantModel.findOne({ id: reqBody.id });
     if (consultant === null) {
-        throw new UserDoesNotExistError(`consultant with id ${reqBody.id} does not exist`)
+        throw new UserDoesNotExistError(`consultant with id ${reqBody.id} does not exist`);
     }
     
     consultant.profile.mobile = reqBody.mobile
@@ -300,11 +324,13 @@ const getMeetingQuestionsAndConditions = async (meetingId) => {
     let meeting = await MeetingModel.findOne({ id: meetingId })
     if (!meeting) throw `error x: meeting ${meetingId} returned empty object`
     return { questions: meeting.details.questions, conditions: meeting.details.conditions }
+    // TODO: Catch null meeting
+    // TODO: Unify with other controller output
 }
 
 
 // Util Functions
-const _compareMeeting = function(meeting1, meeting2) {
+const privateCompareMeeting = function(meeting1, meeting2) {
     if (meeting1.startTimestamp < meeting2.startTimestamp) return -1
     else if (meeting1.startTimestamp > meeting2.startTimestamp) return 1
     else return 0
