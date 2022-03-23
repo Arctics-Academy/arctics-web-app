@@ -4,6 +4,7 @@ const router = express.Router()
 
 // Controllers
 const StudentController = require('../controllers/student.controllers')
+const FilterController = require('../controllers/filter.controllers');
 
 
 // Routes
@@ -88,6 +89,26 @@ router.post('/toolbar/check-discount-code/verify', async (req, res) => {
         res.status(200).json({ status: "error", message: `student ${req.body.id} discount code check failed` });
     }
 })
+
+router.post('/toolbar/filter', async (req, res) => {
+    // req.body
+    // {
+    //     query: 
+    //     {
+    //         school: ["array", "of", "schools"],
+    //         field: ["array", "of", "fields"],
+    //         major: ["array", "of", "majors"]
+    //     }
+    // }
+    try {
+        let data = await FilterController.filterConsultants(req.body);
+        res.status(200).json({ status: "success", data: data });
+    } 
+    catch (e) {
+        console.error(e);
+        res.send(200).json({ status: "error", message: `uncaught query controller error`});
+    }
+});
 
 
 module.exports = router
