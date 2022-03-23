@@ -309,7 +309,7 @@ const loginStudent = async (reqBody) => {
 
     // Login
     if (student.user.passwordEncrypted === hashed) {
-        student = new Object(consultant)
+        student = new Object(student)
         student.user = null
         return student
     }
