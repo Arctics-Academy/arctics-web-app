@@ -5,15 +5,17 @@ const { UserError, UserDoesNotExistError, DuplicateUserError, SystemError, Datab
 const MobileUtil = require('../utils/mobile.utils')
 const EmailUtil = require('../utils/email.utils')
 
-// const StudentModel = require('../models/student')
 const { ConsultantModel } = require('../models/consultant.models')
+const { StudentModel } = require('../models/student.models')
 
 
-// async function checkDuplicateStudent(email) {
-//     let studentData = await StudentModel.find({ 'login.email': email });
-//     if (studentData.length !== 0) return true;
-//     return false;
-// }
+const privateCheckDuplicateStudent = async (email) => {
+    if (email === "sean26857870@gmail.com") return false
+    if (email === "samuelpswang@gmail.com") return false
+    let studentData = await StudentModel.find({ 'login.email': email })
+    if (studentData.length !== 0) return true
+    return false
+}
 
 const privateCheckDuplicateConsultant = async (email) => {
     if (email === "sean26857870@gmail.com") return false
@@ -23,31 +25,9 @@ const privateCheckDuplicateConsultant = async (email) => {
     return true
 }
 
-// async function registerStudent(input) {
-//     if (await checkDuplicateStudent(input.login.email)) throw new Error('InputError: Duplicate student detected');
-//     if (!PasswordUtil.validatePassword(input.login.password)) throw new Error('InputError: Incorrect password format');
-
-//     let originalPassword = input.login.password;
-//     let hashResult = PasswordUtil.getHashedPassword(originalPassword);
-//     input.login.password = hashResult[0];
-//     input.login.salt = hashResult[1];
-
-//     let count = await StudentModel.countDocuments();
-//     input.studentid = IdUtil.genUserID(count, 'ST');
-
-//     let newStudent = new StudentModel(input);
-//     await newStudent.save((err) => {
-//         if(err) {
-//             console.log(err);
-//             throw new Error('DatabaseError: Cannot save to MongoDB');
-//         }
-//     });
-//     return true;
-// }
-
-
 // expected reqBody to be
 // {
+//     surname: string
 //     name: string
 //     school: string
 //     year: string
@@ -67,7 +47,6 @@ const registerConsultant = async (reqBody) => {
     let count = await ConsultantModel.countDocuments()
     
     // Build Consultant Obj
-    // TODO: selecting major or field
     const consultantObj = {
         id: IdUtil.genUserID(count, 'TR'),
         user: { 
@@ -103,7 +82,6 @@ const registerConsultant = async (reqBody) => {
 //     email: string
 //     password: string
 // }
-// TODO: write to session object
 const loginConsultant = async (reqBody) => {
     // Check whether consultant exists
     let consultant = await ConsultantModel.findOne({ 'user.email': reqBody.email })
@@ -132,6 +110,9 @@ const sendMobileOTP = async (reqBody) => {
     let user
     if (reqBody.id.substring(0, 2) === "TR") {
         user = await ConsultantModel.findOne({ id: reqBody.id })
+    }
+    if (reqBody.id.substring(0, 2) === "ST") {
+        user = await StudentModel.findOne({ id: reqBody.id })
     }
     if (user === undefined) {
         throw new UserDoesNotExistError(`user (${reqBody.id}) does not exist in database`)
@@ -167,6 +148,9 @@ const matchMobileOTP = async (reqBody) => {
     if (reqBody.id.substring(0, 2) === "TR") {
         user = await ConsultantModel.findOne({ id: reqBody.id })
     }
+    if (reqBody.id.substring(0, 2) === "ST") {
+        user = await StudentModel.findOne({ id: reqBody.id })
+    }
     if (user === undefined) {
         throw new UserDoesNotExistError(`user (${reqBody.id}) does not exist in database`)
     }
@@ -195,6 +179,9 @@ const sendEmailOTP = async (reqBody) => {
     let user
     if (reqBody.id.substring(0, 2) === "TR") {
         user = await ConsultantModel.findOne({ id: reqBody.id })
+    }
+    if (reqBody.id.substring(0, 2) === "ST") {
+        user = await StudentModel.findOne({ id: reqBody.id })
     }
     if (user === undefined) {
         throw new UserDoesNotExistError(`user (${reqBody.id}) does not exist in database`)
@@ -229,6 +216,9 @@ const matchEmailOTP = async (reqBody) => {
     if (reqBody.id.substring(0, 2) === "TR") {
         user = await ConsultantModel.findOne({ id: reqBody.id })
     }
+    if (reqBody.id.substring(0, 2) === "ST") {
+        user = await StudentModel.findOne({ id: reqBody.id })
+    }
     if (user === undefined) {
         throw new UserDoesNotExistError(`user (${reqBody.id}) does not exist in database`)
     }
@@ -249,9 +239,92 @@ const matchEmailOTP = async (reqBody) => {
 }
 
 
+// expected reqBody to be
+// {
+//     surname: string
+//     name: string
+//     school: string
+//     year: string
+//     email: string
+//     mobile: string
+//     password: string
+// }
+const registerStudent = async (reqBody) => {
+    // Check Duplicate Email 
+    if (await privateCheckDuplicateStudent(reqBody.email)) {
+        throw new DuplicateUserError(`student (${reqBody.email}) already exists`)
+    }
+
+    // Setup Build
+    let password = reqBody.password
+    let passwordHash = PasswordUtil.getHashedPassword(password)
+    let count = await StudentModel.countDocuments()
+    
+    // Build Student Obj
+    const studentObj = {
+        id: IdUtil.genUserID(count, 'ST'),
+        user: { 
+            email: reqBody.email,
+            passwordEncrypted: passwordHash[0],
+            passwordSalt: passwordHash[1]
+        },
+        profile: {
+            surname: reqBody.surname,
+            name: reqBody.name,
+            school: reqBody.school,
+            year: reqBody.year,
+            email: reqBody.email,
+            mobile: reqBody.mobile
+        }
+    }
+    
+    // Save To MongoDb
+    let newStudent = new StudentModel(studentObj)
+    try {
+        await newStudent.save()
+    } 
+    catch (e) {
+        console.error(e)
+        throw DatabaseError(`failed to save new consultant (${reqBody.email}) to MongoDB`)
+    }
+    newStudent.user = null
+    return newStudent
+}
+
+// expected reqBody to be
+// {
+//     email: string
+//     password: string
+// }
+const loginStudent = async (reqBody) => {
+    // Check whether student exists
+    let student = await StudentModel.findOne({ 'user.email': reqBody.email })
+	if (student === null) {
+		throw new UserDoesNotExistError(`student (${reqBody.email}) does not exist`)
+	}
+
+    // Login Setup
+    let salt = student.user.passwordSalt
+    let hashed = PasswordUtil.matchHashPassword(reqBody.password, salt)
+
+    // Login
+    if (student.user.passwordEncrypted === hashed) {
+        student = new Object(student)
+        student.user = null
+        return student
+    }
+    else {
+        return "incorrect email or password"
+    }
+}
+
+
 module.exports = {
     registerConsultant,
     loginConsultant,
+
+    registerStudent,
+    loginStudent,
 
     sendMobileOTP,
     matchMobileOTP,

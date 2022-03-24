@@ -64,13 +64,15 @@ const StudentSchema = new mongoose.Schema({
         name: { type: String, required: true }, // 名字
         count: { type: Number, required: true, default: 0 }, // 已諮詢
         // 下
-        school: { type: String, required: true }, // 就讀學係
+        school: { type: String, required: true }, // 就讀學系
         email: { type: String, required: true }, // 電子信箱
         emailBackup: { type: String }, // 備援信箱
         mobile: { type: String, required: true }, // 手機號碼
         mobileBackup: { type: String }, // 備援號碼
         emailVerified: { type: Boolean, required: true, default: false }, // 驗證信箱
         mobileVerified: { type: Boolean, required: true, default: false }, // 驗證號碼
+        // 沒有顯示的
+        year: { type: String }
     },
     list: {
         consultants: { type: [StudentListConsultantSchema], required: true, default: [] }

@@ -17,7 +17,7 @@ router.post('/dashboard/get', async function (req, res) {
     }
     catch (e) {
         console.log(e)
-        res.status(500).json({ status: "error", message: `cannot get consultant dashboard info with id ${req.body.id}` })
+        res.status(200).json({ status: "error", message: `cannot get consultant dashboard info with id ${req.body.id}` })
     }
 })
 
@@ -31,11 +31,11 @@ router.post('/notifications/get', async function (req, res) {
     }
     catch (e) {
         console.log(e)
-        res.status(500).json({ status: "error", message: `cannot get consultant notifications with id ${req.body.id}` })
+        res.status(200).json({ status: "error", message: `cannot get consultant notifications with id ${req.body.id}` })
     }
 })
 
-// action: read notification
+// reads notification
 // req.body: { id: "string", announcementId: ["string"], notificationId: ["string"] }
 // tested
 router.post('/notifications/read', async (req, res) => {
@@ -45,7 +45,7 @@ router.post('/notifications/read', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: `consultant notifications read opersation failed` })
+        res.status(200).json({ status: "error", message: `consultant notifications read opersation failed` })
     }
 })
 
@@ -59,7 +59,7 @@ router.post('/meetings/calendar/get', async function (req, res) {
     }
     catch (e) {
         console.log(e)
-        res.status(500).json({ status: "error", message: `cannot get consultant calendar with id ${req.body.id}` })
+        res.status(200).json({ status: "error", message: `cannot get consultant calendar with id ${req.body.id}` })
     }
 })
 
@@ -73,11 +73,11 @@ router.post('/meetings/list/get', async function (req, res) {
     }
     catch (e) {
         console.log(e)
-        res.status(500).json({ status: "error", message: `cannot get consultant meeting list with id ${req.body.id}` })
+        res.status(200).json({ status: "error", message: `cannot get consultant meeting list with id ${req.body.id}` })
     }
 })
 
-// action: cancel meeting
+// cancels meeting
 // req.body: { id: "string", meetingId: "string" }
 // router.post('/meetings/cancel', async function(req, res) {
 //     let result = await consultantController.consultantCancelMeeting(req.body.id, req.body.meetingId)
@@ -85,11 +85,11 @@ router.post('/meetings/list/get', async function (req, res) {
 //         res.status(200).json({ status: "success", message: `meeting with ${req.meetingId} canceled successfully`})
 //     }
 //     else {
-//         res.status(500).json({ status: "error", message: "cannot cancel meeting, try again later"})
+//         res.status(200).json({ status: "error", message: "cannot cancel meeting, try again later"})
 //     }
 // })
 
-// action: view meeting meeting information
+// views meeting meeting information
 // req.body: { meetingId: "string" }
 router.post('/meetings/questions-and-conditions/get', async (req, res) => {
     try {
@@ -98,7 +98,7 @@ router.post('/meetings/questions-and-conditions/get', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: `cannot get meeting details` })
+        res.status(200).json({ status: "error", message: `cannot get meeting details` })
     }
 })
 
@@ -111,11 +111,11 @@ router.post('/purse/get', async function (req, res) {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: `cannot get consultant purse with id ${req.body.id}` })
+        res.status(200).json({ status: "error", message: `cannot get consultant purse with id ${req.body.id}` })
     }
 }) 
 
-// action: get consultant bank no
+// returns bank no
 // req.body: { id: "string"}
 // tested
 router.post('/purse/bank/get', async (req, res) => {
@@ -125,11 +125,11 @@ router.post('/purse/bank/get', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: `cannot get consultant bank info with id ${req.body.id}`})
+        res.status(200).json({ status: "error", message: `cannot get consultant bank info with id ${req.body.id}`})
     }
 })
 
-// action: add bank account
+// adds bank account
 // req.body: { id: "string", usage: "string", bankNo: "string", accountNo: "string" }
 // tested
 router.post('/purse/bank/update', async (req, res) => {
@@ -139,11 +139,11 @@ router.post('/purse/bank/update', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: `cannot add consultant bank info` })
+        res.status(200).json({ status: "error", message: `cannot add consultant bank info` })
     }
 })
 
-// return consultant.id & consultant.profile obj
+// returns consultant.id & consultant.profile obj
 // req.body: { id: "string" }
 // tested
 router.post('/profile/get', async function (req, res) {
@@ -153,11 +153,11 @@ router.post('/profile/get', async function (req, res) {
     }
     catch(e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: `cannot get consultant profile with id ${req.body.id}` })
+        res.status(200).json({ status: "error", message: `cannot get consultant profile with id ${req.body.id}` })
     }
 })
 
-// action: add consultant student id scan
+// adds consultant student id scan
 // req.body: { id: "string", studentIdScan: file }
 router.post('/profile/student-id/update', StudentIdUploadMiddleware.single('studentIdScan'), async (req, res) => {
     try {
@@ -166,11 +166,11 @@ router.post('/profile/student-id/update', StudentIdUploadMiddleware.single('stud
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: `upload student id scan for consultant ${req.body.id} failed` })
+        res.status(200).json({ status: "error", message: `upload student id scan for consultant ${req.body.id} failed` })
     }
 })
 
-// action: update consultant profile
+// updates consultant profile
 // req.body: { id: "string", data: profile object }
 router.post('/profile/update', async (req, res) => {
     try {
@@ -183,7 +183,7 @@ router.post('/profile/update', async (req, res) => {
     }
 })
 
-// action: add/update profile photo
+// adds/updates profile photo
 // req.body: { id: "string", profilePhoto: file}
 router.post('/profile/photo/update', ProfilePhotoUploadMiddleware.single('profilePhoto'), async (req, res) => {
     try {
@@ -196,7 +196,7 @@ router.post('/profile/photo/update', ProfilePhotoUploadMiddleware.single('profil
     }
 })
 
-// action: update consultant timetable
+// updates consultant timetable
 // req.body: { id: "string", data: timetable obj }
 // tested
 router.post('/profile/timetable/get', async (req, res) => {
@@ -210,7 +210,7 @@ router.post('/profile/timetable/get', async (req, res) => {
     }
 })
 
-// action: update consultant password
+// updates consultant password
 // req.body: { id: "string", oldPassword: "string", newPassword: "string" }
 // tested
 router.post('/profile/password/update', async (req, res) => {
@@ -224,7 +224,7 @@ router.post('/profile/password/update', async (req, res) => {
     }
 })
 
-// action: update consultant email
+// updates consultant email
 // req.body: { id: "string", email: "string" }
 // tested
 router.post('/profile/email/update', async (req, res) => {
@@ -238,7 +238,7 @@ router.post('/profile/email/update', async (req, res) => {
     }
 })
 
-// action: update consultant mobile
+// updates consultant mobile
 // req.body: { id: "string", mobile: "string" }
 // tested
 router.post('/profile/mobile/update', async (req, res) => {
@@ -262,7 +262,7 @@ router.post('/toolbar/notification-count/get', async (req, res) => {
     }
     catch (e) {
         console.error(e)
-        res.status(500).json({ status: "error", message: `cannot get consultant notification count with id ${req.body.id}` })
+        res.status(200).json({ status: "error", message: `cannot get consultant notification count with id ${req.body.id}` })
     }
 })
 

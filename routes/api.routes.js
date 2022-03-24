@@ -24,6 +24,10 @@ router.use('/demo', demoRouter)
 const consultantRouter = require('./consultant.routes')
 router.use('/consultant', consultantRouter)
 
+// student - everything student side
+const studentRouter = require('./student.routes')
+router.use('/student', studentRouter)
+
 // user - everything with user management, such as egister & login
 const userRouter = require('./user.routes')
 router.use('/user', userRouter)

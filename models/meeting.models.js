@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const { MediaSchema } = require('./system.models');
+
 const MeetingRecordSchema = new mongoose.Schema({
     timestamp: { type: Date, required: true },
     description: { type: String, required: true }
@@ -8,23 +10,38 @@ const MeetingRecordSchema = new mongoose.Schema({
 const MeetingSchema = new mongoose.Schema({
     id: { type: String, required: true, index: true, select: true, unique: true },
     details: {
-        meetingTimeslot: {type: Number, required: true }, // 諮詢時間
-        fromTime: { type: Date, required: true }, // 諮詢時間
-        toTime: { type: Date, required: true }, // 諮詢時間 
+        meetingSlot: { type: Number, required: true },
+        meetingStartTime: { type: Date, required: true },
 
-        studentId: { type: String, required: true }, // 對象
-        teacherId: { type: String, required: true }, // ...
+        studentId: { type: String, required: true },
+        studentSurname: { type: String, required: true },
+        studentName: { type: String, required: true },
+        studentSchool: { type: String },
+        studentYear: { type: String, required: true },
+        
+        consultantId: { type: String, required: true },
+        consultantSurname: { type: String, required: true },
+        consultantName: { type: String, required: true },
+        consultantSchool: { type: String, required: true },
+        consultantMajor: { type: String, required: true },
+        consultantYear: { type: String, required: true },
+        consultantPrice: { type: Number, required: true },
 
-        labels: { type: [String], required: true, default: [] }, // 諮詢項目
-
-        remarks: { type: String, required: true }, // 備註
-        questions: { type: String, required: true }, // 問題
-        conditions: { type: String, required: true } // 學習狀況簡述
+        remarks: { type: String }, // 備註
+        questions: { type: String }, // 問題
+        conditions: { type: String } // 學習狀況簡述
     },
     order: {
-        paidConsultantAmount: { type: Number, required: true, default: 200 },
-        paidConsultantTime: { type: Date, required: false },
-        paidConsultant: { type: Boolean, required: true, default: false }
+        confirmed: { type: Boolean, required: true, default: false },
+        discount: { type: String },
+        
+        submitted: { type: Boolean, required: true, default: false },
+        submittedTimestamp: { type: Date },
+        
+        paymentAmount: { type: Number },
+        paymentAccountName: { type: String },
+        paymentDate: { type: String },
+        paymentReceipt: { type: MediaSchema }
     },
     post: {
         comment: { type: String, required: false } // 留言&回饋

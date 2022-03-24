@@ -1,4 +1,5 @@
 const { ConsultantModel } = require('../models/consultant.models')
+const { StudentModel } = require('../models/student.models')
 
 const systemValidateConsultantStudentCard = async (id) => {
     let consultant = await ConsultantModel.findOne({ id: id })
@@ -12,4 +13,15 @@ const getConsultantObject = async (id) => {
     return consultant
 }
 
-module.exports = { systemValidateConsultantStudentCard, getConsultantObject }
+const getStudentObject = async (id) => {
+    let student = await StudentModel.findOne({ id: id })
+    student.user = null
+    return student
+}
+
+module.exports = 
+{ 
+    systemValidateConsultantStudentCard, 
+    getConsultantObject,
+    getStudentObject,
+}
