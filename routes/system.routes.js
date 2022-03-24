@@ -5,7 +5,7 @@ const { getConsultantObject, systemValidateConsultantStudentCard, getStudentObje
 
 
 // Session Routes
-router.post('/consultant', async (req, res) => {
+router.get('/consultant', async (req, res) => {
     try {
         if (req.session.auth.consultantAuth) {
             let data = await getConsultantObject(req.session.auth.consultantId)
@@ -21,7 +21,7 @@ router.post('/consultant', async (req, res) => {
     }
 })
 
-router.post('/student', async (req, res) => {
+router.get('/student', async (req, res) => {
     try {
         if (req.session.auth.studentAuth) {
             let data = await getStudentObject(req.session.auth.studentId)
