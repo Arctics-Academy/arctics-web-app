@@ -63,6 +63,8 @@ const registerConsultant = async (reqBody) => {
             mobile: reqBody.mobile
         }
     }
+
+    // FIXME: Add welcome message to new consultant
     
     // Save To MongoDb
     let newConsultant = new ConsultantModel(consultantObj)

@@ -24,6 +24,11 @@ router.post('/dashboard/get', async function (req, res) {
     }
 });
 
+// TODO: return notifications
+// router.post('/notifications/get', async (req, res) => {});
+// TODO: return announcements
+// router.post('/announcement/get', async (req, res) => {});
+
 // returns student list information
 router.post('/list/get', async (req, res) => {
     // req.body

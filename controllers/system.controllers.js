@@ -2,6 +2,9 @@ const { ConsultantModel } = require('../models/consultant.models')
 const { StudentModel } = require('../models/student.models')
 
 const systemValidateConsultantStudentCard = async (id) => {
+
+    // FIXME: Send confirmation once student card is confirmed
+
     let consultant = await ConsultantModel.findOne({ id: id })
     consultant.profile.studentCardVerified = true
     await consultant.save()
