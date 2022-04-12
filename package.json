@@ -1,11 +1,11 @@
 {
   "name": "arctics-web-app",
-  "version": "0.0.0",
+  "version": "2.1.3",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www",
-    "me": "npm install && echo \"NOTICE: Remember to add .env file!\""
+    "me": "npm install && YELLOW=\"\\033[1;33m\" && NC=\"\\033[0m\" && echo \"${YELLOW}WARNING:${NC} Remember to add .env file!\""
   },
   "dependencies": {
     "aws-sdk": "^2.1083.0",
