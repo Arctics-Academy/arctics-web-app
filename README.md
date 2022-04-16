@@ -17,8 +17,8 @@ root
 ├── middlewares/
 ├── utils/
 ├── statics/
-│   └── emails/
-├── docs/
+│   ├── emails/
+│   └── notifs/
 ├── app.js
 ├── Procfile
 ├── README.md
@@ -32,7 +32,6 @@ root
 * `middlewares/` contains all middlewares, handles file uploads and security checks.
 * `utils/` contains utility functions needed in multiple controllers, such as calculating time and others.
 * `statics/` contains all content (except frontend) that will be edployed through backend services (e.g. emails).
-* `docs/` contains API documentation, feature faults, back logs.
 * `Procfile` handles commands on Heroku development.
 
 ## Start Scripts
@@ -43,9 +42,9 @@ root
 1. Go to [`arctics-web-frontend`](https://github.com/Arctics-Academy/arctics-web-frontend) repository.
 2. Run `yarn build`.
 3. Copy `arctics-web-frontend/build/` folder into `arctics-web-app/frontend/` and replace current folder.
-4. Write "`Deploy: Update frontend commit<7-digit-commit-id>`" as commit message when committing changes (eg. `Deploy: Add frontend commit8EC0960`).
+4. Write "`deploy: deploy frontend v<semantic-version-number>`" as commit message when committing changes (eg. `deploy: deploy frontend v1.0.0`).
 5. `git push` to deploy on Heroku.
 
 ## Used Services
-* Database: MongoDB (`env['MONGO_URI']`)
+* Database: MongoDB (`env['MONGODB_URI_USER']`, `env['MONGODB_URI_SYSTEM']`)
 * Email: Mailgun (`env['MAILGUN_API_KEY']`)
