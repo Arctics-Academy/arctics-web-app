@@ -1,7 +1,7 @@
 // Models
 const { StudentModel } = require('../models/student.models')
 const { ConsultantModel } = require('../models/consultant.models')
-const { DiscountCodeModel } = require('../models/system.models')
+const { DiscountCodeModel, AnnouncementModel } = require('../models/system.models')
 
 // Utils
 const { UserDoesNotExistError } = require('../utils/error.utils')
@@ -33,6 +33,21 @@ const getStudentMeetings = async (reqBody) => {
 const getStudentNotificationCount = async (reqBody) => {
     let student = await StudentModel.findOne({ id: reqBody.id }).select('announcements.unreadCount notifications.unreadCount')
     return student.announcements.unreadCount + student.notifications.unreadCount
+}
+
+const getStudentNotifications = async (reqBody) => {
+    // load data
+    let student = await StudentModel.findOne({ id: reqBody.id }).select('announcements notifications');
+    if (student === null) {
+        throw new UserDoesNotExistError(`student with id ${id} does not exist`);
+    }
+
+    // replace announcements
+    for (announcement of student.announcements.list) {
+        let temp = await AnnouncementModel.findOne({ id: announcement.id });
+        item = Object.assign(item, temp);
+    }
+    return student;
 }
 
 const studentUpdateProfile = async (reqBody) => {
@@ -100,6 +115,31 @@ const studentVerifyDiscountCode = async (reqBody) => {
     }
 }
 
+// const studentReadNotifications = async (consultantId, announcementIdArray, notificaionIdArray) => {
+const studentReadNotifications = async (reqBody) => {
+    let student = await StudentModel.findOne({ id: reqBody.studentId });
+    if (student === null) {
+        throw new UserDoesNotExistError(`student with id ${id} does not exist`);
+    }
+    
+    for (announcement of student.announcements.list) {
+        if (reqBody.announcementIds.includes(announcement.id)) {
+            announcement.read = true;
+            student.announcements.unreadCount -= 1;
+        }
+    }
+
+    for (notification of student.notifications.list) {
+        if (reqBody.notificaionIds.includes(notification.id)) {
+            notification.read = true;
+            student.notifications.unreadCount -= 1;
+        }
+    }
+    
+    await student.save();
+    return true;
+}
+
 
 module.exports = 
 {
@@ -108,11 +148,13 @@ module.exports =
     getStudentMeetings,
     getStudentProfile,
     getStudentNotificationCount,
+    getStudentNotifications,
 
     studentUpdateProfile,
     studentAddToList,
     studentDeleteFromList,
     studentClearList,
+    studentReadNotifications,
     studentViewConsultant,
     studentVerifyDiscountCode,
 }

@@ -24,10 +24,39 @@ router.post('/dashboard/get', async function (req, res) {
     }
 });
 
-// TODO: return notifications
-// router.post('/notifications/get', async (req, res) => {});
-// TODO: return announcements
-// router.post('/announcement/get', async (req, res) => {});
+// returns notifications
+router.post('/notifications/get', async (req, res) => {
+    // req.body
+    // {
+    //     id: "string"
+    // }
+    try {
+        let data = await StudentController.getStudentNotifications(req.body);
+        res.status(200).json({ status: "success", data: data });
+    }
+    catch (e) {
+        console.log(e);
+        res.status(200).json({ status: "error", message: `uncaught student (${req.body.id}) get notification error`});
+    }
+});
+
+// reads notification
+router.post('/notifications/read', async (req, res) => {
+    // req.body
+    // { 
+    //     id: "string"
+    //     announcementIds: ["string"]
+    //     notificationIds: ["string"] 
+    // }
+    try {
+        await StudentController.studentReadNotifications(req.body);
+        res.status(200).json({ status: "success", message: `student notifications read operation complete` });
+    }
+    catch (e) {
+        console.error(e);
+        res.status(200).json({ status: "error", message: `uncaught student (id: ${req.body.id}) read notification error` });
+    }
+})
 
 // returns student list information
 router.post('/list/get', async (req, res) => {
