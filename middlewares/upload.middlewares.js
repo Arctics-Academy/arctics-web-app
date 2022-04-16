@@ -9,7 +9,10 @@ const imageFileExtRegex = /\.(png|jpg|jpeg|pdf)$/
 // Student Id Middleware
 const studentIdStorage = multer.diskStorage({
     destination: './frontend/uploads/student-ids', 
-    filename: (req, file, cb) => { cb(null, `StudentID-${req.body.id}-${path.extname(file.originalname)}`) }
+    filename: (req, file, cb) => {
+        let identifier = "StudentID" + "-" + req.body.id + "-" + Date.now();
+        cb(null, identifier);
+    }
 })
 
 const StudentIdUploadMiddleware = multer({
@@ -17,10 +20,10 @@ const StudentIdUploadMiddleware = multer({
     limits: { fileSize: 10 * 1024 * 1024 }, // in bytes...file limit 10MB
     fileFilter: (req, file, cb) => {
         if (!file.originalname.match(imageFileExtRegex)) {
-            return cb(new Error('uploaded student id is not an image'));
+            cb(new Error('uploaded student id is not an image'));
         }
         else {
-            cb(null, true)
+            cb(null, true);
         }
     }
 })
@@ -29,7 +32,10 @@ const StudentIdUploadMiddleware = multer({
 // Profile Photo Middleware
 const profilePhotoStorage = multer.diskStorage({
     destination: './frontend/uploads/profile-photos', 
-    filename: (req, file, cb) => { cb(null, `ProfilePhoto-${req.body.id}-${path.extname(file.originalname)}`) }
+    filename: (req, file, cb) => { 
+        let identifier = "ProfilePhoto" + "-" + req.body.id + "-" + Date.now();
+        cb(null, identifier);
+    }
 })
 
 const ProfilePhotoUploadMiddleware = multer({
@@ -37,10 +43,10 @@ const ProfilePhotoUploadMiddleware = multer({
     limits: { fileSize: 10 * 1024 * 1024 }, // in bytes...file limit 10MB
     fileFilter: (req, file, cb) => {
         if (!file.originalname.match(imageFileExtRegex)) {
-            return cb(new Error('uploaded profile photo is not an image'));
+            cb(new Error('uploaded profile photo is not an image'));
         }
         else {
-            cb(null, true)
+            cb(null, true);
         }
     }
 })
