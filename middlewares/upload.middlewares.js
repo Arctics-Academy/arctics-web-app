@@ -52,8 +52,32 @@ const ProfilePhotoUploadMiddleware = multer({
 })
 
 
+// Meeting Payment Middleware
+const meetingPaymentStorage = multer.diskStorage({
+    destination: './frontend/uploads/meeting-payment', 
+    filename: (req, file, cb) => { 
+        let identifier = "MeetingPayment" + "-" + req.body.meetingId + "-" + Date.now() + path.extname(file.originalname);
+        cb(null, identifier);
+    }
+})
+
+const MeetingPaymentUploadMiddleware = multer({
+    storage: meetingPaymentStorage,
+    limits: { fileSize: 10 * 1024 * 1024 }, // in bytes...file limit 10MB
+    fileFilter: (req, file, cb) => {
+        if (!file.originalname.match(imageFileExtRegex)) {
+            cb(new Error('uploaded meeting payment is not an image'));
+        }
+        else {
+            cb(null, true);
+        }
+    }
+})
+
+
 module.exports = 
 { 
     StudentIdUploadMiddleware,
     ProfilePhotoUploadMiddleware,
+    MeetingPaymentUploadMiddleware,
 }
