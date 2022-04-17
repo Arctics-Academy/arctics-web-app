@@ -58,6 +58,9 @@ mapS0Subject.set("S0-S4-Cancel-Student", "`[Arctics Academy升大學顧問平台
 const OtpCompiledEmail = pug.compileFile('statics/emails/pugs/SYS-OtpEmail.pug')
 const OtpTemplateString = read_file_to_string('statics/emails/texts/SYS-OtpEmail.txt')
 
+const StudentCardVerifiedEmail = pug.compileFile('statics/emails/pugs/SYS-StudentCardEmail-Consultant.pug');
+const StudentCardVerifiedTemplateString = read_file_to_string('statics/emails/texts/SYS-StudentCardEmail-Consultant.txt');
+
 let early_access_email = async (data) => {
     // Build mime message using nodemailer
     let mail_content = 
@@ -262,6 +265,55 @@ const sendSystemStudentCardVerification = async (userObj, file) => {
     }
 }
 
+const sendStudentCardVerifiedEmail = async (consultantObj) => {
+    // 1. Template String Params Setup
+    const surname = consultantObj.profile.surname;
+    const name = consultantObj.profile.name;
+    
+    // 2. Build Email Content
+    const emailName = consultantObj.profile.surname + consultantObj.profile.name;
+    const emailAddress = consultantObj.profile.email;
+    const emailSubject = `[Arctics Academy升大學顧問平台] 身份驗證成功`;
+    const emailText = eval(StudentCardVerifiedTemplateString);
+    const emailHtml = StudentCardVerifiedEmail({ surname, name });
+    
+    // 3. Build email object
+    let mail_content = 
+    {
+        from: `"Arctics升學顧問" <hello@mailgun.arctics.academy>`,
+        to: `"${emailName}" <${emailAddress}>`,
+        subject: emailSubject,
+        text: emailText,
+        html: emailHtml,
+        attachments:
+        [
+            {
+                filename: `logo.png`,
+                encoding: `base64`,
+                contentType: `image/png`,
+                content: read_file_to_base64('statics/emails/imgs/logo.png'),
+                cid: `<logo.png@arctics.academy>`
+            }
+        ]
+    };
+    const raw_mime_mail = new mail_composer(mail_content) // converting to MIME
+    const compiled_mime_mail = await raw_mime_mail.compile().build()
+
+    // Build mailgun object
+    let mail_object = {
+        to: [ `"${emailName}" <${emailAddress}>` ],
+        message: compiled_mime_mail
+    }
+
+    // Send mail through mailgun
+    try {
+        await mailgun_instance.messages.create(mailgun_domain, mail_object);
+    } 
+    catch(e) {
+        console.log(e)
+    }
+}
+
 const privateToTwoCharString = (item) => {
     let itemStr = toString(item)
     if (itemStr.length >= 2) return itemStr
@@ -273,6 +325,6 @@ module.exports = {
     early_access_email,
     sendS0Email,
     sendEmailOtp,
-
     sendSystemStudentCardVerification,
+    sendStudentCardVerifiedEmail,
 }
