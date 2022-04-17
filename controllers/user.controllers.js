@@ -63,8 +63,6 @@ const registerConsultant = async (reqBody) => {
             mobile: reqBody.mobile
         }
     }
-
-    // FIXME: Add welcome message to new consultant
     
     // Save To MongoDb
     let newConsultant = new ConsultantModel(consultantObj)
@@ -75,6 +73,10 @@ const registerConsultant = async (reqBody) => {
         console.error(e)
         throw DatabaseError(`failed to save new consultant (${reqBody.email}) to MongoDB`)
     }
+
+    // Send Welcome Message
+    EmailUtil.sendConsultantWelcomeEmail(consultantObj);
+
     newConsultant.user = null
     return newConsultant
 }

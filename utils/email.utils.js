@@ -11,7 +11,8 @@ const MailComposer = require('nodemailer/lib/mail-composer');
 const { fileToBase64String, getEmailAddressee } = require('./file.utils')
 const { mapS0CompiledEmail, mapS0TemplateString, mapS0Subject } = require('../statics/emails/index/s0.data');
 const { OtpCompiledEmail, OtpTemplateString, 
-    StudentCardVerifiedEmail, StudentCardVerifiedTemplateString } = require('../statics/emails/index/misc.data');
+    StudentCardVerifiedEmail, StudentCardVerifiedTemplateString, ConsultantWelcomeEmail,
+    ConsultantWelcomeTemplateString, } = require('../statics/emails/index/misc.data');
 
 // Setup Mailgun Instances
 const MAILGUN_DOMAIN = 'mailgun.arctics.academy';
@@ -238,6 +239,55 @@ const sendStudentCardVerifiedEmail = async (consultantObj) => {
     }
 }
 
+// sends welcome email to consultant
+const sendConsultantWelcomeEmail = async (consultantObj) => {
+    // 1. Template String Params Setup
+    const name = consultantObj.profile.name;
+    
+    // 2. Build Email Content
+    const emailName = consultantObj.profile.surname + consultantObj.profile.name;
+    const emailAddress = consultantObj.profile.email;
+    const emailSubject = `[Arctics Academy升大學顧問平台] 註冊成功`;
+    const emailText = eval(ConsultantWelcomeTemplateString);
+    const emailHtml = ConsultantWelcomeEmail({ name });
+    
+    // 3. Build email object
+    let emailContent = 
+    {
+        from: `"Arctics升學顧問" <hello@mailgun.arctics.academy>`,
+        to: `"${emailName}" <${emailAddress}>`,
+        subject: emailSubject,
+        text: emailText,
+        html: emailHtml,
+        attachments:
+        [
+            {
+                filename: `logo.png`,
+                encoding: `base64`,
+                contentType: `image/png`,
+                content: fileToBase64String('statics/emails/imgs/logo.png'),
+                cid: `<logo.png@arctics.academy>`
+            }
+        ]
+    };
+    const rawMimeEmail = new MailComposer(emailContent);
+    const compiledMimeEmail = await rawMimeEmail.compile().build();
+
+    // Build mailgun object
+    let mailgunObj = {
+        to: [ `"${emailName}" <${emailAddress}>` ],
+        message: compiledMimeEmail
+    };
+
+    // Send mail through mailgun
+    try {
+        await MAILGUN_INSTANCE.messages.create(MAILGUN_DOMAIN, mailgunObj);
+    } 
+    catch (e) {
+        console.log(e);
+    }
+}
+
 
 // Utility Functions
 const privateToTwoCharString = (item) => {
@@ -252,6 +302,7 @@ module.exports = {
     sendEmailOtp,
     sendSystemStudentCardVerification,
     sendStudentCardVerifiedEmail,
+    sendConsultantWelcomeEmail,
 }
 
 

@@ -7,6 +7,9 @@ const OtpTemplateString = fileToString('statics/emails/texts/SYS-OtpEmail.txt')
 const StudentCardVerifiedEmail = Pug.compileFile('statics/emails/pugs/SYS-StudentCardEmail-Consultant.pug');
 const StudentCardVerifiedTemplateString = fileToString('statics/emails/texts/SYS-StudentCardEmail-Consultant.txt');
 
+const ConsultantWelcomeEmail = Pug.compileFile('statics/emails/pugs/SYS-Welcome-Consultant.pug');
+const ConsultantWelcomeTemplateString = fileToString('statics/emails/texts/SYS-Welcome-Consultant.txt');
+
 module.exports = 
 {
     OtpCompiledEmail,
@@ -14,4 +17,7 @@ module.exports =
     
     StudentCardVerifiedEmail,
     StudentCardVerifiedTemplateString,
+
+    ConsultantWelcomeEmail,
+    ConsultantWelcomeTemplateString,
 }
