@@ -8,7 +8,7 @@ const FormData = require('form-data');
 const MailComposer = require('nodemailer/lib/mail-composer');
 
 // Setup Internal Modules
-const { read_file_to_base64, getEmailAddressee } = require('./file.utils')
+const { fileToBase64String, getEmailAddressee } = require('./file.utils')
 const { mapS0CompiledEmail, mapS0TemplateString, mapS0Subject } = require('../statics/emails/index/s0.data');
 const { OtpCompiledEmail, OtpTemplateString, 
     StudentCardVerifiedEmail, StudentCardVerifiedTemplateString } = require('../statics/emails/index/misc.data');
@@ -59,7 +59,7 @@ const sendS0Email = async (identifier, consultantObj, studentObj, meetingObj) =>
                 filename: `logo.png`,
                 encoding: `base64`,
                 contentType: `image/png`,
-                content: read_file_to_base64('statics/emails/imgs/logo.png'),
+                content: fileToBase64String('statics/emails/imgs/logo.png'),
                 cid: `<logo.png@arctics.academy>`
             }
         ]
@@ -116,7 +116,7 @@ const sendEmailOtp = async (userObj, otpCode) => {
                 filename: `logo.png`,
                 encoding: `base64`,
                 contentType: `image/png`,
-                content: read_file_to_base64('statics/emails/imgs/logo.png'),
+                content: fileToBase64String('statics/emails/imgs/logo.png'),
                 cid: `<logo.png@arctics.academy>`
             }
         ]
@@ -165,7 +165,7 @@ const sendSystemStudentCardVerification = async (userObj, file) => {
                 filename: file.filename,
                 encoding: `base64`,
                 contentType: file.mimetype,
-                content: read_file_to_base64(file.path),
+                content: fileToBase64String(file.path),
                 cid: `<student_card@arctics.academy>`
             }
         ]
@@ -215,7 +215,7 @@ const sendStudentCardVerifiedEmail = async (consultantObj) => {
                 filename: `logo.png`,
                 encoding: `base64`,
                 contentType: `image/png`,
-                content: read_file_to_base64('statics/emails/imgs/logo.png'),
+                content: fileToBase64String('statics/emails/imgs/logo.png'),
                 cid: `<logo.png@arctics.academy>`
             }
         ]
@@ -263,7 +263,7 @@ module.exports = {
 //         from: `"Arctics升學顧問" <hello@mailgun.arctics.academy>`,
 //         to: `"${data.lastname+data.firstname}" <${data.email}>`,
 //         subject: `Arctics升學平台 搶先體驗`,
-//         text: read_file_to_string('statics/emails/texts/DEMO-EarlyAccess.txt'),
+//         text: fileToString('statics/emails/texts/DEMO-EarlyAccess.txt'),
 //         html: compiled_early_access_email(data),
 //         attachments: 
 //         [
@@ -271,7 +271,7 @@ module.exports = {
 //                 filename: `logo.png`,
 //                 encoding: `base64`,
 //                 contentType: `image/png`,
-//                 content: read_file_to_base64('statics/emails/imgs/logo.png'),
+//                 content: fileToBase64String('statics/emails/imgs/logo.png'),
 //                 cid: `<logo.png@arctics.academy>`
 //             }
 //         ]

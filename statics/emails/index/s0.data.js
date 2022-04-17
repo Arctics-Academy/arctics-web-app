@@ -1,5 +1,5 @@
 const Pug = require('pug');
-const { read_file_to_string } = require('../../../utils/file.utils');
+const { fileToString } = require('../../../utils/file.utils');
 
 
 var mapS0Subject = new Map()
@@ -30,17 +30,17 @@ mapS0CompiledEmail.set("S0-S4-Cancel-Consultant", Pug.compileFile('statics/email
 mapS0CompiledEmail.set("S0-S4-Cancel-Student", Pug.compileFile('statics/emails/pugs/S0-S4-Cancel-Student.pug'))
 
 var mapS0TemplateString = new Map()
-mapS0TemplateString.set("S0-S0-Book-Consultant", read_file_to_string('statics/emails/texts/S0-S0-Book-Consultant.txt'))
-mapS0TemplateString.set("S0-S0-Book-Student", read_file_to_string('statics/emails/texts/S0-S0-Book-Student.txt'))
-mapS0TemplateString.set("S0-S1-Cancel-Consultant", read_file_to_string('statics/emails/texts/S0-S1-Cancel-Consultant.txt'))
-mapS0TemplateString.set("S0-S1-Cancel-Student", read_file_to_string('statics/emails/texts/S0-S1-Cancel-Student.txt'))
-mapS0TemplateString.set("S0-S2-Cancel-Consultant", read_file_to_string('statics/emails/texts/S0-S2-Cancel-Consultant.txt'))
-mapS0TemplateString.set("S0-S2-Cancel-Student", read_file_to_string('statics/emails/texts/S0-S2-Cancel-Student.txt'))
-mapS0TemplateString.set("S0-S2-Pay-Student", read_file_to_string('statics/emails/texts/S0-S2-Pay-Student.txt'))
-mapS0TemplateString.set("S0-S3-Cancel-Consultant", read_file_to_string('statics/emails/texts/S0-S3-Cancel-Consultant.txt'))
-mapS0TemplateString.set("S0-S3-Cancel-Student", read_file_to_string('statics/emails/texts/S0-S3-Cancel-Student.txt'))
-mapS0TemplateString.set("S0-S4-Cancel-Consultant", read_file_to_string('statics/emails/texts/S0-S4-Cancel-Consultant.txt'))
-mapS0TemplateString.set("S0-S4-Cancel-Student", read_file_to_string('statics/emails/texts/S0-S4-Cancel-Student.txt'))
+mapS0TemplateString.set("S0-S0-Book-Consultant", fileToString('statics/emails/texts/S0-S0-Book-Consultant.txt'))
+mapS0TemplateString.set("S0-S0-Book-Student", fileToString('statics/emails/texts/S0-S0-Book-Student.txt'))
+mapS0TemplateString.set("S0-S1-Cancel-Consultant", fileToString('statics/emails/texts/S0-S1-Cancel-Consultant.txt'))
+mapS0TemplateString.set("S0-S1-Cancel-Student", fileToString('statics/emails/texts/S0-S1-Cancel-Student.txt'))
+mapS0TemplateString.set("S0-S2-Cancel-Consultant", fileToString('statics/emails/texts/S0-S2-Cancel-Consultant.txt'))
+mapS0TemplateString.set("S0-S2-Cancel-Student", fileToString('statics/emails/texts/S0-S2-Cancel-Student.txt'))
+mapS0TemplateString.set("S0-S2-Pay-Student", fileToString('statics/emails/texts/S0-S2-Pay-Student.txt'))
+mapS0TemplateString.set("S0-S3-Cancel-Consultant", fileToString('statics/emails/texts/S0-S3-Cancel-Consultant.txt'))
+mapS0TemplateString.set("S0-S3-Cancel-Student", fileToString('statics/emails/texts/S0-S3-Cancel-Student.txt'))
+mapS0TemplateString.set("S0-S4-Cancel-Consultant", fileToString('statics/emails/texts/S0-S4-Cancel-Consultant.txt'))
+mapS0TemplateString.set("S0-S4-Cancel-Student", fileToString('statics/emails/texts/S0-S4-Cancel-Student.txt'))
 
 
 module.exports = { mapS0Subject, mapS0CompiledEmail, mapS0TemplateString }
