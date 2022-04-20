@@ -217,9 +217,9 @@ router.post('/tools/filter', async (req, res) => {
     // {
     //     query: 
     //     {
-    //         school: ["array", "of", "schools"],
-    //         field: ["array", "of", "fields"],
-    //         major: ["array", "of", "majors"]
+    //         school: ["array", "of", "schools"], // (先不要) 只有一間學校
+    //         field: ["array", "of", "fields"], // (先不要) 學群
+    //         major: ["array", "of", "majors"] // 學系
     //     }
     // }
     try {
