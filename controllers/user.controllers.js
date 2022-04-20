@@ -12,7 +12,7 @@ const { StudentModel } = require('../models/student.models')
 const privateCheckDuplicateStudent = async (email) => {
     if (email === "sean26857870@gmail.com") return false
     if (email === "samuelpswang@gmail.com") return false
-    let studentData = await StudentModel.find({ 'login.email': email })
+    let studentData = await StudentModel.find({ 'user.email': email })
     if (studentData.length !== 0) return true
     return false
 }
