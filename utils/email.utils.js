@@ -348,8 +348,6 @@ module.exports = {
     sendSystemStudentCardVerification,
     sendStudentCardVerifiedEmail,
     sendConsultantWelcomeEmail,
-
-    sendSystemEmail,
 }
 
 

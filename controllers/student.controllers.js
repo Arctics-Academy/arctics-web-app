@@ -189,6 +189,4 @@ module.exports =
     studentReadNotifications,
     studentViewConsultant,
     studentVerifyDiscountCode,
-
-    studentSubmitPaymentProof,
 }
