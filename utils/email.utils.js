@@ -288,6 +288,51 @@ const sendConsultantWelcomeEmail = async (consultantObj) => {
     }
 }
 
+// sends system email
+// files: [{ cid: "string", file: file }]
+// const { SystemEmail } = require('../statics/system/index/SystemEmail.index');
+// const { SystemAsset } = require('../statics/system/index/SystemAsset.index');
+// const sendSystemEmail = async (key, consultant, student, meeting, files, assetids) => {
+//     let attachments = [];
+//     for (item of files) {
+//         attachments.push({
+//             filename: item.file.filename,
+//             encoding: `base64`,
+//             contentType: item.file.mimetype,
+//             content: fileToBase64String(item.file.path),
+//             cid: item.cid
+//         })
+//     }
+//     for (item of assetids) {
+//         if (SystemAsset[item]) {
+//             attachments.push(SystemAsset[item]);
+//         }
+        
+//     }
+
+//     const email = {
+//         from: `"Arctics系統小幫手" <system@mailgun.arctics.academy>`,
+//         to: `"Arctics總信箱" <arcticsteam.official@gmail.com>`,
+//         subject: eval(SystemEmail[key][0]),
+//         text: eval(SystemEmail[key][1]),
+//         attachments: attachments
+//     };
+
+//     const mail = {
+//         to: [ `"Arctics總信箱" <arcticsteam.official@gmail.com>` ],
+//         message: await (new MailComposer(email)).compile().build()
+//     };
+    
+//     try {
+//         await MAILGUN_INSTANCE.messages.create(MAILGUN_DOMAIN, mail);
+//     } 
+//     catch (e) {
+//         console.log(e);
+//     }
+
+//     return true;
+// }
+
 
 // Utility Functions
 const privateToTwoCharString = (item) => {
@@ -303,6 +348,8 @@ module.exports = {
     sendSystemStudentCardVerification,
     sendStudentCardVerifiedEmail,
     sendConsultantWelcomeEmail,
+
+    sendSystemEmail,
 }
 
 
