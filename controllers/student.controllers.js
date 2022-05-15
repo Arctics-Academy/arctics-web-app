@@ -1,11 +1,14 @@
 // Models
 const { StudentModel } = require('../models/student.models')
+const { MeetingModel } = require('../models/meeting.models')
 const { ConsultantModel } = require('../models/consultant.models')
 const { DiscountCodeModel, AnnouncementModel } = require('../models/system.models')
 
 // Utils
-const { UserDoesNotExistError } = require('../utils/error.utils')
+const { UserDoesNotExistError, MeetingDoesNotExistError } = require('../utils/error.utils')
 const { castToStudentListConsultant } = require('../utils/profile.utils')
+// const { sendSystemMeetingPaymentVerification } = require('../utils/email.utils');
+// const { pushNotification } = require('../utils/notif.utils');
 
 const getStudentDashboard = async (reqBody) => {
     let dashboard = await StudentModel.findOne({ id: reqBody.id }).select("profile announcements meetings");
@@ -140,6 +143,35 @@ const studentReadNotifications = async (reqBody) => {
     return true;
 }
 
+// s
+// const studentSubmitPaymentProof = async (reqBody, reqFile) => {
+//     // find meeting
+//     let meeting = await MeetingModel.findOne({ id: reqBody.meetingId });
+//     if (meeting === null) {
+//         throw new MeetingDoesNotExistError(`meeting with id ${reqBody.meetingId} does not exist`);
+//     }
+    
+//     // push meeting record
+//     let record = { timestamp: new Date(), description: "收到學生上傳付款證明" };
+//     meeting.records.push(record);
+
+//     // TODO: Should add push notitfication system
+//     // await pushNotification(meeting.details.studentId, `已收到諮詢付款證明`, ``); 
+
+//     // add details to meeting object
+//     let imgFile = fs.readFileSync(reqFile.path);
+//     let imgEncoded = imgFile.toString('base64');
+//     let media = { timestamp: new Date(), type: reqFile.mimetype, data: new Buffer.from(imgEncoded, 'base64') };
+//     meeting.order.paymentReceipt = media;
+
+//     // TODO: should send email to us
+//     await sendSystemMeetingPaymentVerification(meeting, reqFile);
+    
+//     // cleanup
+//     await meeting.save();
+//     fs.unlinkSync(reqFile.path);
+// }
+
 
 module.exports = 
 {
@@ -157,4 +189,6 @@ module.exports =
     studentReadNotifications,
     studentViewConsultant,
     studentVerifyDiscountCode,
+
+    studentSubmitPaymentProof,
 }
