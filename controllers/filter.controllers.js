@@ -15,13 +15,13 @@ const filterConsultants = async (reqBody) => {
     let mongoQuery = {};
     mongoQuery["profile.studentCardVerified"] = true;
     if (reqBody.query.major) {
-        mongoQuery["profile.major"] ={ $in: reqBody.query.major };
+        mongoQuery["profile.major"] = { $in: reqBody.query.major };
     }
     if (reqBody.query.school) {
-        mongoQuery["profile.school"] ={ $in: reqBody.query.school };
+        mongoQuery["profile.school"] = { $in: reqBody.query.school };
     }
     if (reqBody.query.field) {
-        mongoQuery["profile.field"] ={ $in: reqBody.query.field };
+        mongoQuery["profile.field"] = { $in: reqBody.query.field };
     }
     
     console.log(mongoQuery);
