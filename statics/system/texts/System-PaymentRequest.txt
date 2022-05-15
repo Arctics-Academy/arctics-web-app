@@ -1,0 +1,14 @@
+`嗨Arctics員工：
+
+麻煩驗證以下資料～
+顧問價格：${meeting.details.consultantPrice}
+優惠代碼：${meeting.order.discount}
+試算價格：${meeting.order.paymentAmount}
+學生電子郵件：${student.profile.email}
+學生聯絡電話：${student.profile.mobile}
+
+若款項正確請點以下網址：
+https://arctics.academy/api/system/meeting/confirm-payment/${meeting.id}
+
+謝謝您
+Sam的系統小幫手 敬上`
