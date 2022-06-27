@@ -26,3 +26,5 @@ router.post('/add', async (req, res) => {
 // TODO: add update meeting
 
 // TODO: add cancel meeting
+
+module.exports = router;

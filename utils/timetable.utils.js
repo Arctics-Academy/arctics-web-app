@@ -1,11 +1,11 @@
 const slotToStartDate = (year, month, date, slot) => {
-    let date = new Date();
-    date.setFullYear(year);
-    date.setMonth(month);
-    date.setDate(date);
-    date.setHours(Math.floor(slot/2));
-    date.setMinutes(((slot % 2) === 0 ? 0 : 30));
-    return date;
+    let result = new Date();
+    result.setFullYear(year);
+    result.setMonth(month);
+    result.setDate(date);
+    result.setHours(Math.floor(slot/2));
+    result.setMinutes(((slot % 2) === 0 ? 0 : 30));
+    return result;
 }
 
 const startDateToSlot = (time) => {

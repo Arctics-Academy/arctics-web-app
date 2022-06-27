@@ -29,8 +29,8 @@ const studentRouter = require('./student.routes')
 router.use('/student', studentRouter)
 
 // meetings - everything about booking / canceling meetings
-const studentRouter = require('./meeting.routes')
-router.use('/meeting', studentRouter)
+const meetingRouter = require('./meeting.routes')
+router.use('/meeting', meetingRouter)
 
 // user - everything with user management, such as egister & login
 const userRouter = require('./user.routes')
