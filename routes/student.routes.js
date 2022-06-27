@@ -142,21 +142,21 @@ router.post('/meetings/list/get', async function (req, res) {
 })
 
 // updates
-// router.post('/meetings/submit-payment-proof', MeetingPaymentUploadMiddleware.single("meetingPaymentScan"), async (req, res) => {
-//     // req.body (form-data)
-//     // {
-//     //     meetingId: "string"
-//     //     meetingPaymentScan: file
-//     // }
-//     try {
-//         await StudentController.studentSubmitPaymentProof(req.body, req.file);
-//         res.status(200).json({ status: "success", message: `upload payment proof for meeting ${req.body.meetindId} successful` });
-//     }
-//     catch (e) {
-//         console.error(e);
-//         res.status(200).json({ status: "error", message: `upload payment proof for meeting ${req.body.meetingId} failed` });
-//     }
-// });
+router.post('/meetings/submit-payment-proof', MeetingPaymentUploadMiddleware.single("meetingPaymentScan"), async (req, res) => {
+    // req.body (form-data)
+    // {
+    //     meetingId: "string"
+    //     meetingPaymentScan: file
+    // }
+    try {
+        await StudentController.studentSubmitPaymentProof(req.body, req.file);
+        res.status(200).json({ status: "success", message: `upload payment proof for meeting ${req.body.meetindId} successful` });
+    }
+    catch (e) {
+        console.error(e);
+        res.status(200).json({ status: "error", message: `upload payment proof for meeting ${req.body.meetingId} failed` });
+    }
+});
 
 // returns student profile information
 router.post('/profile/get', async (req, res) => {

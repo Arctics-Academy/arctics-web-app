@@ -13,6 +13,7 @@ const { mapS0CompiledEmail, mapS0TemplateString, mapS0Subject } = require('../st
 const { OtpCompiledEmail, OtpTemplateString, 
     StudentCardVerifiedEmail, StudentCardVerifiedTemplateString, ConsultantWelcomeEmail,
     ConsultantWelcomeTemplateString, } = require('../statics/emails/index/misc.data');
+const { timestampToString } = require('../utils/time.utils')
 
 // Setup Mailgun Instances
 const MAILGUN_DOMAIN = 'mailgun.arctics.academy';
@@ -276,6 +277,58 @@ const sendConsultantWelcomeEmail = async (consultantObj) => {
     // Build mailgun object
     let mailgunObj = {
         to: [ `"${emailName}" <${emailAddress}>` ],
+        message: compiledMimeEmail
+    };
+
+    // Send mail through mailgun
+    try {
+        await MAILGUN_INSTANCE.messages.create(MAILGUN_DOMAIN, mailgunObj);
+    } 
+    catch (e) {
+        console.log(e);
+    }
+}
+
+const sendSystemMeetingPaymentVerification = async (meetingObj, file) => {
+    const emailSubject = `[Arctics系統] 會議付款驗證 (ID: ${meetingObj.id})`;
+    let emailText = "";
+    emailText += `嗨Arctics員工：\n\n`;
+    emailText += `麻煩驗證以下資料～\n`;
+    emailText += `會議代碼：${meetingObj.id}\n`;
+    emailText += `會議開始：${timestampToString(meetingObj.details.meetingStartTime)}\n`;
+    emailText += `會議價格：${meetingObj.details.consultantPrice}\n\n`;
+
+    // emailText += `顧問姓名：${userObj.profile.year}\n`;
+    // emailText += `學生姓名：${userObj.profile.year}\n`;
+    // emailText += `學生電子郵件：${userObj.profile.email}\n\n`;
+    
+    emailText += `若學生證正確請點以下網址：\nhttps://arctics.academy/api/system/meeting/confirm-payment/${meetingObj.id}\n\n`;
+    emailText += `謝謝您\nSam的系統小幫手 敬上`;
+    
+    // Build email object
+    let emailContent = 
+    {
+        from: `"Arctics系統小幫手" <system@mailgun.arctics.academy>`,
+        to: "arcticsteam.official@gmail.com",
+        subject: emailSubject,
+        text: emailText,
+        attachments:
+        [
+            {
+                filename: file.filename,
+                encoding: `base64`,
+                contentType: file.mimetype,
+                content: fileToBase64String(file.path),
+                cid: `<student_card@arctics.academy>`
+            }
+        ]
+    };
+    const rawMimeEmail = new MailComposer(emailContent); // converting to MIME
+    const compiledMimeEmail = await rawMimeEmail.compile().build();
+
+    // Build mailgun object
+    let mailgunObj = {
+        to: [ "arcticsteam.official@gmail.com" ],
         message: compiledMimeEmail
     };
 
