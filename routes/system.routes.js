@@ -50,5 +50,16 @@ router.get('/consultant/confirm-student-id/:consultantId', async (req, res) => {
     }
 })
 
+router.get('/meeting/confirm-payment/:meetingId', async (req, res) => {
+    try {
+        await systemValidateMeetingPayment(req.params.meetingId);
+        res.status(200).json({ status: "success", message: `會議${req.params.meetingId}之付款證明已認證完成` })
+    }
+    catch (e) {
+        console.error(e)
+        res.status(200).json({ status: "error", message: `資料庫有問題 請通知Sam手動認證` })
+    }
+})
+
 
 module.exports = router
