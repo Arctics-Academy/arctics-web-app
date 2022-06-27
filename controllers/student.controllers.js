@@ -7,6 +7,7 @@ const { DiscountCodeModel, AnnouncementModel } = require('../models/system.model
 // Utils
 const { UserDoesNotExistError, MeetingDoesNotExistError } = require('../utils/error.utils')
 const { castToStudentListConsultant } = require('../utils/profile.utils')
+const { unionTimetable } = require('../utils/timetable.utils');
 // const { sendSystemMeetingPaymentVerification } = require('../utils/email.utils');
 // const { pushNotification } = require('../utils/notif.utils');
 
@@ -93,9 +94,11 @@ const studentClearList = async (reqBody) => {
 }
 
 const studentViewConsultant = async (reqBody) => {
-    let consultant = await ConsultantModel.findOne({ id: reqBody.consultantId }).select("id profile timetable");
-    return consultant;
-    // TODO: Union consultant meetings, student meetings, and consultant timetable
+    let consultant = await ConsultantModel.findOne({ id: reqBody.consultantId }).select("id profile timetable meetings");
+    let student = await StudentModel.findOne({ id: reqBody.studentId }).select("meetings");
+    let timetable = unionTimetable(consultant.timetable, consultant.meetings, student.meetings);
+    let data = { profile: consultant.profile, timetable: timetable };
+    return { status: "success", data: data };
 }
 
 const studentVerifyDiscountCode = async (reqBody) => {

@@ -254,6 +254,7 @@ router.post('/tools/filter', async (req, res) => {
 router.post('/tools/consultant-profile/get', async (req, res) => {
     // req.body
     // {
+    //     studentId: "string",
     //     consultantId: "string"
     // }
     try {
