@@ -1,3 +1,13 @@
+const slotToStartDate = (year, month, date, slot) => {
+    let date = new Date();
+    date.setFullYear(year);
+    date.setMonth(month);
+    date.setDate(date);
+    date.setHours(Math.floor(slot/2));
+    date.setMinutes(((slot % 2) === 0 ? 0 : 30));
+    return date;
+}
+
 const startDateToSlot = (time) => {
     return 2*(time.getHours()) + (time.getMinutes() >= 30 ? 1 : 0);
 }
@@ -36,4 +46,8 @@ const unionTimetable = (consultantTable, consultantMeetings, studentMeetings) =>
     return result;
 }
 
-module.exports = { unionTimetable };
+module.exports = { 
+    slotToStartDate,
+    startDateToSlot,
+    unionTimetable 
+};
