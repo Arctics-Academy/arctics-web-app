@@ -98,7 +98,7 @@ const studentViewConsultant = async (reqBody) => {
     let student = await StudentModel.findOne({ id: reqBody.studentId }).select("meetings");
     let timetable = unionTimetable(consultant.timetable, consultant.meetings, student.meetings);
     let data = { profile: consultant.profile, timetable: timetable };
-    return { status: "success", data: data };
+    return data;
 }
 
 const studentVerifyDiscountCode = async (reqBody) => {
