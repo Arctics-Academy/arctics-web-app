@@ -120,15 +120,26 @@ router.post('/student/register', async (req, res) => {
 })
 
 router.post('/student/login', async (req, res) => {
+    // try {
+    //     result = await loginStudent(req.body)
+    //     if (typeof(result) !== "string") {
+    //         req.session.auth.studentAuth = true
+	// 	    req.session.auth.studentId = result.id
+    //         res.status(200).json({ status: "success", data: result })
+    //     }
+    //     else {
+    //         res.status(200).json({ status: "failed", message: result })
+    //     }
+    // }
     try {
         result = await loginStudent(req.body)
-        if (typeof(result) !== "string") {
-            req.session.auth.studentAuth = true
-		    req.session.auth.studentId = result.id
-            res.status(200).json({ status: "success", data: result })
+        if (result.status === "success") {
+            req.session.auth.consultantAuth = true
+		    req.session.auth.consultantId = result.data.id
+            res.status(200).json(result)
         }
         else {
-            res.status(200).json({ status: "failed", message: result })
+            res.status(200).json(result)
         }
     }
     catch (e) {

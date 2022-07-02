@@ -315,10 +315,10 @@ const loginStudent = async (reqBody) => {
     if (student.user.passwordEncrypted === hashed) {
         student = new Object(student)
         student.user = null
-        return student
+        return { status: "success", data: student }
     }
     else {
-        return "incorrect email or password"
+        return { status: "failed" }
     }
 }
 
