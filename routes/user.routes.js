@@ -134,8 +134,8 @@ router.post('/student/login', async (req, res) => {
     try {
         result = await loginStudent(req.body)
         if (result.status === "success") {
-            req.session.auth.consultantAuth = true
-		    req.session.auth.consultantId = result.data.id
+            req.session.auth.studentAuth = true
+		    req.session.auth.studentId = result.data.id
             res.status(200).json(result)
         }
         else {
