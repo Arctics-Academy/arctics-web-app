@@ -8,9 +8,11 @@ const { genMeetingID } = require('../utils/id.utils');
 const { slotToStartDate, startDateToSlot } = require('../utils/timetable.utils');
 
 const addMeeting = async (reqBody) => {
-    let consultant = ConsultantModel.findOne({ id: reqBody.consultantId });
-    let student = StudentModel.findOne({ id: reqBody.stuentId });
+    let consultant = await ConsultantModel.findOne({ id: reqBody.consultantId });
+    let student = await StudentModel.findOne({ id: reqBody.studentId });
     let count = await MeetingModel.countDocuments();
+
+    // console.log(consultant, student)
 
     // TODO: perform valid checks
 
@@ -18,7 +20,7 @@ const addMeeting = async (reqBody) => {
         id: genMeetingID(count),
         details: {
             meetingSlot: reqBody.slot,
-            meetingStartTime: slotToStartDate(reqBody.year, reqBody.month, reqBody,date, reqBody.slot),
+            meetingStartTime: slotToStartDate(reqBody.year, reqBody.month, reqBody.date, reqBody.slot),
     
             studentId: reqBody.studentId,
             studentSurname: student.profile.surname,
@@ -50,9 +52,9 @@ const addMeeting = async (reqBody) => {
     let consultantMeeting = {
         id: meetingObj.id,
         status: "future",
-        startTimestamp: meetingObj.meetingStartTime,
-        studentName: meetingObj.studentSurname+meetingObj.studentName,
-        studentYear: meetingObj.studentYear,
+        startTimestamp: meetingObj.details.meetingStartTime,
+        studentName: meetingObj.details.studentSurname+meetingObj.details.studentName,
+        studentYear: meetingObj.details.studentYear,
         studentItems: [],
         remark: "",
         comment: ""
@@ -64,15 +66,17 @@ const addMeeting = async (reqBody) => {
     let studentMeeting = {
         id: meetingObj.id,
         active: true,
-        startTimestamp: meetingObj.meetingStartTime,
-        studentName: meetingObj.studentSurname+meetingObj.studentName,
-        studentYear: meetingObj.studentYear,
+        startTimestamp: meetingObj.details.meetingStartTime,
+        consultantName: meetingObj.details.consultantSurname+meetingObj.details.consultantName,
+        consultantYear: meetingObj.details.consultantYear,
         studentItems: [],
         remark: "",
         comment: ""
     };
     student.meetings.future.push(studentMeeting);
     await student.save();
+
+    return newMeeting
 }
 
 module.exports = { addMeeting }

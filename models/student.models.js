@@ -27,11 +27,11 @@ const StudentMeetingSchema = new mongoose.Schema({
     id: { type: String, required: true },
     active: { type: Boolean, required: true, default: true },
     startTimestamp: { type: Date, required: true },
-    studentName: { type: String, required: true },
-    studentYear: { type: String, required: true },
+    consultantName: { type: String, required: true },
+    consultantYear: { type: String, required: true },
     studentItems: { type: [String], required: true, default: [] },
-    remark: { type: String, required: true, default: "" },
-    comment: { type: String, required: true, default: "" }
+    remark: { type: String },
+    comment: { type: String }
 }, { _id: false })
 
 const StudentListConsultantSchema = new mongoose.Schema({

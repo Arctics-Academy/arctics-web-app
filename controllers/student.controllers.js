@@ -102,6 +102,14 @@ const studentViewConsultant = async (reqBody) => {
     return consultant;
 }
 
+const studentViewSlots = async (reqBody) => {
+    console.log(reqBody)
+    let consultant = await ConsultantModel.findOne({ id: reqBody.consultantId }).select("id profile meetings");
+    let student = await StudentModel.findOne({ id: reqBody.studentId }).select("meetings");
+    let timetable = unionTimetable(consultant.profile.timetable, consultant.meetings, student.meetings);
+    return timetable;
+}
+
 const studentVerifyDiscountCode = async (reqBody) => {
     let discount = await DiscountCodeModel.findOne({ code: reqBody.discount });
     if (!discount) {
@@ -191,6 +199,7 @@ module.exports =
     studentClearList,
     studentReadNotifications,
     studentViewConsultant,
+    studentViewSlots,
     studentVerifyDiscountCode,
     studentSubmitPaymentProof,
 }

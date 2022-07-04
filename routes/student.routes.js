@@ -267,6 +267,23 @@ router.post('/tools/consultant-profile/get', async (req, res) => {
     }
 })
 
+// return parsed timetable
+router.post('/tools/consultant-timetable/get', async (req, res) => {
+    // req.body
+    // {
+    //     studentId: "string"
+    //     consultantId: "string"
+    // }
+    try {
+        let data = await StudentController.studentViewSlots(req.body);
+        res.status(200).json({ status: "success", data: data });
+    }
+    catch (e) {
+        console.error(e);
+        res.status(200).json({ status: "error", message: `uncaught student controller error`});
+    }
+})
+
 
 // Exports
 module.exports = router

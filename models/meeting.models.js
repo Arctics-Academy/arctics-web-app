@@ -47,7 +47,7 @@ const MeetingSchema = new mongoose.Schema({
         comment: { type: String, required: false } // 留言&回饋
     }, 
     records: { type: [MeetingRecordSchema], default: [] },
-}, { _id: false, collection: 'Meetings' });
+}, { id: false, collection: 'Meetings' });
 const MeetingModel = mongoose.model('Meeting', MeetingSchema);
 
 
