@@ -75,30 +75,31 @@ const studentUpdateProfile = async (reqBody) => {
 
 const studentAddToList = async (reqBody) => {
     let student = await StudentModel.findOne({ id: reqBody.id }).select("list");
-    let newListItem = await ConsultantModel.findOne({ id: reqBody.id }).select("profile");
+    let newListItem = await ConsultantModel.findOne({ id: reqBody.consultantId }).select("profile");
     newListItem = castToStudentListConsultant(newListItem);
-    student.list.push(newListItem);
+    student.list.consultants.push(newListItem);
     await student.save();
 }
 
 const studentDeleteFromList = async (reqBody) => {
     let student = await StudentModel.findOne({ id: reqBody.id }).select("list");
-    student.list = student.list.filter(item => item.consultantId !== reqBody.consultantId);
+    student.list.consultants = student.list.consultants.filter(item => item.consultantId !== reqBody.consultantId);
     await student.save();
 }
 
 const studentClearList = async (reqBody) => {
     let student = await StudentModel.findOne({ id: reqBody.id }).select("list");
-    student.list = [];
+    student.list.consultants = [];
     await student.save();
 }
 
 const studentViewConsultant = async (reqBody) => {
     let consultant = await ConsultantModel.findOne({ id: reqBody.consultantId }).select("id profile timetable meetings");
-    let student = await StudentModel.findOne({ id: reqBody.studentId }).select("meetings");
-    let timetable = unionTimetable(consultant.timetable, consultant.meetings, student.meetings);
-    let data = { profile: consultant.profile, timetable: timetable };
-    return data;
+    // let student = await StudentModel.findOne({ id: reqBody.studentId }).select("meetings");
+    // let timetable = unionTimetable(consultant.timetable, consultant.meetings, student.meetings);
+    // let data = { profile: consultant.profile, timetable: consultant.timetable };
+    consultant.user = null;
+    return consultant;
 }
 
 const studentVerifyDiscountCode = async (reqBody) => {

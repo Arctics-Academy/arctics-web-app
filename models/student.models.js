@@ -37,14 +37,18 @@ const StudentMeetingSchema = new mongoose.Schema({
 const StudentListConsultantSchema = new mongoose.Schema({
     consultantId: { type: String, required: true },
     // 左
-    photo: { type: MediaSchema, required: true },
+    photo: { type: MediaSchema },
+    surname: { type: String, required: true },
+    name: { type: String, required: true },
     // 中
     price: { type: Number, required: true },
     school: { type: String, required: true },
+    major: { type: String, required: true },
+    year: { type: String, required: true },
     // 右
     count: { type: Number, required: true },
     labels: { type: [String], required: true },
-    intro: { type: String, required: true },
+    intro: { type: String },
     // 最右
     star: { type: Number }
 }, { _id: false })
