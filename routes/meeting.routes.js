@@ -16,9 +16,8 @@ router.post('/add', async (req, res) => {
     //     slot: number,
     // }
     try {
-        let meeting = await addMeeting(req.body);
-        res.status(200).json({ status: "success", message: `meeting ${meeting.id} successfully created`});
-
+        let { meeting, student } = await addMeeting(req.body);
+        res.status(200).json({ status: "success", message: `meeting ${meeting.id} successfully created`, data: new Object(student) });
         // TODO: add discount
         // TODO: add email & notifications
     }

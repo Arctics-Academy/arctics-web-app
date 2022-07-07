@@ -146,11 +146,17 @@ router.post('/meetings/submit-payment-proof', MeetingPaymentUploadMiddleware.sin
     // req.body (form-data)
     // {
     //     meetingId: "string"
+    //     paymentName: "string"
+    //     paymentDate: "string"
     //     meetingPaymentScan: file
     // }
     try {
-        await StudentController.studentSubmitPaymentProof(req.body, req.file);
-        res.status(200).json({ status: "success", message: `upload payment proof for meeting ${req.body.meetindId} successful` });
+        let submittedDate = await StudentController.studentSubmitPaymentProof(req.body, req.file);
+        res.status(200).json({ 
+            status: "success", 
+            message: `upload payment proof for meeting ${req.body.meetindId} successful`,
+            data: { paymentTime: submittedDate }
+        });
     }
     catch (e) {
         console.error(e);

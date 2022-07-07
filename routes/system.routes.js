@@ -52,8 +52,9 @@ router.get('/consultant/confirm-student-id/:consultantId', async (req, res) => {
 
 router.get('/meeting/confirm-payment/:meetingId', async (req, res) => {
     try {
-        await systemValidateMeetingPayment(req.params.meetingId);
-        res.status(200).json({ status: "success", message: `會議${req.params.meetingId}之付款證明已認證完成` })
+        let actualMeetingId = `#${req.params.meetingId}`
+        await systemValidateMeetingPayment(actualMeetingId);
+        res.status(200).json({ status: "success", message: `會議${actualMeetingId}之付款證明已認證完成` })
     }
     catch (e) {
         console.error(e)

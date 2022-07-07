@@ -39,6 +39,7 @@ const addMeeting = async (reqBody) => {
         order: {
             confirmed: true,
             submitted: false,
+            paymentAmount: consultant.profile.price
         },
         records: [{ timestamp: new Date(), description: "預約會議"}],
     
@@ -65,18 +66,28 @@ const addMeeting = async (reqBody) => {
     // save to student
     let studentMeeting = {
         id: meetingObj.id,
-        active: true,
+        status: "future",
         startTimestamp: meetingObj.details.meetingStartTime,
+        
+        consultantId: meetingObj.details.consultantId,
         consultantName: meetingObj.details.consultantSurname+meetingObj.details.consultantName,
+        consultantSchool: consultant.profile.school,
+        consultantMajor: consultant.profile.major,
         consultantYear: meetingObj.details.consultantYear,
+        consultantCount: consultant.profile.count,
+
+        paymentTime: undefined,
+        consultantPrice: consultant.profile.price,
+
         studentItems: [],
         remark: "",
         comment: ""
     };
     student.meetings.future.push(studentMeeting);
     await student.save();
+    student.user = null;
 
-    return newMeeting
+    return { meeting: newMeeting, consultant: consultant, student: student }
 }
 
 module.exports = { addMeeting }

@@ -25,10 +25,20 @@ const StudentAnnouncementSchema = new mongoose.Schema({
 
 const StudentMeetingSchema = new mongoose.Schema({
     id: { type: String, required: true },
+    status: { type: String, required: true },
     active: { type: Boolean, required: true, default: true },
     startTimestamp: { type: Date, required: true },
+    
+    consultantId: { type: String, required: true },
     consultantName: { type: String, required: true },
+    consultantSchool: { type: String, required: true },
+    consultantMajor: { type: String, required: true },
     consultantYear: { type: String, required: true },
+    consultantCount: { type: Number },
+
+    paymentTime: { type: Date },
+    consultantPrice: { type: Number },
+
     studentItems: { type: [String], required: true, default: [] },
     remark: { type: String },
     comment: { type: String }

@@ -14,7 +14,6 @@ const startDateToSlot = (time) => {
 
 const withinNextMonth = (meeting) => {
     let nextMonth = new Date(Date.now() + 1000*3600*24*30);
-    console.log('withinNextMonth', meeting.startTimestamp.getTime(), nextMonth.getTime(), Date.now())
     if (meeting.startTimestamp.getTime() < nextMonth.getTime()) return true;
     else return false;
 }
@@ -42,10 +41,6 @@ const unionTimetable = (consultantTable, consultantMeetings, studentMeetings) =>
             result.studentBooked.push(box);
         }
     }
-    
-    console.log(consultantMeetings.future)
-    console.log(studentMeetings.future)
-    console.log(result)
 
     // return result
     return result;

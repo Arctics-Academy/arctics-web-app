@@ -22,7 +22,7 @@ function genUserID(count, pre) {
 function genMeetingID(count) {
     let id = '';
 
-    let len = count.toString().length;
+    let len = (count+1).toString().length;
     if (len < 5) {
         let zeros = 5 - len;
         while (zeros !== 0) {

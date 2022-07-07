@@ -56,7 +56,7 @@ const ProfilePhotoUploadMiddleware = multer({
 const meetingPaymentStorage = multer.diskStorage({
     destination: './frontend/uploads/meeting-payment', 
     filename: (req, file, cb) => { 
-        let identifier = "MeetingPayment" + "-" + req.body.meetingId + "-" + Date.now() + path.extname(file.originalname);
+        let identifier = "MeetingPayment" + "-" + (req.body.meetingId.substr(1,5)) + "-" + Date.now() + path.extname(file.originalname);
         cb(null, identifier);
     }
 })

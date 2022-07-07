@@ -10,6 +10,7 @@ const { castToStudentListConsultant } = require('../utils/profile.utils')
 const { unionTimetable } = require('../utils/timetable.utils');
 const { sendSystemMeetingPaymentVerification } = require('../utils/email.utils');
 // const { pushNotification } = require('../utils/notif.utils');
+const fs = require('fs')
 
 const getStudentDashboard = async (reqBody) => {
     let dashboard = await StudentModel.findOne({ id: reqBody.id }).select("profile announcements meetings");
@@ -103,7 +104,6 @@ const studentViewConsultant = async (reqBody) => {
 }
 
 const studentViewSlots = async (reqBody) => {
-    console.log(reqBody)
     let consultant = await ConsultantModel.findOne({ id: reqBody.consultantId }).select("id profile meetings");
     let student = await StudentModel.findOne({ id: reqBody.studentId }).select("meetings");
     let timetable = unionTimetable(consultant.profile.timetable, consultant.meetings, student.meetings);
@@ -156,15 +156,31 @@ const studentReadNotifications = async (reqBody) => {
 }
 
 const studentSubmitPaymentProof = async (reqBody, reqFile) => {
+    // timestamp
+    let timestamp = new Date()
+
     // find meeting
     let meeting = await MeetingModel.findOne({ id: reqBody.meetingId });
     if (meeting === null) {
         throw new MeetingDoesNotExistError(`meeting with id ${reqBody.meetingId} does not exist`);
     }
-    
     // push meeting record
-    let record = { timestamp: new Date(), description: "收到學生上傳付款證明" };
+    let record = { timestamp: timestamp, description: "收到學生上傳付款證明" };
     meeting.records.push(record);
+    // update meeting details
+    meeting.order.submittedTimestamp = timestamp;
+    meeting.order.paymentAccountName = reqBody.paymentName;
+    meeting.order.paymentDate = reqBody.paymentDate;
+
+    // find student
+    let student = await StudentModel.findOne({ id: meeting.details.studentId });
+    // TODO: catch student fail
+    for (let idx in student.meetings.future) {
+        if (reqBody.meetingId === student.meetings.future[idx].id) {
+            student.meetings.future[idx].paymentTime = timestamp;
+        }
+    }
+    
 
     // TODO: Should add push notitfication system
     // await pushNotification(meeting.details.studentId, `已收到諮詢付款證明`, ``); 
@@ -180,7 +196,10 @@ const studentSubmitPaymentProof = async (reqBody, reqFile) => {
     
     // cleanup
     await meeting.save();
+    await student.save();
     fs.unlinkSync(reqFile.path);
+
+    return timestamp;
 }
 
 

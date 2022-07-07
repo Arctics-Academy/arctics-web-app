@@ -295,14 +295,15 @@ const sendSystemMeetingPaymentVerification = async (meetingObj, file) => {
     emailText += `嗨Arctics員工：\n\n`;
     emailText += `麻煩驗證以下資料～\n`;
     emailText += `會議代碼：${meetingObj.id}\n`;
-    emailText += `會議開始：${timestampToString(meetingObj.details.meetingStartTime)}\n`;
-    emailText += `會議價格：${meetingObj.details.consultantPrice}\n\n`;
+    emailText += `會議價格：${meetingObj.order.paymentAmount}\n`;
+    emailText += `帳戶名稱：${meetingObj.order.paymentAccountName}\n`;
+    emailText += `付款時間：${meetingObj.order.paymentDate}\n\n`;
 
     // emailText += `顧問姓名：${userObj.profile.year}\n`;
     // emailText += `學生姓名：${userObj.profile.year}\n`;
     // emailText += `學生電子郵件：${userObj.profile.email}\n\n`;
     
-    emailText += `若學生證正確請點以下網址：\nhttps://arctics.academy/api/system/meeting/confirm-payment/${meetingObj.id}\n\n`;
+    emailText += `若學生證正確請點以下網址：\nhttps://arctics.academy/api/system/meeting/confirm-payment/${(meetingObj.id).substr(1,5)}\n\n`;
     emailText += `謝謝您\nSam的系統小幫手 敬上`;
     
     // Build email object
@@ -401,6 +402,7 @@ module.exports = {
     sendSystemStudentCardVerification,
     sendStudentCardVerifiedEmail,
     sendConsultantWelcomeEmail,
+    sendSystemMeetingPaymentVerification
 }
 
 

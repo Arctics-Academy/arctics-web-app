@@ -8,10 +8,6 @@ const { castToStudentListConsultant } = require('../utils/profile.utils')
 
 // Functions
 const filterConsultants = async (reqBody) => {
-
-    console.log("reqbody");
-    console.log(reqBody);
-    
     let mongoQuery = {};
     mongoQuery["profile.studentCardVerified"] = true;
     if (reqBody.query.major) {
@@ -24,8 +20,6 @@ const filterConsultants = async (reqBody) => {
         mongoQuery["profile.field"] = { $in: reqBody.query.field };
     }
     
-    console.log(mongoQuery);
-
     let rawResults = await ConsultantModel.find(mongoQuery).select("id profile");
 
     let cleanedResults = [];
