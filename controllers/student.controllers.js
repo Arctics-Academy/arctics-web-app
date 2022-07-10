@@ -171,6 +171,8 @@ const studentSubmitPaymentProof = async (reqBody, reqFile) => {
     meeting.order.submittedTimestamp = timestamp;
     meeting.order.paymentAccountName = reqBody.paymentName;
     meeting.order.paymentDate = reqBody.paymentDate;
+    meeting.order.paymentBankNo = reqBody.paymentBankNo;
+    meeting.order.paymentAccountNo = reqBody.paymentAccountNo;
 
     // find student
     let student = await StudentModel.findOne({ id: meeting.details.studentId });
@@ -186,10 +188,12 @@ const studentSubmitPaymentProof = async (reqBody, reqFile) => {
     // await pushNotification(meeting.details.studentId, `已收到諮詢付款證明`, ``); 
 
     // add details to meeting object
-    let imgFile = fs.readFileSync(reqFile.path);
-    let imgEncoded = imgFile.toString('base64');
-    let media = { timestamp: new Date(), type: reqFile.mimetype, data: new Buffer.from(imgEncoded, 'base64') };
-    meeting.order.paymentReceipt = media;
+    if (reqFile) {
+        let imgFile = fs.readFileSync(reqFile.path);
+        let imgEncoded = imgFile.toString('base64');
+        let media = { timestamp: new Date(), type: reqFile.mimetype, data: new Buffer.from(imgEncoded, 'base64') };
+        meeting.order.paymentReceipt = media;
+    }
 
     // TODO: should send email to us
     await sendSystemMeetingPaymentVerification(meeting, reqFile);
@@ -197,7 +201,9 @@ const studentSubmitPaymentProof = async (reqBody, reqFile) => {
     // cleanup
     await meeting.save();
     await student.save();
-    fs.unlinkSync(reqFile.path);
+    if (reqFile) {
+        fs.unlinkSync(reqFile.path);
+    }
 
     return timestamp;
 }

@@ -41,7 +41,9 @@ const MeetingSchema = new mongoose.Schema({
         paymentAmount: { type: Number },
         paymentAccountName: { type: String },
         paymentDate: { type: String },
-        paymentReceipt: { type: MediaSchema }
+        paymentReceipt: { type: MediaSchema },
+        paymentBankNo: { type: String },
+        paymentAccountNo: { type: String },
     },
     post: {
         comment: { type: String, required: false } // 留言&回饋

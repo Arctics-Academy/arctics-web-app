@@ -295,9 +295,12 @@ const sendSystemMeetingPaymentVerification = async (meetingObj, file) => {
     emailText += `嗨Arctics員工：\n\n`;
     emailText += `麻煩驗證以下資料～\n`;
     emailText += `會議代碼：${meetingObj.id}\n`;
-    emailText += `會議價格：${meetingObj.order.paymentAmount}\n`;
-    emailText += `帳戶名稱：${meetingObj.order.paymentAccountName}\n`;
-    emailText += `付款時間：${meetingObj.order.paymentDate}\n\n`;
+    emailText += `會議價格：${meetingObj.order.paymentAmount}\n\n`;
+
+    emailText += `匯款人名稱：${meetingObj.order.paymentAccountName}\n`;
+    emailText += `匯款帳戶銀行代碼：${(meetingObj.order.paymentBankNo ? meetingObj.order.paymentBankNo : "無填入")}\n`;
+    emailText += `匯款帳戶號碼：${(meetingObj.order.paymentAccountNo ? meetingObj.order.paymentAccountNo : "無填入")}\n`;
+    emailText += `匯款時間：${meetingObj.order.paymentDate}\n\n`;
 
     // emailText += `顧問姓名：${userObj.profile.year}\n`;
     // emailText += `學生姓名：${userObj.profile.year}\n`;
@@ -305,6 +308,18 @@ const sendSystemMeetingPaymentVerification = async (meetingObj, file) => {
     
     emailText += `若學生證正確請點以下網址：\nhttps://arctics.academy/api/system/meeting/confirm-payment/${(meetingObj.id).substr(1,5)}\n\n`;
     emailText += `謝謝您\nSam的系統小幫手 敬上`;
+
+    // attachment array
+    let attachments = [];
+    if (file) {
+        attachments.push({
+            filename: file.filename,
+            encoding: `base64`,
+            contentType: file.mimetype,
+            content: fileToBase64String(file.path),
+            cid: `<payment_receipt@arctics.academy>`
+        });
+    }
     
     // Build email object
     let emailContent = 
@@ -313,16 +328,7 @@ const sendSystemMeetingPaymentVerification = async (meetingObj, file) => {
         to: "arcticsteam.official@gmail.com",
         subject: emailSubject,
         text: emailText,
-        attachments:
-        [
-            {
-                filename: file.filename,
-                encoding: `base64`,
-                contentType: file.mimetype,
-                content: fileToBase64String(file.path),
-                cid: `<student_card@arctics.academy>`
-            }
-        ]
+        attachments: attachments
     };
     const rawMimeEmail = new MailComposer(emailContent); // converting to MIME
     const compiledMimeEmail = await rawMimeEmail.compile().build();
