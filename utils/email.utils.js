@@ -88,7 +88,7 @@ const sendS0Email = async (identifier, consultantObj, studentObj, meetingObj) =>
 const sendEmailOtp = async (userObj, otpCode) => {
     // Set up rendering parameters
     let userName = userObj.profile.surname + userObj.profile.name;
-    let isConsultant = true;
+    let isConsultant = (userObj.id.substr(0, 2) === 'TR' ? true : false);
     let code = otpCode;
 
     // Test type of user
