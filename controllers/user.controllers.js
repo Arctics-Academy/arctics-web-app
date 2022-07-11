@@ -12,7 +12,7 @@ const { StudentModel } = require('../models/student.models')
 const privateCheckDuplicateStudent = async (email) => {
     if (email === "sean26857870@gmail.com") return false
     if (email === "samuelpswang@gmail.com") return false
-    let studentData = await StudentModel.find({ 'user.email': email })
+    let studentData = await StudentModel.find({ 'login.email': email })
     if (studentData.length !== 0) return true
     return false
 }
@@ -73,10 +73,6 @@ const registerConsultant = async (reqBody) => {
         console.error(e)
         throw DatabaseError(`failed to save new consultant (${reqBody.email}) to MongoDB`)
     }
-
-    // Send Welcome Message
-    EmailUtil.sendConsultantWelcomeEmail(consultantObj);
-
     newConsultant.user = null
     return newConsultant
 }
@@ -315,76 +311,10 @@ const loginStudent = async (reqBody) => {
     if (student.user.passwordEncrypted === hashed) {
         student = new Object(student)
         student.user = null
-        return { status: "success", data: student }
+        return student
     }
     else {
-        return { status: "failed" }
-    }
-}
-
-// patch: fix later
-const sendPasswordResetOtp = async (reqBody) => {
-    if (reqBody.identity === 'consultant') {
-        let consultant = await ConsultantModel.findOne({ 'user.email': reqBody.email });
-        if (!consultant) return { status: 'failed', message: `consultant (${reqBody.email}) not found`, code: 0 };
-
-        let code = IdUtil.genMobileOTP();
-        consultant.user.otpEmail = code;
-        await consultant.save();
-        EmailUtil.sendEmailOtp(consultant, code);
-        return { status: 'success', message: `consultant (${reqBody.email}) otp email sent` };
-    }
-    else if (reqBody.identity === 'student') {
-        let student = await StudentModel.findOne({ 'user.email': reqBody.email });
-        if (!student) return { status: 'failed', message: `student (${reqBody.email}) not found`, code: 0 };
-
-        let code = IdUtil.genMobileOTP();
-        student.user.otpEmail = code;
-        await student.save();
-        EmailUtil.sendEmailOtp(student, code);
-        return { status: 'success', message: `student (${reqBody.email}) otp email sent` };
-    }
-    else {
-        return { status: 'failed', message: `request parameters error`, code: 2 };
-    }
-}
-
-// patch: fix later
-const matchPasswordResetOtp = async (reqBody) => {
-    if (reqBody.identity === 'consultant') {
-        let consultant = await ConsultantModel.findOne({ 'user.email': reqBody.email });
-        if (!consultant) return { status: 'failed', message: `consultant (${reqBody.email}) not found`, code: 0 };
-
-        if (reqBody.code === consultant.user.otpEmail) {
-            let password = reqBody.password;
-            let passwordHash = PasswordUtil.getHashedPassword(password);
-            consultant.user.passwordEncrypted = passwordHash[0];
-            consultant.user.passwordSalt = passwordHash[1];
-            await consultant.save();
-            return { status: 'success', message: `consultant (${reqBody.email}) password reset` };
-        }
-        else {
-            return { status: 'failed', message: `email otp incorrect`, code: 1 };
-        }
-    }
-    else if (reqBody.identity === 'student') {
-        let student = await StudentModel.findOne({ 'user.email': reqBody.email });
-        if (!student) return { status: 'failed', message: `student (${reqBody.email}) not found`, code: 0 };
-
-        if (reqBody.code === student.user.otpEmail) {
-            let password = reqBody.password;
-            let passwordHash = PasswordUtil.getHashedPassword(password);
-            student.user.passwordEncrypted = passwordHash[0];
-            student.user.passwordSalt = passwordHash[1];
-            await student.save();
-            return { status: 'success', message: `student (${reqBody.email}) password reset` };
-        }
-        else {
-            return { status: 'failed', message: `email otp incorrect`, code: 1 };
-        }
-    }
-    else {
-        return { status: 'failed', message: `request parameters error`, code: 2 };
+        return "incorrect email or password"
     }
 }
 
@@ -400,7 +330,4 @@ module.exports = {
     matchMobileOTP,
     sendEmailOTP,
     matchEmailOTP,
-
-    sendPasswordResetOtp,
-    matchPasswordResetOtp
 }
