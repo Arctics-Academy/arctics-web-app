@@ -41,15 +41,13 @@ const MeetingSchema = new mongoose.Schema({
         paymentAmount: { type: Number },
         paymentAccountName: { type: String },
         paymentDate: { type: String },
-        paymentReceipt: { type: MediaSchema },
-        paymentBankNo: { type: String },
-        paymentAccountNo: { type: String },
+        paymentReceipt: { type: MediaSchema }
     },
     post: {
         comment: { type: String, required: false } // 留言&回饋
     }, 
     records: { type: [MeetingRecordSchema], default: [] },
-}, { id: false, collection: 'Meetings' });
+}, { _id: false, collection: 'Meetings' });
 const MeetingModel = mongoose.model('Meeting', MeetingSchema);
 
 

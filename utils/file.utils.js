@@ -1,26 +1,21 @@
-// Setup External Modules
 const fs = require('fs');
 
-// Main Functions
-// returns base 64 string of path
-let fileToBase64String = (path) => {
+
+let read_file_to_base64 = (path) => {
     return fs.readFileSync(path, {encoding: 'base64'});
 }
 
-// returns string of txt file of path
-let fileToString = (path) => {
+let read_file_to_string = (path) => {
     return fs.readFileSync(path).toString('utf-8');
 }
 
-// returns last dash delimitated string
 const getEmailAddressee = (identifier) => {
-    return identifier.split("-").pop();
+    return identifier.split("-").pop()
 }
-
 
 module.exports = 
 { 
-    fileToBase64String, 
-    fileToString, 
-    getEmailAddressee,
+    read_file_to_base64, 
+    read_file_to_string, 
+    getEmailAddressee 
 }

@@ -25,40 +25,26 @@ const StudentAnnouncementSchema = new mongoose.Schema({
 
 const StudentMeetingSchema = new mongoose.Schema({
     id: { type: String, required: true },
-    status: { type: String, required: true },
     active: { type: Boolean, required: true, default: true },
     startTimestamp: { type: Date, required: true },
-    
-    consultantId: { type: String, required: true },
-    consultantName: { type: String, required: true },
-    consultantSchool: { type: String, required: true },
-    consultantMajor: { type: String, required: true },
-    consultantYear: { type: String, required: true },
-    consultantCount: { type: Number },
-
-    paymentTime: { type: Date },
-    consultantPrice: { type: Number },
-
+    studentName: { type: String, required: true },
+    studentYear: { type: String, required: true },
     studentItems: { type: [String], required: true, default: [] },
-    remark: { type: String },
-    comment: { type: String }
+    remark: { type: String, required: true, default: "" },
+    comment: { type: String, required: true, default: "" }
 }, { _id: false })
 
 const StudentListConsultantSchema = new mongoose.Schema({
     consultantId: { type: String, required: true },
     // 左
-    photo: { type: MediaSchema },
-    surname: { type: String, required: true },
-    name: { type: String, required: true },
+    photo: { type: MediaSchema, required: true },
     // 中
     price: { type: Number, required: true },
     school: { type: String, required: true },
-    major: { type: String, required: true },
-    year: { type: String, required: true },
     // 右
     count: { type: Number, required: true },
     labels: { type: [String], required: true },
-    intro: { type: String },
+    intro: { type: String, required: true },
     // 最右
     star: { type: Number }
 }, { _id: false })

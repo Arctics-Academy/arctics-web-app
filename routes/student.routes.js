@@ -2,10 +2,9 @@
 const express = require('express')
 const router = express.Router()
 
-// Controllers & Middlewares
+// Controllers
 const StudentController = require('../controllers/student.controllers')
 const FilterController = require('../controllers/filter.controllers');
-const { MeetingPaymentUploadMiddleware } = require('../middlewares/upload.middlewares');
 
 
 // Routes
@@ -24,40 +23,6 @@ router.post('/dashboard/get', async function (req, res) {
         res.status(200).json({ status: "error", message: `cannot get student dashboard info with id ${req.body.id}` })
     }
 });
-
-// returns notifications
-router.post('/notifications/get', async (req, res) => {
-    // req.body
-    // {
-    //     id: "string"
-    // }
-    try {
-        let data = await StudentController.getStudentNotifications(req.body);
-        res.status(200).json({ status: "success", data: data });
-    }
-    catch (e) {
-        console.log(e);
-        res.status(200).json({ status: "error", message: `uncaught student (${req.body.id}) get notification error`});
-    }
-});
-
-// reads notification
-router.post('/notifications/read', async (req, res) => {
-    // req.body
-    // { 
-    //     id: "string"
-    //     announcementIds: ["string"]
-    //     notificationIds: ["string"] 
-    // }
-    try {
-        await StudentController.studentReadNotifications(req.body);
-        res.status(200).json({ status: "success", message: `student notifications read operation complete` });
-    }
-    catch (e) {
-        console.error(e);
-        res.status(200).json({ status: "error", message: `uncaught student (id: ${req.body.id}) read notification error` });
-    }
-})
 
 // returns student list information
 router.post('/list/get', async (req, res) => {
@@ -141,29 +106,6 @@ router.post('/meetings/list/get', async function (req, res) {
     }
 })
 
-// updates
-router.post('/meetings/submit-payment-proof', MeetingPaymentUploadMiddleware.single("meetingPaymentScan"), async (req, res) => {
-    // req.body (form-data)
-    // {
-    //     meetingId: "string"
-    //     paymentName: "string"
-    //     paymentDate: "string"
-    //     meetingPaymentScan: file
-    // }
-    try {
-        let submittedDate = await StudentController.studentSubmitPaymentProof(req.body, req.file);
-        res.status(200).json({ 
-            status: "success", 
-            message: `upload payment proof for meeting ${req.body.meetindId} successful`,
-            data: { paymentTime: submittedDate }
-        });
-    }
-    catch (e) {
-        console.error(e);
-        res.status(200).json({ status: "error", message: `upload payment proof for meeting ${req.body.meetingId} failed` });
-    }
-});
-
 // returns student profile information
 router.post('/profile/get', async (req, res) => {
     // expect req.body
@@ -241,9 +183,9 @@ router.post('/tools/filter', async (req, res) => {
     // {
     //     query: 
     //     {
-    //         school: ["array", "of", "schools"], // (先不要) 只有一間學校
-    //         field: ["array", "of", "fields"], // (先不要) 學群
-    //         major: ["array", "of", "majors"] // 學系
+    //         school: ["array", "of", "schools"],
+    //         field: ["array", "of", "fields"],
+    //         major: ["array", "of", "majors"]
     //     }
     // }
     try {
@@ -260,7 +202,6 @@ router.post('/tools/filter', async (req, res) => {
 router.post('/tools/consultant-profile/get', async (req, res) => {
     // req.body
     // {
-    //     studentId: "string",
     //     consultantId: "string"
     // }
     try {
@@ -270,23 +211,6 @@ router.post('/tools/consultant-profile/get', async (req, res) => {
     catch (e) {
         console.error(e);
         res.send(200).json({ status: "error", message: `uncaught student controller error`});
-    }
-})
-
-// return parsed timetable
-router.post('/tools/consultant-timetable/get', async (req, res) => {
-    // req.body
-    // {
-    //     studentId: "string"
-    //     consultantId: "string"
-    // }
-    try {
-        let data = await StudentController.studentViewSlots(req.body);
-        res.status(200).json({ status: "success", data: data });
-    }
-    catch (e) {
-        console.error(e);
-        res.status(200).json({ status: "error", message: `uncaught student controller error`});
     }
 })
 

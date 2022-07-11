@@ -75,7 +75,7 @@ const getConsultantNotifications = async (id) => {
     }
 
     // replace announcements
-    for (item of consultant.announcements) {
+    for (item in consultant.announcements) {
         let temp = await AnnouncementModel.findOne({ id: item.id })
         item = Object.assign(item, temp)
     }
