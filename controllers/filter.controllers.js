@@ -1,4 +1,6 @@
 // Models
+const req = require('express/lib/request');
+const { ProfilePhotoUploadMiddleware } = require('../middlewares/upload.middlewares');
 const { ConsultantModel } = require('../models/consultant.models');
 
 // Utils
@@ -6,16 +8,22 @@ const { castToStudentListConsultant } = require('../utils/profile.utils')
 
 // Functions
 const filterConsultants = async (reqBody) => {
-    let mongoQuery = {
-        "profile.school": (reqBody.query.school ? { $in: reqBody.query.school } : { $exists: true }),
-        "profile.field": (reqBody.query.field ? { $in: reqBody.query.field }: { $exists: true }),
-        "profile.major": (reqBody.query.major ? { $in: reqBody.query.major } : { $exists: true }),
-        "profile.studentCardVerified": true
+    let mongoQuery = {};
+    mongoQuery["profile.studentCardVerified"] = true;
+    if (reqBody.query.major) {
+        mongoQuery["profile.major"] = { $in: reqBody.query.major };
     }
-
+    if (reqBody.query.school) {
+        mongoQuery["profile.school"] = { $in: reqBody.query.school };
+    }
+    if (reqBody.query.field) {
+        mongoQuery["profile.field"] = { $in: reqBody.query.field };
+    }
+    
     let rawResults = await ConsultantModel.find(mongoQuery).select("id profile");
-    let cleanedResults;
-    for (consultant in rawResults) {
+
+    let cleanedResults = [];
+    for (consultant of rawResults) {
         cleanedResults.push(castToStudentListConsultant(consultant));
     }
     

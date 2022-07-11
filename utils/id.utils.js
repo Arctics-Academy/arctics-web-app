@@ -22,9 +22,9 @@ function genUserID(count, pre) {
 function genMeetingID(count) {
     let id = '';
 
-    let len = count.toString().length;
-    if (len < 10) {
-        let zeros = 10 - len;
+    let len = (count+1).toString().length;
+    if (len < 5) {
+        let zeros = 5 - len;
         while (zeros !== 0) {
             id += '0';
             zeros--;
@@ -34,7 +34,7 @@ function genMeetingID(count) {
         id = (++count).toString();
     }
     
-    id = 'M' + id;
+    id = '#' + id;
     return id;
 }
 

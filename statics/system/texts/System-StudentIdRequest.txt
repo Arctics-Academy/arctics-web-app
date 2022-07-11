@@ -1,0 +1,13 @@
+`嗨Arctics員工：
+
+麻煩驗證以下資料～
+顧問姓名：${consultant.profile.surname+consultant.profile.name}
+顧問年級：${consultant.profile.year}
+顧問學系：${consultant.profile.major}
+顧問電子郵件：${consultant.profile.email}
+
+若學生證正確請點以下網址：
+https://arctics.academy/api/system/consultant/confirm-student-id/${consultant.id}
+
+謝謝您
+Sam的系統小幫手 敬上`
