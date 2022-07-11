@@ -15,10 +15,27 @@ class UserDoesNotExistError extends UserError {
     }
 }
 
-class DuplicateUserError extends Error {
+class DuplicateUserError extends UserError {
     constructor(message) {
         super()
         this.name = "DuplicateUserError"
+        this.message = message
+    }
+}
+
+// Meeting Errors
+class MeetingError extends Error {
+    constructor(message) {
+        super()
+        this.name = "MeetingError"
+        this.message = message
+    }
+}
+
+class MeetingDoesNotExistError extends MeetingError {
+    constructor(message) {
+        super()
+        this.name = "MeetingDoesNotExistError"
         this.message = message
     }
 }
@@ -104,6 +121,9 @@ module.exports =
     UserError,
     UserDoesNotExistError,
     DuplicateUserError,
+
+    MeetingError,
+    MeetingDoesNotExistError,
 
     EmailGenerationError,
     EmptySubjectError,

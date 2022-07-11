@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const { DuplicateUserError } = require('../utils/error.utils')
-const { registerConsultant, loginConsultant, sendEmailOTP, matchEmailOTP, sendMobileOTP, matchMobileOTP, registerStudent, loginStudent } = require('../controllers/user.controllers')
+const { registerConsultant, loginConsultant, sendEmailOTP, matchEmailOTP, sendMobileOTP, matchMobileOTP, registerStudent, loginStudent, sendPasswordResetOtp, matchPasswordResetOtp } = require('../controllers/user.controllers')
 
 router.post('/consultant/register', async (req, res) => {
     try {
@@ -120,15 +120,26 @@ router.post('/student/register', async (req, res) => {
 })
 
 router.post('/student/login', async (req, res) => {
+    // try {
+    //     result = await loginStudent(req.body)
+    //     if (typeof(result) !== "string") {
+    //         req.session.auth.studentAuth = true
+	// 	    req.session.auth.studentId = result.id
+    //         res.status(200).json({ status: "success", data: result })
+    //     }
+    //     else {
+    //         res.status(200).json({ status: "failed", message: result })
+    //     }
+    // }
     try {
         result = await loginStudent(req.body)
-        if (typeof(result) !== "string") {
+        if (result.status === "success") {
             req.session.auth.studentAuth = true
-		    req.session.auth.studentId = result.id
-            res.status(200).json({ status: "success", data: result })
+		    req.session.auth.studentId = result.data.id
+            res.status(200).json(result)
         }
         else {
-            res.status(200).json({ status: "failed", message: result })
+            res.status(200).json(result)
         }
     }
     catch (e) {
@@ -188,5 +199,39 @@ router.post('/student/mobile-otp/verify', async (req, res) => {
         res.status(200).json({ status: "error", message: "internal error; try again later"})
     }
 })
+
+router.post('/reset-password/send-otp', async (req, res) => {
+    // req.body
+    // {
+    //     identity: "string"
+    //     email: "string"
+    // }
+    try {
+        let payload = await sendPasswordResetOtp(req.body);
+        res.status(200).json(payload);
+    }
+    catch (e) {
+        console.error(e)
+        res.status(200).json({ status: "error", message: "internal server error, try again later"});
+    }
+});
+
+router.post('/reset-password/match-otp', async (req, res) => {
+    // req.body
+    // {
+    //     identity: "string"
+    //     email: "string"
+    //     code: "string"
+    //     password: "string"
+    // }
+    try {
+        let payload = await matchPasswordResetOtp(req.body);
+        res.status(200).json(payload);
+    }
+    catch (e) {
+        console.error(e)
+        res.status(200).json({ status: "error", message: "internal server error, try again later"});
+    }
+});
 
 module.exports = router

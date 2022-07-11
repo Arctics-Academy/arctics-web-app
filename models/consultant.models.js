@@ -33,8 +33,8 @@ const ConsultantMeetingSchema = new mongoose.Schema({
     studentName: { type: String, required: true },
     studentYear: { type: String, required: true },
     studentItems: { type: [String], required: true, default: [] },
-    remark: { type: String, required: true, default: "" },
-    comment: { type: String, required: true, default: "" }
+    remark: { type: String },
+    comment: { type: String }
 }, { _id: false })
 
 const ConsultantBankSchema = new mongoose.Schema({

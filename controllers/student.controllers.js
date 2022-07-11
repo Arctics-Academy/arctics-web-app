@@ -1,11 +1,16 @@
 // Models
 const { StudentModel } = require('../models/student.models')
+const { MeetingModel } = require('../models/meeting.models')
 const { ConsultantModel } = require('../models/consultant.models')
-const { DiscountCodeModel } = require('../models/system.models')
+const { DiscountCodeModel, AnnouncementModel } = require('../models/system.models')
 
 // Utils
-const { UserDoesNotExistError } = require('../utils/error.utils')
+const { UserDoesNotExistError, MeetingDoesNotExistError } = require('../utils/error.utils')
 const { castToStudentListConsultant } = require('../utils/profile.utils')
+const { unionTimetable } = require('../utils/timetable.utils');
+const { sendSystemMeetingPaymentVerification } = require('../utils/email.utils');
+// const { pushNotification } = require('../utils/notif.utils');
+const fs = require('fs')
 
 const getStudentDashboard = async (reqBody) => {
     let dashboard = await StudentModel.findOne({ id: reqBody.id }).select("profile announcements meetings");
@@ -35,6 +40,21 @@ const getStudentNotificationCount = async (reqBody) => {
     return student.announcements.unreadCount + student.notifications.unreadCount
 }
 
+const getStudentNotifications = async (reqBody) => {
+    // load data
+    let student = await StudentModel.findOne({ id: reqBody.id }).select('announcements notifications');
+    if (student === null) {
+        throw new UserDoesNotExistError(`student with id ${id} does not exist`);
+    }
+
+    // replace announcements
+    for (announcement of student.announcements.list) {
+        let temp = await AnnouncementModel.findOne({ id: announcement.id });
+        item = Object.assign(item, temp);
+    }
+    return student;
+}
+
 const studentUpdateProfile = async (reqBody) => {
     let student = await StudentModel.findOne({ id: reqBody.id })
     if (student === null) {
@@ -56,28 +76,38 @@ const studentUpdateProfile = async (reqBody) => {
 
 const studentAddToList = async (reqBody) => {
     let student = await StudentModel.findOne({ id: reqBody.id }).select("list");
-    let newListItem = await ConsultantModel.findOne({ id: reqBody.id }).select("profile");
+    let newListItem = await ConsultantModel.findOne({ id: reqBody.consultantId }).select("profile");
     newListItem = castToStudentListConsultant(newListItem);
-    student.list.push(newListItem);
+    student.list.consultants.push(newListItem);
     await student.save();
 }
 
 const studentDeleteFromList = async (reqBody) => {
     let student = await StudentModel.findOne({ id: reqBody.id }).select("list");
-    student.list = student.list.filter(item => item.consultantId !== reqBody.consultantId);
+    student.list.consultants = student.list.consultants.filter(item => item.consultantId !== reqBody.consultantId);
     await student.save();
 }
 
 const studentClearList = async (reqBody) => {
     let student = await StudentModel.findOne({ id: reqBody.id }).select("list");
-    student.list = [];
+    student.list.consultants = [];
     await student.save();
 }
 
 const studentViewConsultant = async (reqBody) => {
-    let consultant = await ConsultantModel.findOne({ id: reqBody.consultantId }).select("id profile timetable");
+    let consultant = await ConsultantModel.findOne({ id: reqBody.consultantId }).select("id profile timetable meetings");
+    // let student = await StudentModel.findOne({ id: reqBody.studentId }).select("meetings");
+    // let timetable = unionTimetable(consultant.timetable, consultant.meetings, student.meetings);
+    // let data = { profile: consultant.profile, timetable: consultant.timetable };
+    consultant.user = null;
     return consultant;
-    // TODO: Union consultant meetings, student meetings, and consultant timetable
+}
+
+const studentViewSlots = async (reqBody) => {
+    let consultant = await ConsultantModel.findOne({ id: reqBody.consultantId }).select("id profile meetings");
+    let student = await StudentModel.findOne({ id: reqBody.studentId }).select("meetings");
+    let timetable = unionTimetable(consultant.profile.timetable, consultant.meetings, student.meetings);
+    return timetable;
 }
 
 const studentVerifyDiscountCode = async (reqBody) => {
@@ -100,6 +130,84 @@ const studentVerifyDiscountCode = async (reqBody) => {
     }
 }
 
+// const studentReadNotifications = async (consultantId, announcementIdArray, notificaionIdArray) => {
+const studentReadNotifications = async (reqBody) => {
+    let student = await StudentModel.findOne({ id: reqBody.studentId });
+    if (student === null) {
+        throw new UserDoesNotExistError(`student with id ${id} does not exist`);
+    }
+    
+    for (announcement of student.announcements.list) {
+        if (reqBody.announcementIds.includes(announcement.id)) {
+            announcement.read = true;
+            student.announcements.unreadCount -= 1;
+        }
+    }
+
+    for (notification of student.notifications.list) {
+        if (reqBody.notificaionIds.includes(notification.id)) {
+            notification.read = true;
+            student.notifications.unreadCount -= 1;
+        }
+    }
+    
+    await student.save();
+    return true;
+}
+
+const studentSubmitPaymentProof = async (reqBody, reqFile) => {
+    // timestamp
+    let timestamp = new Date()
+
+    // find meeting
+    let meeting = await MeetingModel.findOne({ id: reqBody.meetingId });
+    if (meeting === null) {
+        throw new MeetingDoesNotExistError(`meeting with id ${reqBody.meetingId} does not exist`);
+    }
+    // push meeting record
+    let record = { timestamp: timestamp, description: "收到學生上傳付款證明" };
+    meeting.records.push(record);
+    // update meeting details
+    meeting.order.submittedTimestamp = timestamp;
+    meeting.order.paymentAccountName = reqBody.paymentName;
+    meeting.order.paymentDate = reqBody.paymentDate;
+    meeting.order.paymentBankNo = reqBody.paymentBankNo;
+    meeting.order.paymentAccountNo = reqBody.paymentAccountNo;
+
+    // find student
+    let student = await StudentModel.findOne({ id: meeting.details.studentId });
+    // TODO: catch student fail
+    for (let idx in student.meetings.future) {
+        if (reqBody.meetingId === student.meetings.future[idx].id) {
+            student.meetings.future[idx].paymentTime = timestamp;
+        }
+    }
+    
+
+    // TODO: Should add push notitfication system
+    // await pushNotification(meeting.details.studentId, `已收到諮詢付款證明`, ``); 
+
+    // add details to meeting object
+    if (reqFile) {
+        let imgFile = fs.readFileSync(reqFile.path);
+        let imgEncoded = imgFile.toString('base64');
+        let media = { timestamp: new Date(), type: reqFile.mimetype, data: new Buffer.from(imgEncoded, 'base64') };
+        meeting.order.paymentReceipt = media;
+    }
+
+    // TODO: should send email to us
+    await sendSystemMeetingPaymentVerification(meeting, reqFile);
+    
+    // cleanup
+    await meeting.save();
+    await student.save();
+    if (reqFile) {
+        fs.unlinkSync(reqFile.path);
+    }
+
+    return timestamp;
+}
+
 
 module.exports = 
 {
@@ -108,11 +216,15 @@ module.exports =
     getStudentMeetings,
     getStudentProfile,
     getStudentNotificationCount,
+    getStudentNotifications,
 
     studentUpdateProfile,
     studentAddToList,
     studentDeleteFromList,
     studentClearList,
+    studentReadNotifications,
     studentViewConsultant,
+    studentViewSlots,
     studentVerifyDiscountCode,
+    studentSubmitPaymentProof,
 }
